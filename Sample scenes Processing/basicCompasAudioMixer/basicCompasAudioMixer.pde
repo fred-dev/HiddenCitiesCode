@@ -71,6 +71,8 @@ void setup ()
 
   snd1.setLooping(false); //restart playback end reached
   snd1.setVolume(0, 0); //Set left and right volumes. Range is from 0.0 to 1.0
+  
+  snd1.start();
 }
 
 

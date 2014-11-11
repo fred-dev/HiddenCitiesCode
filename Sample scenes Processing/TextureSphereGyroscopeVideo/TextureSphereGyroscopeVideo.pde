@@ -41,6 +41,7 @@ int SINCOS_LENGTH = int(360.0 / SINCOS_PRECISION);
 
 
 void setup() {
+  size(1920,1080,P3D);
   compass = new CompassManager(this);
   sensor = new KetaiSensor(this);
   sensor.start();
