@@ -52,7 +52,7 @@ public class SimplePlayerActivity extends Activity implements PFAssetObserver {
         _frameContainer.setBackgroundColor(0xFF000000);
         
 		
-		loadVideo("storage/sdcard0/hiddenCities/video/360.mp4");
+		loadVideo("storage/emulated/0/hiddenCities/video/360.mp4");
 
 		showControls(false);	
 		_pfasset.play();
