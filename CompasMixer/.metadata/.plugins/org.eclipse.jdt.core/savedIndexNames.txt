@@ -1,0 +1,9 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/CompasMixer/.metadata/.plugins/org.eclipse.jdt.core
+2339628580.index
+1279742979.index
+3231941412.index
+3387564061.index
+1994340197.index
+3156189126.index
+1724270900.index
+1296485029.index

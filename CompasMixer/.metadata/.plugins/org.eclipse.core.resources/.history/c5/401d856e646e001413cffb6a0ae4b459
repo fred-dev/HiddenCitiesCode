@@ -1,0 +1,263 @@
+package processing.test.AudioTest2;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
+import processing.core.*;
+import processing.data.*;
+import processing.event.*;
+import processing.opengl.*;
+
+import android.os.Environment;
+
+import apwidgets.*;
+
+
+
+
+public class AudioTest2 extends PApplet
+{	
+	
+
+	APWidgetContainer	mWidgetContainer;
+	APToggleButton		mToggle1, mToggle2;
+
+	String[]			mPaths;
+	AudioPlayManager[]	mPlayManagers;
+
+	SensorManager mSensorManager;
+	SensorEventListener sensorEventListener;
+	Sensor magnetometer;
+	boolean sensorAvailable = false;
+	String[] fontList;
+	PFont androidFont;
+
+	// azimuth, rotation around the Z axis
+	// pitch, rotation around the X axis
+	// roll, rotation around the Y axis
+	Float azimuth       = (float) 0.0;
+	Float pitch         = (float) 0.0;
+	Float roll          = (float) 0.0;
+
+
+	Float sAzimuth       = (float) 0.0;
+
+	boolean firstdraw = true;
+	
+
+	public void setup()
+	{
+		fontList = PFont.list();
+		  androidFont = createFont(fontList[0], 20, true);
+		  textFont(androidFont);
+		  
+		mPaths = new String[2];
+		
+		mPaths[0] = "storage/sdcard0/hiddenCities/audio/track1.wav";
+		mPaths[1]= "storage/sdcard0/hiddenCities/audio/track2.wav";
+		
+//		mPaths[0] = Environment.getExternalStorageDirectory().getAbsolutePath()
+//				+ "/hiddenCities/audio/Track A - option 1.wav";
+//		mPaths[1] = Environment.getExternalStorageDirectory().getAbsolutePath()
+//				+ "/hiddenCities/audio/Track B - option 1.wav";
+
+		mPlayManagers = new AudioPlayManager[mPaths.length];
+		for (int i = 0; i < mPlayManagers.length; i++) {
+			println("making manager number " + i);
+			mPlayManagers[i] = new AudioPlayManager(mPaths[i], 64); // buffersize = 64kb
+			mPlayManagers[i].setIsLooping(true);
+
+		}
+
+		mWidgetContainer = new APWidgetContainer(this);
+		mToggle1 = new APToggleButton(width / 2 - 60, height / 2 - 20, 120, 40,
+				"Switch Track A");
+		mToggle1 = new APToggleButton(width / 2 - 60, height / 2 + 20, 120, 40,
+				"Switch Track B");
+		mWidgetContainer.addWidget(mToggle1);
+		// mWidgetContainer.addWidget(mToggle2);
+
+	}
+
+	public void draw()
+	{
+		// println(frameRate);
+	
+		
+		background(0);
+
+		  // Display sensor readings
+		  displaySensorReadings();   
+
+		  // Show compass
+		  showCompass();
+//		mPlayManagers[0].setVolume(map((float) mouseX, 0.0f, (float) width,
+//				0.0f, 1.0f));
+//		mPlayManagers[1].setVolume(map((float) mouseY, 0.0f, (float) height,
+//				0.0f, 1.0f));
+//		noStroke();
+//		fill(0, 0, 0);
+//		ellipse (mouseX, mouseY, 30 ,30);
+		// println(mPlayManagers[0].getVolume());
+		// println(mPlayManagers[1].getVolume());
+
+	}
+
+	protected void onResume()
+	{ // Called on startup
+	  super.onResume();
+
+      mSensorManager.registerListener((SensorEventListener) this, mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_UI);
+
+	  // Initialize sensor objects
+	  initSensor();
+	}
+
+	protected void onPause()
+	{ // Called on exit
+	  super.onPause();
+
+	  // Unregister sensorEventListener
+	  exitSensor();
+	}
+
+
+	/********************************************************************************
+	 
+	 Initialize sensors
+	 
+	 ********************************************************************************/
+	 void initSensor()
+	{
+	  // Initiate instances
+		//sensorEventListener = new mSensorEventListener();
+	  mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+	  magnetometer   = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+	  sensorAvailable = true;
+
+	  // Register our listeners
+
+	  mSensorManager.registerListener(sensorEventListener, magnetometer, mSensorManager.SENSOR_DELAY_GAME);
+	}
+
+
+	/********************************************************************************
+	 
+	 Unregister listener on exit
+	 
+	 ********************************************************************************/
+	void exitSensor()
+	{
+	  if (sensorAvailable) mSensorManager.unregisterListener(sensorEventListener);
+	}
+
+	void displaySensorReadings()
+	{
+	  if (sensorAvailable)
+	  {
+	    text("Azimuth: "+degrees(azimuth)+" ("+azimuth+")", 20, 590);
+	    text("Pitch: "+pitch, 20, 610);
+	    text("Roll: "+roll, 20, 630);
+	  } else
+	  { // Oops... phone doesn't have the required sensors...
+	    fill(255, 0, 0);
+	    text("Compass: NO SENSOR FOUND", 20, 590);
+	    fill(255);
+	  }
+	  
+	     if (degrees(azimuth) >0) {
+
+	    	 mPlayManagers[0].setVolume(1-map(degrees(azimuth), 0, 180, 0, 1));
+	      
+	    }
+	    if (degrees(azimuth)<0) {
+	      
+	    	mPlayManagers[0].setVolume(map(degrees(-azimuth), 0, 180, 0, 1));
+	      
+	    }
+	}
+
+	void showCompass()
+	{
+	  int cx = width/2;
+	  int cy = width/2;
+	  float radius = (float) (0.9 * cx);
+
+	  stroke(255);
+	  noFill();
+	  ellipse(cx, cy, radius*2, radius*2);
+
+	  if (!firstdraw)
+	  {
+	    pushMatrix();
+	    translate(cx, cy);
+	    rotate(-azimuth);
+	    line(0, 0, 0, -radius);
+	    text("NORTH", -25, -radius-5);
+	    ellipse(0, 0, 10, 10);
+	    popMatrix();
+
+	    // Display value (in degrees)
+	    fill(255);
+	    text(str(degrees(azimuth)), cx+7, cy+7);
+	  }
+
+	  firstdraw = false;
+	}
+	
+	public void onClickWidget(APWidget widget)
+	{
+		if (widget == mToggle1) {
+			if (mToggle1.isChecked()) {
+				println("Chnaging A");
+				mPaths[0] = Environment.getExternalStorageDirectory()
+						.getAbsolutePath()
+						+ "/hiddenCities/audio/Track A - option 2.wav";
+				mPlayManagers[0].setPath(mPaths[0]);
+				println("path set");
+
+			} else {
+				mPaths[0] = Environment.getExternalStorageDirectory()
+						.getAbsolutePath()
+						+ "/hiddenCities/audio/Track A - option 1.wav";
+				mPlayManagers[0].setPath(mPaths[0]);
+			}
+		} else if (widget == mToggle2) {
+			if (mToggle2.isChecked()) {
+				mPaths[1] = Environment.getExternalStorageDirectory()
+						.getAbsolutePath()
+						+ "/hiddenCities/audio/Track B - option 2.wav";
+				mPlayManagers[1].setPath(mPaths[1]);
+
+			} else {
+				mPaths[1] = Environment.getExternalStorageDirectory()
+						.getAbsolutePath()
+						+ "/hiddenCities/audio/Track B - option 1.wav";
+				mPlayManagers[1].setPath(mPaths[1]);
+
+			}
+		}
+	}
+
+	public void mousePressed()
+	{
+
+	}
+
+	public void keyPressed()
+	{
+
+	}
+
+	public int sketchWidth()
+	{
+		return displayWidth;
+	}
+
+	public int sketchHeight()
+	{
+		return displayHeight;
+	}
+}

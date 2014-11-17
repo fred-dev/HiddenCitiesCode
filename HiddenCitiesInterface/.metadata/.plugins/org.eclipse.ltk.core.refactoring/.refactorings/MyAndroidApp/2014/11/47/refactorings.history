@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.mkyong.android.MyAndroidAppActivity&apos; to &apos;HiddenCitiesInterface&apos;&#x0A;- Original project: &apos;MyAndroidApp&apos;&#x0A;- Original element: &apos;com.mkyong.android.MyAndroidAppActivity&apos;&#x0A;- Renamed element: &apos;com.mkyong.android.HiddenCitiesInterface&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;MyAndroidAppActivity&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;com.mkyong.android{MyAndroidAppActivity.java[MyAndroidAppActivity" matchStrategy="1" name="HiddenCitiesInterface" qualified="false" references="true" similarDeclarations="false" stamp="1416243098379" textual="false" version="1.0"/>
+</session>

@@ -1,0 +1,65 @@
+package com.mkyong.android;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.Toast;
+import android.view.View;
+import android.view.View.OnClickListener;
+
+public class MyAndroidAppActivity extends Activity implements View.OnClickListener {
+
+	ImageButton imageButton01,imageButton02,imageButton03,imageButton04,imageButton05,imageButton06,imageButton07,imageButton08,imageButton09,imageButton10,imageButton11,imageButton12 ;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		imageButton01 = (ImageButton) findViewById(R.id.ImageButton01);
+		imageButton02 = (ImageButton) findViewById(R.id.ImageButton02);
+		imageButton03 = (ImageButton) findViewById(R.id.ImageButton03);
+		imageButton04 = (ImageButton) findViewById(R.id.ImageButton04);
+		imageButton05 = (ImageButton) findViewById(R.id.ImageButton05);
+		imageButton06 = (ImageButton) findViewById(R.id.ImageButton06);
+		imageButton07 = (ImageButton) findViewById(R.id.ImageButton07);
+		imageButton08 = (ImageButton) findViewById(R.id.ImageButton08);
+		imageButton09 = (ImageButton) findViewById(R.id.ImageButton09);
+		imageButton10 = (ImageButton) findViewById(R.id.ImageButton10);
+		imageButton11 = (ImageButton) findViewById(R.id.ImageButton11);
+		imageButton12 = (ImageButton) findViewById(R.id.ImageButton12);
+
+		imageButton01.setOnClickListener(this);
+		imageButton02.setOnClickListener(this);
+		imageButton03.setOnClickListener(this);
+		imageButton01.setOnClickListener(this);
+		imageButton02.setOnClickListener(this);
+		imageButton03.setOnClickListener(this);
+		imageButton01.setOnClickListener(this);
+		imageButton02.setOnClickListener(this);
+		imageButton03.setOnClickListener(this);
+		imageButton01.setOnClickListener(this);
+		imageButton02.setOnClickListener(this);
+		imageButton03.setOnClickListener(this);
+		
+		
+		
+	       
+
+	}
+
+
+
+	@Override
+	public void onClick(View v) {
+		 switch(v.getId()) {
+         case R.id.ImageButton01:
+         // do stuff;
+         break;
+         case R.id.imageButton02:
+         // do stuff;
+         break;
+		
+	}
+
+}
