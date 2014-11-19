@@ -14,7 +14,7 @@
         
         
         <activity
-            android:name="com.panframe.android.samples.SimplePlayer.SimplePlayerActivity"
+            android:name="com.hiddencities.threesixty.HiddenCitiesThreeSixty"
             android:label="@string/title_activity_main" 
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
