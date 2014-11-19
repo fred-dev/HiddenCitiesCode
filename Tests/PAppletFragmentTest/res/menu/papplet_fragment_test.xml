@@ -1,0 +1,35 @@
+<!--  R.layout.activity_papplet_fragment_test; -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.pappletfragmenttest.PAppletFragmentTest" >
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:menuCategory="container"
+        android:visible="true" >
+        <item
+            android:id="@+id/Scene0"
+            android:title="Scene 0">
+        </item>
+        <item
+            android:id="@+id/Scene1"
+            android:title="Scene 1">
+        </item>
+        <item
+            android:id="@+id/CompassVideo"
+            android:title="360 Video">
+        </item>
+        <item
+            android:id="@+id/CameraFTP"
+            android:title="Camera FTP">
+        </item>
+        <item
+            android:id="@+id/CompassAudio"
+            android:title="Compass Audio">
+        </item>
+    </group>
+
+</menu>
