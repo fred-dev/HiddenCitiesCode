@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;EasyGridLayout Open&apos;" deleteContents="false" description="Delete resource &apos;EasyGridLayout Open&apos;" element1="/EasyGridLayout Open" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1416489731336"/>
+</session>

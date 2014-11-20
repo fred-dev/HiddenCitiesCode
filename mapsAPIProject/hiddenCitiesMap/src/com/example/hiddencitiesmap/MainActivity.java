@@ -1,9 +1,13 @@
 package com.example.hiddencitiesmap;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -12,10 +16,18 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import android.graphics.Color;
 import android.location.Location;
 
 import android.support.v4.app.FragmentActivity;
@@ -30,6 +42,21 @@ public class MainActivity extends FragmentActivity
     OnConnectionFailedListener,
     LocationListener,
     OnMyLocationButtonClickListener {
+	
+		private static final LatLng INSTALLATION01 = new LatLng(52.393100, 4.911760);
+	    private static final LatLng INSTALLATION02 = new LatLng(52.393047, 4.911658);
+	    private static final LatLng INSTALLATION03 = new LatLng(52.392792, 4.912575);
+	    private static final LatLng INSTALLATION04 = new LatLng(52.392605, 4.913015);
+	    private static final LatLng INSTALLATION05 = new LatLng(52.392723, 4.913133);
+	   
+	    
+	    private Marker mInstallation01;
+	    private Marker mInstallation02;
+	    private Marker mInstallation03;
+	    private Marker mInstallation04;
+	    private Marker mInstallation05;
+	    
+	    private Polyline mMutablePolyline;
 
 private GoogleMap mMap;
 
@@ -38,6 +65,32 @@ private GoogleApiClient mGoogleApiClient;
 
 // These settings are the same as the settings for the map. They will in fact give you updates
 // at the maximal rates currently possible.
+private void addMarkersToMap() {
+    // Uses a colored icon.
+	mInstallation01 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION01)
+            .title("Installation 1"));
+
+    // Uses a custom icon with the info window popping out of the center of the icon.
+	mInstallation02 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION02)
+            .title("Installation 2"));
+
+    // Creates a draggable marker. Long press to drag.
+	mInstallation03 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION03)
+            .title("Installation 3"));
+
+    // A few more markers for good measure.
+	mInstallation04 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION04)
+            .title("Installation 4"));
+    
+	mInstallation05 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION05)
+            .title("Instlallation 5"));
+
+}
 private static final LocationRequest REQUEST = LocationRequest.create()
         .setInterval(5000)         // 5 seconds
         .setFastestInterval(16)    // 16ms = 60fps
@@ -49,12 +102,19 @@ private static final LocationRequest REQUEST = LocationRequest.create()
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    
    // mMessageView = (TextView) findViewById(R.id.message_text);
 }
 
 @Override
 protected void onResume() {
     super.onResume();
+    
+	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+			WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	 
+	 if (getActionBar().isShowing()) getActionBar().hide();
+	
     setUpMapIfNeeded();
     setUpGoogleApiClientIfNeeded();
     mGoogleApiClient.connect();
@@ -78,6 +138,20 @@ private void setUpMapIfNeeded() {
         if (mMap != null) {
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
+            addMarkersToMap();
+           
+            PolylineOptions options = new PolylineOptions()
+            .add(new LatLng(INSTALLATION01.latitude,INSTALLATION01.longitude))
+            .add(new LatLng(INSTALLATION02.latitude,INSTALLATION02.longitude))
+            .add(new LatLng(INSTALLATION03.latitude,INSTALLATION03.longitude))
+            .add(new LatLng(INSTALLATION04.latitude,INSTALLATION04.longitude))
+            .add(new LatLng(INSTALLATION05.latitude,INSTALLATION05.longitude))
+            .color(Color.BLUE)
+            .width(15);
+    
+    mMutablePolyline = mMap.addPolyline(options);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(INSTALLATION03, 17));
+           
         }
     }
 }

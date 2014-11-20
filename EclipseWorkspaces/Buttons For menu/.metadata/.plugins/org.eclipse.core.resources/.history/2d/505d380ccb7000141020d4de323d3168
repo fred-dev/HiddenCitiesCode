@@ -1,0 +1,31 @@
+package com.example.hiddencitieshelpdialer;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+
+public class HiddenCitiesHelpDialer extends Activity {
+	
+	Button mButton;
+
+    
+  
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_hidden_cities_help_dialer);
+		mButton = (Button)findViewById(R.id.1);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.hidden_cities_help_dialer, menu);
+		return true;
+	}
+}

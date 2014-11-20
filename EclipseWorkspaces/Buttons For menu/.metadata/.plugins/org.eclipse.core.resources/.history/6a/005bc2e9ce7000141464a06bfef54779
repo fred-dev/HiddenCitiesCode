@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+    android:background="#000000" 
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:columnCount="4"
+    android:orientation="horizontal"
+>
+
+    <Button
+        android:id="@+id/ButtonDivision"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="3"
+        android:text="/" />
+
+    <Button
+        android:id="@+id/Button1"
+        android:text="1" />
+
+    <Button
+        android:id="@+id/Button2"
+        android:text="2" />
+
+    <Button
+        android:id="@+id/Button3"
+        android:text="3" />
+
+    <Button
+        android:id="@+id/Buttonstar"
+        android:text="*" />
+
+    <Button
+        android:id="@+id/Button4"
+        android:text="4" />
+
+    <Button
+        android:id="@+id/Button5"
+        android:text="5" />
+
+    <Button android:id="@+id/Button6"
+        android:text="6" />
+
+    <Button android:id="@+id/ButtonMinus"
+        android:text="-" />
+
+    <Button android:id="@+id/Button7"
+        android:text="7" />
+
+    <Button android:id="@+id/Button8"
+        android:text="8" />
+
+    <Button android:id="@+id/Button9"
+        android:text="9" />
+
+    <Button android:id="@+id/ButtonPlus"
+        android:layout_gravity="fill"
+        android:layout_rowSpan="3"
+        android:text="+" />
+
+    <Button android:id="@+id/Button0"
+        android:layout_columnSpan="2"
+        android:layout_gravity="fill"
+        android:text="0" />
+
+    <Button android:id="@+id/ButtonDoubleZero"
+        android:text="00" />
+
+    <Button android:id="@+id/ButtonEquals"
+        android:layout_columnSpan="3"
+        android:layout_gravity="fill"
+        android:text="=" />
+
+</GridLayout>

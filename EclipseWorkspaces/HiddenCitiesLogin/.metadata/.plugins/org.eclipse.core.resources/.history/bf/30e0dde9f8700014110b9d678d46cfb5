@@ -1,0 +1,78 @@
+package com.example.hiddencitieslogin;
+
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class HiddenCitiesLogin extends Activity {
+
+   private EditText  username=null;
+   private EditText  email=null;
+ 
+   private Button login;
+   int counter = 3;
+   
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_hidden_cities_login);
+      username = (EditText)findViewById(R.id.editText1);
+      email = (EditText)findViewById(R.id.editText2);
+      login = (Button)findViewById(R.id.button1);
+   }
+
+   public void login(View view){
+	   String mEmail;
+	   mEmail = email.getText().toString();
+	   
+	   if(username.getText().toString().equals("")){
+		   Toast.makeText(getApplicationContext(), "oops, you forgot your name", 
+				      Toast.LENGTH_SHORT).show();
+	   }
+	   
+	   if(email.getText().toString().equals("")){
+		   Toast.makeText(getApplicationContext(), "oops, you forgot your email", 
+				      Toast.LENGTH_SHORT).show();
+	   }
+	   if(isEmailValid(mEmail)==false){
+		   Toast.makeText(getApplicationContext(), "Sorry, that email is invalid", 
+				      Toast.LENGTH_SHORT).show();
+	   }
+	 
+   else{
+      Toast.makeText(getApplicationContext(), "Logging in, I'll just be a moment",
+      Toast.LENGTH_SHORT).show();
+   }
+}
+   
+   public static boolean isEmailValid(String email) {
+	    boolean isValid = false;
+
+	    String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+	    CharSequence inputStr = email;
+
+	    Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+	    Matcher matcher = pattern.matcher(inputStr);
+	    if (matcher.matches()) {
+	        isValid = true;
+	    }
+	    return isValid;
+	}
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+      // Inflate the menu; this adds items to the action bar if it is present.
+      getMenuInflater().inflate(R.menu.hidden_cities_login, menu);
+      return true;
+   }
+
+}
