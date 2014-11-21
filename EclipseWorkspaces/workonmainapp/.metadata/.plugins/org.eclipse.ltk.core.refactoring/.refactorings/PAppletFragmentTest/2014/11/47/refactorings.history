@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;AudioPlayManager.java&apos; to &apos;PAppletFragmentTest/src/com.panframe.android.samples.SimplePlayer&apos;&#x0A;- Original project: &apos;PAppletFragmentTest&apos;&#x0A;- Destination element: &apos;PAppletFragmentTest/src/com.panframe.android.samples.SimplePlayer&apos;&#x0A;- Original element: &apos;processing.test.AudioTest2.AudioPlayManager.java&apos;" description="Copy compilation unit" destination="/src&lt;com.panframe.android.samples.SimplePlayer" element1="/src&lt;processing.test.AudioTest2{AudioPlayManager.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1416528159600" units="1" version="1.0"/>
+</session>

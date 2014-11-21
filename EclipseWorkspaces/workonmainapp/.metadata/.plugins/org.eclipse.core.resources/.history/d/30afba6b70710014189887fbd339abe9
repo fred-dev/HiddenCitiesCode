@@ -1,0 +1,188 @@
+package com.panframe.android.samples.SimplePlayer;
+
+import java.util.*;
+
+import processing.test.AudioTest2.AudioPlayManager;
+
+import com.panframe.android.lib.*;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.app.Fragment;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.util.Log;
+import android.view.*;
+
+
+
+
+public class CompassVideo extends Fragment implements  PFAssetObserver ,SensorEventListener {
+
+	PFView				_pfview;
+	PFAsset 			_pfasset;
+    PFNavigationMode 	_currentNavigationMode = PFNavigationMode.MOTION;
+	
+	boolean 			_updateThumb = true;;
+    Timer 				_scrubberMonitorTimer;    
+
+    ViewGroup 			_frameContainer;
+
+    String[]				mPaths;
+	AudioPlayManager[]		mPlayManagers	= null;
+	private float			currentDegree	= 0f;
+	private float			tempDegree		= 0f;
+	 private final float[] mRotationMatrix = new float[16];
+	 float[]					mRotation;
+	 float[] mGravity;
+	  float[] mGeomagnetic;
+	  private SensorManager mSensorManager;
+
+	 Sensor accelerometer;
+	  Sensor magnetometer;
+	  
+
+    @Override
+    
+    public void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+//    	setContentView(R.layout.activity_main);
+    }
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//		getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        _frameContainer = (ViewGroup) getActivity().getWindow().getDecorView();
+        _frameContainer.setBackgroundColor(0xFF000000);
+		loadVideo("storage/sdcard0/hiddenCities/video/360.mp4");
+		showControls(false);	
+		_pfasset.play();
+		
+		mPaths = new String[4];
+		mRotation = new float[3];
+		
+		
+
+
+		mSensorManager = (SensorManager) getActivity().getSystemService(
+				Context.SENSOR_SERVICE);
+		
+//	    accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//	    magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+	    mSensorManager.registerListener(this,mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
+	    mSensorManager.registerListener(this,mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),SensorManager.SENSOR_DELAY_GAME);
+
+		return null;
+		
+		
+	}
+
+    public void showControls(boolean bShow)
+    {
+    	
+		if (_pfview != null)
+		{
+			if (!_pfview.supportsNavigationMode(PFNavigationMode.MOTION))
+            Log.d("SimplePlayer","Not supported nav");
+		}
+    }
+
+    public void loadVideo(String filename)
+    {
+		
+        _pfview = PFObjectFactory.view(this.getActivity());               
+        _pfasset = PFObjectFactory.assetFromUri(this.getActivity(), Uri.parse(filename), this);
+        
+        _pfview.displayAsset(_pfasset);
+        _pfview.setNavigationMode(_currentNavigationMode);
+
+        _frameContainer.addView(_pfview.getView(), 0);     
+
+    }
+
+	public void onStatusMessage(final PFAsset asset, PFAssetStatus status) {
+		switch (status)
+		{
+			case LOADED:
+				Log.d("SimplePlayer", "Loaded");
+				break;
+			case DOWNLOADING:
+				Log.d("SimplePlayer", "Downloading 360 movie: "+ _pfasset.getDownloadProgress()+" percent complete");
+				break;
+			case DOWNLOADED:
+				Log.d("SimplePlayer", "Downloaded to "+asset.getUrl());
+				break;
+			case DOWNLOADCANCELLED:
+				Log.d("SimplePlayer", "Download cancelled");
+				break;
+			case PLAYING:
+				Log.d("SimplePlayer", "Playing");
+		        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				break;
+			case PAUSED:
+				Log.d("SimplePlayer", "Paused");
+	
+				break;
+			case STOPPED:
+				Log.d("SimplePlayer", "Stopped");
+				
+				getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				break;
+			case COMPLETE:
+				Log.d("SimplePlayer", "Complete");
+
+				getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				break;
+			case ERROR:
+				Log.d("SimplePlayer", "Error");
+				break;
+		}
+	}
+
+
+    public void onPause() {
+        super.onPause(); 
+        if (_pfasset != null)
+        {
+	        if (_pfasset.getStatus() == PFAssetStatus.PLAYING)
+	        	_pfasset.pause();
+        }
+    }
+    
+
+	public void  onStartCommand(Intent intent, int flags, int startId) {
+		_pfasset.play();
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+		      mGravity = event.values;
+		    if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+		      mGeomagnetic = event.values;
+		    if (mGravity != null && mGeomagnetic != null) {
+		      float R[] = new float[9];
+		      float I[] = new float[9];
+		      boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+		      if (success) {
+		        float orientation[] = new float[3];
+		        SensorManager.getOrientation(R, orientation);
+		        float azimut = orientation[0]; // orientation contains: azimut, pitch and roll
+		        Log.d("Azimut", Float.toString(azimut));
+		      }
+		    }
+		  }
+		
+	
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+}
