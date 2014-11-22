@@ -130,11 +130,12 @@ public class MyKetaiCamera extends PImage
 		determineObjectIntentions(this);
 
 		// we'll store our photos in a folder named after our application!
-		PackageManager pm = parent.getActivity().getApplicationContext().getPackageManager();
+		PackageManager pm = parent.getActivity().getApplicationContext()
+				.getPackageManager();
 		ApplicationInfo ai;
 		try {
-			ai = pm.getApplicationInfo(parent.getActivity().getApplicationContext()
-					.getPackageName(), 0);
+			ai = pm.getApplicationInfo(parent.getActivity()
+					.getApplicationContext().getPackageName(), 0);
 		} catch (final NameNotFoundException e) {
 			ai = null;
 		}
@@ -520,8 +521,8 @@ public class MyKetaiCamera extends PImage
 			} else
 				PApplet.println("No flash support.");
 
-			int rotation = parent.getActivity().getWindowManager().getDefaultDisplay()
-					.getRotation();
+			int rotation = parent.getActivity().getWindowManager()
+					.getDefaultDisplay().getRotation();
 			int degrees = 0;
 			switch (rotation) {
 				case Surface.ROTATION_0:
@@ -1067,6 +1068,82 @@ public class MyKetaiCamera extends PImage
 															}
 														};
 
+	public PictureCallback			jpegRotatedFastCallback	= new PictureCallback() {
+															public void onPictureTaken(
+																	byte[] data,
+																	Camera camera)
+															{
+																final Camera newCamera = camera;
+																final byte[] newData = data;
+																Thread thread = new Thread(
+																		new Runnable() {
+																			public void run()
+																			{
+																				PApplet.println("pictureCallback entered...");
+																				if (newCamera == null)
+																					return;
+																				FileOutputStream outStream = null;
+
+																				try {
+																					PApplet.println("Saving image: "
+																							+ savePhotoPath);
+																					int width = newCamera.getParameters().getPictureSize().width;
+																					int height = newCamera.getParameters().getPictureSize().height;
+																					byte[] byteArray;
+																					if (cameraID==0){
+																					byteArray = rotateYUV420Degree90(newData, width, height);
+																					}
+																					else{
+																						byteArray = rotateYUV420DegreeMinus90(newData, width, height);
+																					}
+																					outStream = new FileOutputStream(
+																							savePhotoPath);
+																					outStream
+																							.write(byteArray);
+																					outStream
+																							.close();
+
+																					// callback sketch with path of saved image
+																					// ;
+																					if (onSavePhotoEventMethod != null
+																							&& myPixels != null
+																							&& savePhotoPath != null)
+																						try {
+																							onSavePhotoEventMethod
+																									.invoke(parent,
+																											new Object[] { (String) savePhotoPath });
+																						} catch (IllegalAccessException e) {
+																							e.printStackTrace();
+																						} catch (InvocationTargetException e) {
+																							e.printStackTrace();
+																						}
+
+																					// restart preview
+
+																					// try {
+																					// SurfaceTexture st = new SurfaceTexture(0);
+																					// camera.setPreviewTexture(st);
+																					// camera.startPreview();
+																					// camera.setPreviewDisplay(null);
+																					// } catch (NoClassDefFoundError x) {
+																					// camera.startPreview();
+																					// }
+
+																				} catch (FileNotFoundException e) {
+																					e.printStackTrace();
+																				} catch (IOException e) {
+																					e.printStackTrace();
+																				} catch (RuntimeException rtx) {
+																				} finally {
+
+																				}
+																			}
+																		});
+																thread.start();
+																camera.startPreview();
+															}
+														};
+
 	/** The my scanner callback. */
 	public OnScanCompletedListener	myScannerCallback	= new OnScanCompletedListener() {
 															public void onScanCompleted(
@@ -1091,8 +1168,8 @@ public class MyKetaiCamera extends PImage
 
 		// String[] paths = { mediaFile.getAbsolutePath() };
 		String[] paths = { _file };
-		MediaScannerConnection.scanFile(parent.getActivity().getApplicationContext(), paths,
-				null, myScannerCallback);
+		MediaScannerConnection.scanFile(parent.getActivity()
+				.getApplicationContext(), paths, null, myScannerCallback);
 
 	}
 
@@ -1349,6 +1426,58 @@ public class MyKetaiCamera extends PImage
 	public Camera getCamera()
 	{
 		return camera;
+	}
+
+	public byte[] rotateYUV420Degree90(byte[] data, int imageWidth,
+			int imageHeight)
+	{
+		byte[] yuv = new byte[imageWidth * imageHeight * 3 / 2];
+		// Rotate the Y luma
+		int i = 0;
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = imageHeight - 1; y >= 0; y--) {
+				yuv[i] = data[y * imageWidth + x];
+				i++;
+			}
+		}
+		// Rotate the U and V color components 
+		i = imageWidth * imageHeight * 3 / 2 - 1;
+		for (int x = imageWidth - 1; x > 0; x = x - 2) {
+			for (int y = 0; y < imageHeight / 2; y++) {
+				yuv[i] = data[(imageWidth * imageHeight) + (y * imageWidth) + x];
+				i--;
+				yuv[i] = data[(imageWidth * imageHeight) + (y * imageWidth)
+						+ (x - 1)];
+				i--;
+			}
+		}
+		return yuv;
+	}
+	
+	public byte[] rotateYUV420DegreeMinus90(byte[] data, int imageWidth,
+			int imageHeight)
+	{
+		byte[] yuv = new byte[imageWidth * imageHeight * 3 / 2];
+		// Rotate the Y luma
+		int i = 0;
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = imageHeight - 1; y >= 0; y--) {
+				yuv[i] = data[y * imageWidth + x];
+				i++;
+			}
+		}
+		// Rotate the U and V color components 
+		i = imageWidth * imageHeight * 3 / 2 - 1;
+		for (int x = imageWidth - 1; x > 0; x = x - 2) {
+			for (int y = 0; y < imageHeight / 2; y++) {
+				yuv[i] = data[(imageWidth * imageHeight) + (y * imageWidth) + x];
+				i--;
+				yuv[i] = data[(imageWidth * imageHeight) + (y * imageWidth)
+						+ (x - 1)];
+				i--;
+			}
+		}
+		return yuv;
 	}
 
 	// public void onFaceDetection(Face[] _faces, Camera _camera) {

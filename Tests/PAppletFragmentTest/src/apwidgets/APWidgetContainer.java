@@ -65,14 +65,15 @@ public class APWidgetContainer{
 		pApplet.getActivity().runOnUiThread(new Runnable() 
 		{
 			public void run(){
-				if(getPApplet().getActivity().getWindow().findViewById(scrollViewID)==null){
+//				if(getPApplet().getActivity().getWindow().findViewById(scrollViewID)==null){
 					createLayout(getPApplet());
+					System.out.println("here");
 				//	System.out.println("create new stuff");
-				}else {
-					scrollView = (MyScrollView)getPApplet().getActivity().getWindow().findViewById(scrollViewID);
-					layout = (RelativeLayout)scrollView.getChildAt(0);
-				//	System.out.println("use existing");
-				}
+//				}else {
+//					scrollView = (MyScrollView)getPApplet().getActivity().getWindow().findViewById(scrollViewID);
+//					layout = (RelativeLayout)scrollView.getChildAt(0);
+//				//	System.out.println("use existing");
+//				}
 			}
 		});
 	}
@@ -127,7 +128,6 @@ public class APWidgetContainer{
 			relLayout.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 			
 			layout.addView(pWidget.getView(), relLayout);
-			
 			views.addElement(pWidget.getView());
 		}
 	}
@@ -167,8 +167,10 @@ public class APWidgetContainer{
 //			//container.removeView(views.get(i));
 //		}
 		layout.removeAllViews();
+		views.clear();
 		scrollView.removeView(layout);
-		container.removeView(scrollView);
+		scrollView=null;
+//		container.removeView(scrollView);
 		pApplet.stop();
 	}
 }
