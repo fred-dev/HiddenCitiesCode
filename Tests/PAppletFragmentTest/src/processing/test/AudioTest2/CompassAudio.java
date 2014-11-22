@@ -39,8 +39,8 @@ public class CompassAudio extends PApplet implements SensorEventListener
 
 		mPaths = new String[2];
 
-		mPaths[0] = "storage/sdcard0/hiddenCities/audio/compasAudio1.wav";
-		mPaths[1] = "storage/sdcard0/hiddenCities/audio/compasAudio2.wav";
+		mPaths[0] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/compasAudio1.wav";
+		mPaths[1] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/compasAudio2.wav";
 
 		mPlayManagers = new AudioPlayManager[mPaths.length];
 		for (int i = 0; i < mPlayManagers.length; i++) {

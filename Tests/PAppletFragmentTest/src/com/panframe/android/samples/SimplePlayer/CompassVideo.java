@@ -16,6 +16,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.*;
+import android.os.Environment;
 
 public class CompassVideo extends Fragment implements PFAssetObserver,
 		SensorEventListener {
@@ -56,10 +57,10 @@ public class CompassVideo extends Fragment implements PFAssetObserver,
 
 		mPaths = new String[4];
 
-		mPaths[0] = "storage/sdcard0/hiddenCities/audio/360ch1.wav";
-		mPaths[1] = "storage/sdcard0/hiddenCities/audio/360ch2.wav";
-		mPaths[2] = "storage/sdcard0/hiddenCities/audio/360ch3.wav";
-		mPaths[3] = "storage/sdcard0/hiddenCities/audio/360ch4.wav";
+		mPaths[0] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/360ch1.wav";
+		mPaths[1] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/360ch2.wav";
+		mPaths[2] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/360ch3.wav";
+		mPaths[3] = Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/audio/360ch4.wav";
 
 		mPlayManagers = new AudioPlayManager[mPaths.length];
 		for (int i = 0; i < mPlayManagers.length; i++) {

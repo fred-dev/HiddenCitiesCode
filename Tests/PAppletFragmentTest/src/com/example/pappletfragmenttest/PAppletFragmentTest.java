@@ -12,6 +12,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,13 +31,29 @@ import com.example.pappletfragmenttest.R;
 import processing.test.AudioTest2.*;
 import processing.test.CameraFTPTest.*;
 import com.panframe.android.samples.SimplePlayer.*;
+import processing.test.ArUcoTest.*;
 
-public class PAppletFragmentTest extends Activity
+import org.java_websocket.WebSocketImpl;
+import org.java_websocket.handshake.*;
+import org.java_websocket.client.*;
+import org.java_websocket.drafts.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+public class PAppletFragmentTest extends Activity implements LocationListener
 {
 
-	Fragment[]			mScenes;
-	ArrayList<String>	mManagerWatcher;
-	FragmentManager		mFragmentManager;
+	Fragment[]				mScenes;
+	ArrayList<String>		mManagerWatcher;
+	FragmentManager			mFragmentManager;
+
+	private WebSocketClient	mWSClient;
+	private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
+	private String			mUserId;
+
+	private LocationManager	mLocationManager;
+	private boolean			mIsConnected	= false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -43,14 +63,21 @@ public class PAppletFragmentTest extends Activity
 		if (savedInstanceState == null) {
 			mFragmentManager = getFragmentManager();
 			mManagerWatcher = new ArrayList<String>();
-			mScenes = new Fragment[5];
-			mScenes[0] = (Fragment) new MouseCircle();
-			mScenes[1] = (Fragment) new MouseLines();
-			mScenes[2] = (Fragment) new CompassVideo();
-			mScenes[3] = (Fragment) new CameraFTP();
-			mScenes[4] = (Fragment) new CompassAudio();
-			//			attachMouseCircles();
+//			mScenes = new Fragment[5];
+//			mScenes[0] = (Fragment) new MouseCircle();
+//			mScenes[1] = (Fragment) new MouseLines();
+//			mScenes[2] = (Fragment) new CompassVideo();
+//			mScenes[3] = (Fragment) new CameraFTP();
+//			mScenes[4] = (Fragment) new CompassAudio();
+//			
 
+			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			mLocationManager.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 5000, 1, this);
+			//mUserId should be obtained from xml file
+			mUserId = "arash";
+			setupWebSocket();
+			mWSClient.connect();
 		}
 	}
 
@@ -88,6 +115,19 @@ public class PAppletFragmentTest extends Activity
 		} else if (id == R.id.CompassAudio) {
 			attachCompassAudio();
 			System.out.println("Switch == 4");
+			return true;
+		} else if (id == R.id.CameraFTPWithMap) {
+			attachCameraFTPWithMap();
+			System.out.println("Switch == 5");
+			return true;
+		} else if (id == R.id.Aruco) {
+			attachAruco();
+			System.out.println("Switch == 6");
+			return true;
+		}
+		else if (id == R.id.Error) {
+			triggerError();
+			System.out.println("Switch == 666");
 			return true;
 		}
 
@@ -174,6 +214,47 @@ public class PAppletFragmentTest extends Activity
 
 	}
 
+	public void attachCameraFTPWithMap()
+	{
+		emptyFragmentManager();
+
+		FragmentTransaction fragmentTransaction = mFragmentManager
+				.beginTransaction();
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.add(R.id.container, new CameraFTPWithMap(),
+				"CameraFTPWithMap");
+		mManagerWatcher.add("CameraFTPWithMap");
+
+		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
+
+		fragmentTransaction.commit();
+
+	}
+	
+	public void attachAruco()
+	{
+		emptyFragmentManager();
+
+		FragmentTransaction fragmentTransaction = mFragmentManager
+				.beginTransaction();
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.add(R.id.container, new Aruco(),
+				"Aruco");
+		mManagerWatcher.add("Aruco");
+
+		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
+
+		fragmentTransaction.commit();
+
+	}
+
+	public void triggerError()
+	{
+
+	}
+
 	public void emptyFragmentManager()
 	{
 		if (!mManagerWatcher.isEmpty()) {
@@ -189,6 +270,118 @@ public class PAppletFragmentTest extends Activity
 			fragmentTransaction.commit();
 			mManagerWatcher.clear();
 		}
+	}
+
+	public void setupWebSocket()
+	{
+		WebSocketImpl.DEBUG = true;
+		//		Draft draft = new Draft_17();
+
+		try {
+			mWSClient = new WebSocketClient(new URI(mServerPath + mUserId)) {
+
+				@Override
+				public void onClose(int aCode, String aReason, boolean aRemote)
+				{
+					System.out.print("You have been disconnected from"
+							+ getURI() + "; Code:" + aCode + " " + aReason
+							+ "\n");
+					mIsConnected = false;
+					mWSClient.connect();
+
+				}
+
+				@Override
+				public void onError(Exception aError)
+				{
+					System.out.print("Exception occured ...\n" + aError + "\n");
+					mIsConnected = false;
+					mWSClient.close();
+					mWSClient.connect();
+
+				}
+
+				@Override
+				public void onMessage(String aMessage)
+				{
+					System.out.println(aMessage);
+					if (aMessage.equals("Attach Mouse Lines")
+							|| aMessage.equals("Tester")) {
+						attachMouseLines();
+						System.out.println("Switch == 0");
+					} else if (aMessage.equals("Attach Mouse Circles")) {
+						attachMouseCircles();
+						System.out.println("Switch == 1");
+					} else if (aMessage.equals("Attach Compass Video")) {
+						attachCompassVideo();
+						System.out.println("Switch == 2");
+					} else if (aMessage.equals("Attach CameraFTP")) {
+						attachCameraFTP();
+						System.out.println("Switch == 3");
+					} else if (aMessage.equals("Attach Compass Audio")) {
+						attachCompassAudio();
+						System.out.println("Switch == 4");
+					} else if (aMessage.equals("Attach CameraFTP With Map")) {
+						attachCameraFTPWithMap();
+						System.out.println("Switch == 5");
+					}
+					else if (aMessage.equals("Aruco")) {
+						attachAruco();
+						System.out.println("Switch == 6");
+					} else if (aMessage.equals("Trigger Error")) {
+						triggerError();
+						System.out.println("Switch == 666");
+					}
+
+				}
+
+				@Override
+				public void onOpen(ServerHandshake aHandshake)
+				{
+					System.out.print("You are connected to the server:"
+							+ getURI() + "\n");
+					mIsConnected = true;
+				}
+
+			};
+
+		} catch (URISyntaxException ex) {
+			System.out.println("Is not a valid WebSocker URI");
+		}
+	}
+
+	@Override
+	public void onLocationChanged(Location aLoc)
+	{
+		//		mLoc.setLatitude(aLoc.getLatitude());
+		//		mLoc.setLongitude(aLoc.getLongitude());
+		if (mIsConnected) {
+			mWSClient.send("map/" + aLoc.getLatitude() + "/"
+					+ aLoc.getLongitude());
+			System.out.println("map/" + aLoc.getLatitude() + "/"
+					+ aLoc.getLongitude());
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String arg0, int arg1, Bundle arg2)
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 }
