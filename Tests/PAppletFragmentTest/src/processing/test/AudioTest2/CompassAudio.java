@@ -33,7 +33,7 @@ public class CompassAudio extends PApplet implements SensorEventListener
 	public void setup()
 	{
 
-		compasAudioRotate = loadImage("storage/sdcard0/hiddenCities/images/compasAudioRotate.png");
+		compasAudioRotate = loadImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/hiddenCities/images/compasAudioRotate.png");
 		orientation(PORTRAIT);
 		imageMode(CENTER);
 

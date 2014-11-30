@@ -31,8 +31,9 @@
             android:title="Compass Audio">
         </item>
         <item android:id="@+id/CameraFTPWithMap" android:title="CameraFTPWithMap"></item>
-        <item android:id="@+id/Aruco" android:title="Aruco"></item>
+        <item android:id="@+id/VuforiaScene" android:title="Vuforia Scene"></item><item android:id="@+id/ArucoScene" android:title="Aruco Scene"></item>
         <item android:id="@+id/Error" android:title="Error Trigger"></item>
+        
     </group>
 
 </menu>

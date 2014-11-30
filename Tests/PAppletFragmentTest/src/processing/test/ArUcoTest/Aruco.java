@@ -1,259 +1,434 @@
 package processing.test.ArUcoTest;
 
-import processing.core.*;
-import processing.data.*;
-import processing.event.*;
-import processing.opengl.*;
-import processing.test.CameraFTPTest.MyKetaiCamera;
-
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.util.Vector;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.sql.Date;
 import java.util.List;
+import java.util.Vector;
+import java.lang.System;
 
-import java.nio.*;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
+import org.opencv.android.JavaCameraView;
+import org.opencv.core.CvException;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.highgui.Highgui;
+import org.opencv.highgui.VideoCapture;
+import org.opencv.imgproc.Imgproc;
 
-import ketai.camera.*;
-import apwidgets.*;
+import com.example.pappletfragmenttest.R;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
+import android.os.Environment;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.view.SurfaceView;
+
+import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PImage;
 
 import es.ava.aruco.*;
+import es.ava.aruco.exceptions.ExtParamException;
+import processing.test.ArUcoTest.MyBoard;
+import processing.test.ArUcoTest.MyBoardConfiguration;
+import processing.test.ArUcoTest.MyCameraParameters;
+import processing.test.ArUcoTest.MyJavaCameraView;
 
-import org.opencv.core.*;
-import org.opencv.calib3d.*;
-import org.opencv.utils.*;
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
-import org.opencv.objdetect.CascadeClassifier;
-
-import android.content.res.AssetManager;
-import android.os.Environment;
-
-public class Aruco extends PApplet
+public class Aruco implements Runnable, CvCameraViewListener2
 {
+	PApplet					mPApplet;
+	ArucoListener			mListener;
+	boolean					mIsDetecting			= true;
+	boolean					mIsProcessing			= false;
+	boolean					mIsNewFrameAvailable	= false;
+	Vector<MyMarker>		mDetectedMarkers;
+	MyBoard					mBoardDetected;
+	Mat						mFrame					= null;
+	int						mIdSelected;
+	MyCameraParameters		mCamParam;
+	String					mCamParamPath;
+	float					mMarkerSizeMeters		= 0.40f;	// 40cm
+	MyBoardConfiguration	mBoardConfig			= null;
+	MyBoard					mBoard;
+	boolean					mLookForBoard			= false;
+	MyMarkerDetector		mDetector;
+	MyBoardDetector			mBoardDetector;
+	VideoCapture			mCVCamera;
+	MyJavaCameraView		mJavaCameraView;
+	int						mCameraId				= 0;
+	boolean					mIsJavaCameraStarted	= false;
+	boolean					mIsJavaCameraOpened		= false;
+	Aruco					mSelf;
+	Vector<double[]>		mMatrices;
+	Vector<Vector<Point>>	mCubePoints;
 
-	static {
-		if (!OpenCVLoader.initDebug()) {
-			// Handle initialization error
-		}
+	Thread					mThread;
+
+	public Aruco()
+	{
+
 	}
 
-	static int			CAPTURE_WIDTH		= 320, CAPTURE_HEIGHT = 240;
-	MyKetaiCamera		mCam;
-	int					mCamId				= 0;
-	ByteBuffer			mImageBuffer;
-	PImage				mBufferImage;
-
-	boolean				mIsDetecting		= true;
-	boolean				mIsProcessing		= false;
-	Vector<Marker>		mDetectedMarkers;
-	Board				mBoardDetected;
-	private Mat			mFrame;
-	private int			mIdSelected;
-	CameraParameters	mCamParam;
-	String				mCamParamPath;
-	float				mMarkerSizeMeters	= 0.40f;						// 40cm
-	BoardConfiguration	mBoardConfig;
-	Board				mBoard;
-	boolean				mLookForBoard		= false;
-	MarkerDetector		mDetector;
-	BoardDetector		mBoardDetector;
-	Mat					mBoardImageMat;
-	PImage				mBoardImage;
+	public Aruco(PApplet aPApplet, String aCamParamPath)
+	{
+		mPApplet = aPApplet;
+		mCamParamPath = aCamParamPath;
+		mListener = (ArucoListener) aPApplet;
+		mSelf = this;
+	}
 
 	public void setup()
 	{
-		orientation(PORTRAIT);
-		imageMode(CENTER);
-		smooth();
-
-		mCam = new MyKetaiCamera(this, CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
-		mCam.register(this);
-		mCam.setCameraID(mCamId);
-		mCam.start();
-		while (!mCam.isStarted())
-			;
-		println("Cam Started");
-
-		//mCamParamPath = getAssetPath("camera.xml");
-		setupAruco();
-	}
-
-	public void draw()
-	{
-		//		println(frameRate);
-		//		println(mCamParamPath);
-		background(0);
-
-		tint(255);
-
-		image(mCam, width / 2, height / 2, width / 2, height / 2);
-		println(frameRate);
-		//image(toPImage(mFrame), width / 2, height / 2);
-
-	}
-
-	public void onCameraPreviewEvent()
-	{
-		mCam.read();
-		if ((mIsDetecting || mLookForBoard) && !mIsProcessing) {
-			//mFrame = toMat(mCam);
-			processFrame(mCam);
-		}
-	}
-
-	public void onDetection(Mat aFrame, Vector<Marker> aDetectedMarkers)
-	{
-		for (Marker m : aDetectedMarkers) {
-			println("Marker Id " + m.getMarkerId() + " Found");
-			//				m.draw3dCube(aFrame, mCamParam, new Scalar(255,0,0));
-		}
-
-	}
-
-	public void onBoardDetection(Mat aFrame, Board aBoardDetected, float aProb)
-	{
-		if (aProb > 0.2) {
-			//			aBoardDetected
-			//					.draw3dAxis(mFrame, mCamParam, new Scalar(255, 0, 0));
-		}
-
-	}
-
-	protected void setupAruco()
-	{
-		mCamParamPath = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/hiddenCities/xml/calibration.yml";
-		println(mCamParamPath);
-		int[] ids = { 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
-				211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222,
-				223, 224 };
-		int[][] markersId = new int[5][5];
-		int index = 0;
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
-				markersId[i][j] = ids[index];
-				index++;
-			}
-		mBoardConfig = new BoardConfiguration(5, 5, markersId, 100, 20);
-		mCamParam = new CameraParameters();
+		PApplet.println("Aruco is setting up");
+		PApplet.println(mCamParamPath);
+		mCamParam = new MyCameraParameters();
 		mCamParam.readFromXML(mCamParamPath);
+		PApplet.println("Camera Calibration xml validity: "
+				+ mCamParam.isValid());
+		mBoard = new MyBoard();
+		mDetectedMarkers = new Vector<MyMarker>();
+		mBoardDetected = new MyBoard();
+		mDetector = new MyMarkerDetector();
+		mBoardDetector = new MyBoardDetector();
 
-		mBoard = new Board();
-		mBoardImageMat = mBoard.createBoardImage(new Size(5, 5), 40, 20, 200,
-				mBoardConfig);
-		mBoardImage = toPImage(mBoardImageMat);
-		mDetectedMarkers = new Vector<Marker>();
-		mBoardDetected = new Board();
-		mDetector = new MarkerDetector();
-		mBoardDetector = new BoardDetector();
+		mMatrices = new Vector<double[]>();
+		for (int i = 0; i < 20; i++) {
+			mMatrices.add(new double[16]);
+		}
+		mCubePoints = new Vector<Vector<Point>>();
+		for (int i = 0; i < 20; i++) {
+			mCubePoints.add(new Vector<Point>());
+		}
+
+		PApplet.println("Aruco is set up");
 	}
 
-	protected void processFrame(PImage aCam)
+	public void start()
 	{
-		final Mat frame = toMat(aCam);
-		final Vector<Marker> detectedMarkers = new Vector<Marker>();
-		final Board boardDetected = new Board();
-		
-		Thread thread = new Thread(new Runnable() {
+		PApplet.println("Aruco is starting");
+		mThread = new Thread(this);
+		mThread.start();
+	}
 
-			@Override
-			public void run()
-			{
-				float prob = 0.0f;
-				mIsProcessing = true;
-				mDetector.detect(frame, detectedMarkers, mCamParam,
-						mMarkerSizeMeters, frame);
-				if (mLookForBoard) {
+	@Override
+	public void run()
+	{
+		String TAG = "running";
+		Log.i(TAG, "Starting processing thread");
+		while (mIsDetecting) {
 
-					try {
-						float timeStarted = millis();
-						prob = mBoardDetector.detect(mDetectedMarkers,
-								mBoardConfig, mBoardDetected, mCamParam,
-								mMarkerSizeMeters);
-						float timeEnded = millis();
-						println("Detection Took " + (timeEnded - timeStarted)
-								+ " milliseconds");
-					} catch (CvException e) {
-						e.printStackTrace();
+			//			Bitmap bmp = null;
+
+			synchronized (this) {
+				//				if (mCVCamera == null)
+				//					break;
+				//
+				//				if (!mCVCamera.grab()) {
+				//					Log.e(TAG, "mCamera.grab() failed");
+				//					break;
+				//				}
+				if (mIsNewFrameAvailable) {
+					if (!mIsProcessing) {
+						mIsProcessing = true;
+						PApplet.println("I'm Processing");
+						processFrame(mFrame);
+						mIsNewFrameAvailable = false;
+						mIsProcessing = false;
 					}
+				}
 
-				}
-				mIsProcessing = false;
-				mDetectedMarkers = (Vector<Marker>) detectedMarkers.clone();
-				mBoardDetected = (Board) boardDetected.clone();
-				onDetection(frame, mDetectedMarkers);
-				if (mLookForBoard) {
-					onBoardDetection(frame, mBoardDetected, prob);
-				}
+				//processFrame(mFrame);
 			}
-			
-		});
-		thread.start();
-		
-		
+
+		}
+
+		Log.i(TAG, "Finishing processing thread");
+
 	}
 
-	public void mousePressed()
+	public void setMat(PImage aPImage)
 	{
 
+		if (!mIsProcessing) {
+			mFrame = toMat(aPImage);
+			mIsNewFrameAvailable = true;
+		}
+
 	}
 
-	public void keyPressed()
+	public void setMat(PImage aPImage, int aResizeFactor)
 	{
 
+		//if (!mIsProcessing) {
+			mFrame = toMat(aPImage);
+			Imgproc.resize(mFrame, mFrame, new Size(mFrame.width()
+					/ aResizeFactor, mFrame.height() / aResizeFactor));
+			PApplet.println("CVMat Size after resize is " + mFrame.width()
+					+ " X " + mFrame.height());
+			mIsNewFrameAvailable = true;
+		//}
+
 	}
 
-	public int sketchWidth()
+	public void setLookForBoard(boolean aLookForBoard)
 	{
-		return displayWidth;
+		mLookForBoard = aLookForBoard;
 	}
 
-	public int sketchHeight()
+	public Mat getCameraMat()
 	{
-		return displayHeight;
+		mIsNewFrameAvailable = false;
+		return mFrame;
 	}
 
-	//
-	//	public void draw3dAxis(Mat frame, CameraParameters cp, Scalar color,
-	//			double height, mBoardDetected , Mat Tvec)
-	//	{
-	//		//		Mat objectPoints = new Mat(4,3,CvType.CV_32FC1);
-	//		MatOfPoint3f objectPoints = new MatOfPoint3f();
-	//		Vector<Point3> points = new Vector<Point3>();
-	//		points.add(new Point3(0, 0, 0));
-	//		points.add(new Point3(height, 0, 0));
-	//		points.add(new Point3(0, height, 0));
-	//		points.add(new Point3(0, 0, height));
-	//		objectPoints.fromList(points);
-	//
-	//		MatOfPoint2f imagePoints = new MatOfPoint2f();
-	//		Calib3d.projectPoints(objectPoints, Rvec, Tvec, cp.getCameraMatrix(),
-	//				cp.getDistCoeff(), imagePoints);
-	//		List<Point> pts = new Vector<Point>();
-	//		Converters.Mat_to_vector_Point(imagePoints, pts);
-	//
-	//		Core.line(frame, pts.get(0), pts.get(1), color, 2);
-	//		Core.line(frame, pts.get(0), pts.get(2), color, 2);
-	//		Core.line(frame, pts.get(0), pts.get(3), color, 2);
-	//
-	//		Core.putText(frame, "X", pts.get(1), Core.FONT_HERSHEY_SIMPLEX, 0.5,
-	//				color, 2);
-	//		Core.putText(frame, "Y", pts.get(2), Core.FONT_HERSHEY_SIMPLEX, 0.5,
-	//				color, 2);
-	//		Core.putText(frame, "Z", pts.get(3), Core.FONT_HERSHEY_SIMPLEX, 0.5,
-	//				color, 2);
-	//	}
+	public Bitmap processFrameReturnBitmap(VideoCapture aCapture)
+	{
+		aCapture.retrieve(mFrame, Highgui.CV_CAP_ANDROID_COLOR_FRAME_RGBA);
+		mIsNewFrameAvailable = true;
+		mListener.onNewFrameAvailable(mFrame);
+
+		mDetector.detect(mFrame, mDetectedMarkers, mCamParam,
+				mMarkerSizeMeters, mFrame);
+
+		mListener.onDetection(mFrame, mDetectedMarkers);
+
+		if (mLookForBoard == true) {
+			float prob = 0f;
+			try {
+				prob = mBoardDetector.detect(mDetectedMarkers, mBoardConfig,
+						mBoardDetected, mCamParam, mMarkerSizeMeters);
+
+			} catch (CvException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mListener.onBoardDetection(mFrame, mBoardDetected, prob);
+		}
+		Bitmap bmp = Bitmap.createBitmap(mFrame.cols(), mFrame.rows(),
+				Bitmap.Config.ARGB_8888);
+
+		try {
+			org.opencv.android.Utils.matToBitmap(mFrame, bmp);
+			return bmp;
+		} catch (IllegalArgumentException e) {
+			bmp.recycle();
+			return null;
+		}
+	}
+
+	public void read(PImage aPImage)
+	{
+		synchronized (this) {
+			aPImage = toPImage(mFrame);
+		}
+	}
+
+	public void processFrame(VideoCapture aCapture)
+	{
+		aCapture.retrieve(mFrame, Highgui.CV_CAP_ANDROID_COLOR_FRAME_RGBA);
+		mIsNewFrameAvailable = true;
+		mListener.onNewFrameAvailable(mFrame);
+
+		mDetector.detect(mFrame, mDetectedMarkers, mCamParam,
+				mMarkerSizeMeters, mFrame);
+
+		mListener.onDetection(mFrame, mDetectedMarkers);
+
+		if (mLookForBoard == true) {
+			float prob = 0f;
+			try {
+				prob = mBoardDetector.detect(mDetectedMarkers, mBoardConfig,
+						mBoardDetected, mCamParam, mMarkerSizeMeters);
+
+			} catch (CvException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mListener.onBoardDetection(mFrame, mBoardDetected, prob);
+		}
+
+	}
+
+	public void processFrame(Mat aFrame)
+	{
+		//		PApplet.println("Processing Frame");
+		mDetector.detect(mFrame, mDetectedMarkers, mCamParam,
+				mMarkerSizeMeters, mFrame);
+		if (mDetectedMarkers.size() > 0) {
+			for (int i = 0; i < mDetectedMarkers.size(); i++) {
+				MyMarker m = mDetectedMarkers.get(i);
+				m.get3dCube(mFrame, mCamParam);
+				//				m.getMatrix();
+
+			}
+			mListener.onDetection(mFrame, mDetectedMarkers);
+			//			for (int i1 = 0; i1 < mCubePoints.size(); i1++) {
+			//				if (mCubePoints.get(i1) != null) {
+			//					PApplet.println("showing cubePoint No."+i1);
+			//					Vector<Point> cubePoints = (Vector<Point>)mCubePoints.get(i1);
+			//					PApplet.println("has"+ cubePoints.size());
+			//				}
+			//			}
+		}
+
+		if (mLookForBoard == true) {
+			float prob = 0f;
+			try {
+				prob = mBoardDetector.detect(mDetectedMarkers, mBoardConfig,
+						mBoardDetected, mCamParam, mMarkerSizeMeters);
+
+			} catch (CvException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mListener.onBoardDetection(mFrame, mBoardDetected, prob);
+		}
+
+	}
+
+	public void setBoardConfiguration(MyBoardConfiguration aBoardConfig)
+	{
+		mBoardConfig = aBoardConfig;
+	}
+
+	public MyBoardConfiguration getBoardConfiguration()
+	{
+		return mBoardConfig;
+	}
+
+	public boolean openJavaCamera()
+	{
+		final RelativeLayout mainLayout = (RelativeLayout) mPApplet.getView();
+		final LinearLayout pappletLayout = (LinearLayout) mainLayout
+				.getChildAt(0);
+		Log.i("openJavaCamera", "openCamera");
+		synchronized (this) {
+			mPApplet.getActivity().runOnUiThread(new Runnable() {
+				public void run()
+				{
+
+					mJavaCameraView = new MyJavaCameraView(mPApplet
+							.getActivity(), MyJavaCameraView.CAMERA_ID_ANY);
+					//					mJavaCameraView = (MyJavaCameraView) mPApplet.getActivity().findViewById(R.id.myJavaCameraView);
+					LayoutParams javaCameraViewLayoutParams = new RelativeLayout.LayoutParams(
+							LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+					mJavaCameraView.setLayoutParams(javaCameraViewLayoutParams);
+					mIsJavaCameraOpened = true;
+					mJavaCameraView.setCvCameraViewListener(mSelf);
+					//mJavaCameraView.setVisibility(View.INVISIBLE);
+					mJavaCameraView.setAlpha(1.0f);
+					mJavaCameraView.setVisibility(SurfaceView.VISIBLE);
+
+					mainLayout.addView(mJavaCameraView,
+							javaCameraViewLayoutParams);
+				}
+			});
+		}
+		return true;
+	}
+
+	public void releaseJavaCamera()
+	{
+		Log.i("releaseCamera", "releaseCamera");
+		synchronized (this) {
+			mPApplet.getActivity().runOnUiThread(new Runnable() {
+				public void run()
+				{
+					if (mJavaCameraView != null) {
+						mJavaCameraView.disableView();
+						mJavaCameraView.disconnect();
+					}
+				}
+			});
+
+		}
+	}
+
+	public void setupJavaCamera(final int width, final int height)
+	{
+		Log.i("setupCamera", "setupCamera(" + width + ", " + height + ")");
+		synchronized (this) {
+			mPApplet.getActivity().runOnUiThread(new Runnable() {
+				public void run()
+				{
+					if (mJavaCameraView != null && mIsJavaCameraOpened) {
+						mJavaCameraView.disconnect();
+						mJavaCameraView.setResolution(new Size(width, height));
+						mJavaCameraView.setPreviewSize(width, height);
+						mJavaCameraView.connect();
+						mJavaCameraView.enableView();
+					}
+				}
+			});
+		}
+
+	}
+
+	public boolean openNativeCamera()
+	{
+		Log.i("openNativeCamera", "openCamera");
+		synchronized (this) {
+			releaseNativeCamera();
+			mCVCamera = new VideoCapture(Highgui.CV_CAP_ANDROID);
+			if (!mCVCamera.isOpened()) {
+				mCVCamera.release();
+				mCVCamera = null;
+				Log.e("oepnCamera", "Failed to open native camera");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void releaseNativeCamera()
+	{
+		Log.i("releaseCamera", "releaseCamera");
+		synchronized (this) {
+			if (mCVCamera != null) {
+				mCVCamera.release();
+				mCVCamera = null;
+			}
+		}
+	}
+
+	public void setupNativeCamera(int width, int height)
+	{
+		Log.i("setupCamera", "setupCamera(" + width + ", " + height + ")");
+		synchronized (this) {
+			if (mCVCamera != null && mCVCamera.isOpened()) {
+				List<Size> sizes = mCVCamera.getSupportedPreviewSizes();
+				int mFrameWidth = width;
+				int mFrameHeight = height;
+
+				// selecting optimal camera preview size
+				{
+					double minDiff = Double.MAX_VALUE;
+					for (Size size : sizes) {
+						if (Math.abs(size.height - height) < minDiff) {
+							mFrameWidth = (int) size.width;
+							mFrameHeight = (int) size.height;
+							minDiff = Math.abs(size.height - height);
+						}
+					}
+				}
+
+				mCVCamera.set(Highgui.CV_CAP_PROP_FRAME_WIDTH, mFrameWidth);
+				mCVCamera.set(Highgui.CV_CAP_PROP_FRAME_HEIGHT, mFrameHeight);
+			}
+		}
+
+	}
 
 	Mat toMat(PImage image)
 	{
@@ -263,7 +438,7 @@ public class Aruco extends PApplet
 		Mat mat = new Mat(h, w, CvType.CV_8UC4);
 		byte[] data8 = new byte[w * h * 4];
 		int[] data32 = new int[w * h];
-		arrayCopy(image.pixels, data32);
+		PApplet.arrayCopy(image.pixels, data32);
 
 		ByteBuffer bBuf = ByteBuffer.allocate(w * h * 4);
 		IntBuffer iBuf = bBuf.asIntBuffer();
@@ -280,14 +455,69 @@ public class Aruco extends PApplet
 		int w = mat.width();
 		int h = mat.height();
 
-		PImage image = createImage(w, h, ARGB);
+		PImage image = mPApplet.createImage(w, h, PApplet.ARGB);
 		byte[] data8 = new byte[w * h * 4];
 		int[] data32 = new int[w * h];
 		mat.get(0, 0, data8);
 		ByteBuffer.wrap(data8).asIntBuffer().get(data32);
-		arrayCopy(data32, image.pixels);
+		PApplet.arrayCopy(data32, image.pixels);
 
 		return image;
+	}
+
+	PImage toPImage(Bitmap aBitmap)
+	{
+		if (aBitmap == null) {
+			return null;
+		}
+		PImage img = new PImage(aBitmap.getWidth(), aBitmap.getHeight(),
+				PConstants.ARGB);
+		aBitmap.getPixels(img.pixels, 0, img.width, 0, 0, img.width, img.height);
+		img.updatePixels();
+		return img;
+	}
+
+	public interface ArucoListener
+	{
+
+		public abstract void onDetection(Mat aFrame,
+				Vector<MyMarker> aDetectedMarkers);
+
+		//
+		public abstract void onBoardDetection(Mat aFrame,
+				MyBoard aBoardDetected, float aProbability);
+
+		public abstract void onNewFrameAvailable(Mat aFrame);
+	}
+
+	@Override
+	public void onCameraViewStarted(int width, int height)
+	{
+		mIsJavaCameraStarted = true;
+		PApplet.println("Aruco's Java Camera has started");
+
+	}
+
+	@Override
+	public void onCameraViewStopped()
+	{
+		mIsJavaCameraStarted = false;
+		PApplet.println("Aruco's Java Camera has stopped");
+
+	}
+
+	@Override
+	public Mat onCameraFrame(CvCameraViewFrame inputFrame)
+	{
+		//synchronized (this) {
+		//			if (!mIsProcessing) {
+		mFrame = inputFrame.rgba();
+		mIsNewFrameAvailable = true;
+		//mListener.onNewFrameAvailable(mFrame);
+		//}
+		//}
+
+		return null;
 	}
 
 }
