@@ -32,6 +32,7 @@ import processing.test.AudioTest2.*;
 import processing.test.CameraFTPTest.*;
 import com.panframe.android.samples.SimplePlayer.*;
 import processing.test.ArUcoTest.*;
+import processing.test.Vuforia.*;
 
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.*;
@@ -63,13 +64,13 @@ public class PAppletFragmentTest extends Activity implements LocationListener
 		if (savedInstanceState == null) {
 			mFragmentManager = getFragmentManager();
 			mManagerWatcher = new ArrayList<String>();
-//			mScenes = new Fragment[5];
-//			mScenes[0] = (Fragment) new MouseCircle();
-//			mScenes[1] = (Fragment) new MouseLines();
-//			mScenes[2] = (Fragment) new CompassVideo();
-//			mScenes[3] = (Fragment) new CameraFTP();
-//			mScenes[4] = (Fragment) new CompassAudio();
-//			
+			//			mScenes = new Fragment[5];
+			//			mScenes[0] = (Fragment) new MouseCircle();
+			//			mScenes[1] = (Fragment) new MouseLines();
+			//			mScenes[2] = (Fragment) new CompassVideo();
+			//			mScenes[3] = (Fragment) new CameraFTP();
+			//			mScenes[4] = (Fragment) new CompassAudio();
+			//			
 
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.requestLocationUpdates(
@@ -99,35 +100,47 @@ public class PAppletFragmentTest extends Activity implements LocationListener
 		if (id == R.id.Scene0) {
 			attachMouseLines();
 			System.out.println("Switch == 0");
+			item.setChecked(true);
 			return true;
 		} else if (id == R.id.Scene1) {
 			attachMouseCircles();
 			System.out.println("Switch == 1");
+			item.setChecked(true);
 			return true;
 		} else if (id == R.id.CompassVideo) {
 			attachCompassVideo();
 			System.out.println("Switch == 2");
+			item.setChecked(true);
 			return true;
 		} else if (id == R.id.CameraFTP) {
 			attachCameraFTP();
 			System.out.println("Switch == 3");
+			item.setChecked(true);
 			return true;
 		} else if (id == R.id.CompassAudio) {
 			attachCompassAudio();
 			System.out.println("Switch == 4");
+			item.setChecked(true);
 			return true;
 		} else if (id == R.id.CameraFTPWithMap) {
 			attachCameraFTPWithMap();
 			System.out.println("Switch == 5");
+			item.setChecked(true);
 			return true;
-		} else if (id == R.id.Aruco) {
+		} else if (id == R.id.ArucoScene) {
 			attachAruco();
 			System.out.println("Switch == 6");
+			item.setChecked(true);
 			return true;
-		}
-		else if (id == R.id.Error) {
+		} else if (id == R.id.Error) {
 			triggerError();
 			System.out.println("Switch == 666");
+			item.setChecked(true);
+			return true;
+		} else if (id == R.id.VuforiaScene) {
+			attachVuforia();
+			System.out.println("Switch == 7");
+			item.setChecked(true);
 			return true;
 		}
 
@@ -231,7 +244,7 @@ public class PAppletFragmentTest extends Activity implements LocationListener
 		fragmentTransaction.commit();
 
 	}
-	
+
 	public void attachAruco()
 	{
 		emptyFragmentManager();
@@ -240,9 +253,27 @@ public class PAppletFragmentTest extends Activity implements LocationListener
 				.beginTransaction();
 		fragmentTransaction
 				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragmentTransaction.add(R.id.container, new Aruco(),
-				"Aruco");
-		mManagerWatcher.add("Aruco");
+		fragmentTransaction
+				.add(R.id.container, new ArucoScene3(), "ArucoScene");
+		mManagerWatcher.add("ArucoScene");
+
+		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
+
+		fragmentTransaction.commit();
+
+	}
+
+	public void attachVuforia()
+	{
+		emptyFragmentManager();
+
+		FragmentTransaction fragmentTransaction = mFragmentManager
+				.beginTransaction();
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.add(R.id.container, new VuforiaScene(),
+				"VuforiaScene");
+		mManagerWatcher.add("VuforiaScene");
 
 		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
 
@@ -324,10 +355,12 @@ public class PAppletFragmentTest extends Activity implements LocationListener
 					} else if (aMessage.equals("Attach CameraFTP With Map")) {
 						attachCameraFTPWithMap();
 						System.out.println("Switch == 5");
-					}
-					else if (aMessage.equals("Aruco")) {
+					} else if (aMessage.equals("Attach Aruco Scene")) {
 						attachAruco();
 						System.out.println("Switch == 6");
+					} else if (aMessage.equals("Attach Vuforia Scene")) {
+						attachAruco();
+						System.out.println("Switch == 7");
 					} else if (aMessage.equals("Trigger Error")) {
 						triggerError();
 						System.out.println("Switch == 666");

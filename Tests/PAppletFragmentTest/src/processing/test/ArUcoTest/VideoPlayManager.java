@@ -1,6 +1,7 @@
 package processing.test.ArUcoTest;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,9 +16,14 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
 import processing.core.PApplet;
+import processing.core.PApplet.SketchSurfaceViewGL;
 import processing.opengl.PShader;
+import processing.opengl.Texture;
+import processing.opengl.PGraphicsOpenGL;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -32,11 +38,15 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Surface;
+import android.view.TextureView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class VideoPlayManager implements Runnable,
 		MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener,
 		MediaPlayer.OnBufferingUpdateListener,
-		SurfaceTexture.OnFrameAvailableListener
+		SurfaceTexture.OnFrameAvailableListener,
+		TextureView.SurfaceTextureListener
 {
 
 	public Thread			mThread;
@@ -58,54 +68,72 @@ public class VideoPlayManager implements Runnable,
 	public FileInputStream	mInputStream			= null;
 	public volatile int		mBytesRead;
 
-	public SurfaceTexture	mTexture;
+	int						mWidth, mHeight;
+	public Texture			mTexture;
+	public SurfaceTexture	mSurfaceTexture;
 	public PShader			mShader;
-	public int				mTextureId;
+	public int				mSurfaceTextureId;
 	public Surface			mSurface;
+	public TextureView		mTextureView;
+	public Matrix			mTextureViewTransformMatrix;
+	VideoPlayManager		mSelf;
+	boolean					mIsTextureViewMade		= false;
 
 	// Path of the file, buffer size in kb (the less the buffer size, more
 	// responsive the audio stream and more stutters
-	public VideoPlayManager(PApplet aPApplet, Uri aUri)
+	public VideoPlayManager(PApplet aPApplet, String aPath, int aWidth,
+			int aHeight)
 	{
+		mSelf = this;
 		mPApplet = aPApplet;
-		mPath = aUri.getPath();
-		mUri = aUri;
+		mWidth = aWidth;
+		mHeight = aHeight;
+		mPath = aPath;
+
 		mPlayer = new MediaPlayer();
-		mTexture = new SurfaceTexture(mTextureId);
-		mTexture.setOnFrameAvailableListener(this);
-		mSurface = new Surface(mTexture);
+		setupTextureView();
+		//		mSurfaceTexture = new SurfaceTexture(mSurfaceTextureId);
+		//setupTexture(mPApplet.getActivity());
+
 		
-		try {
-			
-			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mPlayer.setDataSource(mPApplet.getActivity(), mUri);
-			mPlayer.setSurface(mSurface);
-			mPlayer.setLooping(mIsLooping);
-			mPlayer.setOnBufferingUpdateListener(this);
-			mPlayer.setOnCompletionListener(this);
-			mPlayer.setOnPreparedListener(this);
-			mPlayer.prepareAsync();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	}
+
+	public void setupTextureView()
+	{
+		PApplet.println("is setting up Texture view");
+		final RelativeLayout mainLayout = (RelativeLayout) mPApplet.getView();
+
+		mPApplet.getActivity().runOnUiThread(new Runnable() {
+			public void run()
+			{
+				LayoutParams textureViewlayoutParams = new RelativeLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+				mTextureView = new TextureView(mPApplet.getActivity());
+				//				mTextureView.setOpaque(true);
+				mTextureView.setLayoutParams(textureViewlayoutParams);
+				mainLayout.addView(mTextureView, textureViewlayoutParams);
+				mTextureViewTransformMatrix = mTextureView.getMatrix();
+				mTextureView.setSurfaceTextureListener(mSelf);
+//				mTextureView.setSurfaceTexture(mSurfaceTexture);
+				PApplet.println("finished making Texture view");
+				mIsTextureViewMade = true;
+				
+			}
+
+		});
 
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer aPlayer)
 	{
+		PApplet.println("OnPrepared MediaPlayer");
 		if (mPlayer == aPlayer) {
+//			mTextureView.setSurfaceTexture(mSurfaceTexture);
 			mIsPrepared = true;
+			mIsPlaying=true;
+			mPlayer.start();
 		}
 
 	}
@@ -133,21 +161,87 @@ public class VideoPlayManager implements Runnable,
 
 	}
 	
+	@Override
+	public void onSurfaceTextureAvailable(SurfaceTexture aSurfaceTexture, int arg1,
+			int arg2)
+	{
+		PApplet.println("onSurfaceTextureAvailable for MediaPlayer");
+		
+		try {
+			//			Texture.Parameters textureParams = new Texture.Parameters();
+			//			textureParams.target = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+			//			mTexture = new Texture(
+			//					(PGraphicsOpenGL) (((SketchSurfaceViewGL) (mPApplet.getSurfaceView()))
+			//							.getGraphics()), mWidth, mHeight,textureParams);
+			//			mSurfaceTexture = new SurfaceTexture(mTexture.glName);
+			//			mSurfaceTexture.setOnFrameAvailableListener(this);
+			mSurfaceTexture = aSurfaceTexture;
+			mSurface = new Surface(mSurfaceTexture);
+			mInputStream = new FileInputStream(mPath);
+			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			FileDescriptor afd = mInputStream.getFD();
+			mPlayer.setDataSource(afd);
+			//			mPlayer.setDataSource(mPApplet.getActivity(), mUri);
+			mPlayer.setSurface(mSurface);
+			mPlayer.setLooping(mIsLooping);
+			mPlayer.setOnBufferingUpdateListener(this);
+			mPlayer.setOnCompletionListener(this);
+			mPlayer.setOnPreparedListener(this);
+			mPlayer.prepareAsync();
+			
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onSurfaceTextureDestroyed(SurfaceTexture arg0)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onSurfaceTextureSizeChanged(SurfaceTexture arg0, int arg1,
+			int arg2)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSurfaceTextureUpdated(SurfaceTexture arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
 
 	@Override
 	public void run()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void updateTexture()
 	{
 		synchronized (this) {
 			if (mIsNewFrameAvailable) {
-				mTexture.updateTexImage();
-				//                mTexture.getTransformMatrix(videoTextureTransform);
-				mSurface = new Surface(mTexture);
+				mSurfaceTexture.updateTexImage();
+				//                mSurfaceTexture.getTransformMatrix(videoTextureTransform);
+				mSurface = new Surface(mSurfaceTexture);
 				mIsNewFrameAvailable = false;
 			}
 		}
@@ -160,27 +254,6 @@ public class VideoPlayManager implements Runnable,
 			@Override
 			public void run()
 			{
-				//				System.out.println("thread ran");
-				//				try {
-				//					while (mHasSource) {
-				//						int ret = 0;
-				//						while (mBytesRead < mMusicLength && mIsPlaying) {
-				//							ret = mInputStream.read(mByteData, 0, mBufferSize);
-				//							if (ret != -1) {
-				//								// Write the byte array to the track
-				//								mTrack.setStereoVolume(mVol * mMaxVol, mVol
-				//										* mMaxVol);
-				//								mTrack.write(mByteData, 0, ret);
-				//								mBytesRead += ret;
-				//							} else if (mIsLooping) {
-				//								mInputStream.reset();
-				//							}
-				//						}
-				//					}
-				//				} catch (Exception e) {
-				//					e.printStackTrace();
-				//				}
-				//			}
 
 			}
 		});
@@ -189,30 +262,7 @@ public class VideoPlayManager implements Runnable,
 
 	public void makeFile()
 	{
-		//		// release();
-		//		mFile = new File(mPath);
-		//		mByteData = new byte[(int) mBufferSize];
-		//		mBytesRead = 0;
-		//
-		//		mMinBuffSize = AudioTrack.getMinBufferSize(44100,
-		//				AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-		//		mTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
-		//				AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
-		//				mMinBuffSize, AudioTrack.MODE_STREAM);
-		//		mMaxVol = mTrack.getMaxVolume();
-		//		try {
-		//			mInputStream = new FileInputStream(mFile);
-		//
-		//		} catch (FileNotFoundException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-		//		mMusicLength = (int) mFile.length();
-		//
-		//		mPlayer.play();
-		//
-		//		setIsPlaying(true);
-		//		mHasSource = true;
+
 	}
 
 	public void setPath(String aPath)
@@ -317,29 +367,33 @@ public class VideoPlayManager implements Runnable,
 		return mSurface;
 	}
 
-	public SurfaceTexture getTexture()
+	public Texture getTexture()
 	{
 		return mTexture;
 	}
 
-	////////SurfaceTexture things
-	private static final int		EGL_OPENGL_ES2_BIT			= 4;
-	private static final int		EGL_CONTEXT_CLIENT_VERSION	= 0x3098;
-	private static final String		LOG_TAG						= "SurfaceTest.GL";
-	private EGL10					egl;
-	private EGLDisplay				eglDisplay;
-	private EGLContext				eglContext;
-	private EGLSurface				eglSurface;
+	public SurfaceTexture getSurfaceTexture()
+	{
+		return mSurfaceTexture;
+	}
 
-	private long					lastFpsOutput				= 0;
-	private int						frames;
-	private Context					ctx;
-	private FloatBuffer textureBuffer;
-    private float textureCoords[] = { 0.0f, 1.0f, 0.0f, 1.0f,
-                                      0.0f, 0.0f, 0.0f, 1.0f,
-                                      1.0f, 0.0f, 0.0f, 1.0f,
-                                      1.0f, 1.0f, 0.0f, 1.0f };
-	private int[] textures = new int[1];
+	////////SurfaceTexture things
+	private static final int	EGL_OPENGL_ES2_BIT			= 4;
+	private static final int	EGL_CONTEXT_CLIENT_VERSION	= 0x3098;
+	private static final String	LOG_TAG						= "SurfaceTest.GL";
+	private EGL10				egl;
+	private EGLDisplay			eglDisplay;
+	private EGLContext			eglContext;
+	private EGLSurface			eglSurface;
+
+	private long				lastFpsOutput				= 0;
+	private int					frames;
+	private Context				ctx;
+	private FloatBuffer			textureBuffer;
+	private float				textureCoords[]				= { 0.0f, 1.0f,
+			0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, 0.0f, 1.0f								};
+	private int[]				textures					= new int[1];
 
 	private void pingFps()
 	{
@@ -367,7 +421,7 @@ public class VideoPlayManager implements Runnable,
 		eglContext = createContext(egl, eglDisplay, eglConfig);
 
 		eglSurface = egl.eglCreateWindowSurface(eglDisplay, eglConfig,
-				mTexture, null);
+				mSurfaceTexture, null);
 
 		if (eglSurface == null || eglSurface == EGL10.EGL_NO_SURFACE) {
 			throw new RuntimeException("GL Error: "
@@ -423,51 +477,54 @@ public class VideoPlayManager implements Runnable,
 				EGL10.EGL_DEPTH_SIZE, 0, EGL10.EGL_STENCIL_SIZE, 0,
 				EGL10.EGL_NONE };
 	}
-	
+
 	private void setupTexture(Context context)
-    {
-        ByteBuffer texturebb = ByteBuffer.allocateDirect(textureCoords.length * 4);
-        texturebb.order(ByteOrder.nativeOrder());
-        
-        ctx = context;
-        
-        textureBuffer = texturebb.asFloatBuffer();
-        textureBuffer.put(textureCoords);
-        textureBuffer.position(0);
+	{
+		ByteBuffer texturebb = ByteBuffer
+				.allocateDirect(textureCoords.length * 4);
+		texturebb.order(ByteOrder.nativeOrder());
 
-        // Generate the actual texture
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glGenTextures(1, textures, 0);
-        checkGlError("Texture generate");
+		ctx = context;
 
-        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textures[0]);
-        checkGlError("Texture bind");
+		textureBuffer = texturebb.asFloatBuffer();
+		textureBuffer.put(textureCoords);
+		textureBuffer.position(0);
 
-        mTexture = new SurfaceTexture(textures[0]);
-    }
-	
+		// Generate the actual texture
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+		GLES20.glGenTextures(1, textures, 0);
+		checkGlError("Texture generate");
+
+		GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textures[0]);
+		checkGlError("Texture bind");
+
+		mSurfaceTexture = new SurfaceTexture(textures[0]);
+	}
+
 	protected void initGLComponents()
-    {
-//        setupVertexBuffer();
-        setupTexture(ctx);
-//        loadShaders();
-    }
+	{
+		//        setupVertexBuffer();
+		setupTexture(ctx);
+		//        loadShaders();
+	}
 
-    protected void deinitGLComponents()
-    {
-        GLES20.glDeleteTextures(1, textures, 0);
-//        GLES20.glDeleteProgram(shaderProgram);
-        mTexture.release();
-        mTexture.setOnFrameAvailableListener(null);
-    }
+	protected void deinitGLComponents()
+	{
+		GLES20.glDeleteTextures(1, textures, 0);
+		//        GLES20.glDeleteProgram(shaderProgram);
+		mSurfaceTexture.release();
+		mSurfaceTexture.setOnFrameAvailableListener(null);
+	}
 
-    public void checkGlError(String op)
-    {
-        int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e("SurfaceTest", op + ": glError " + GLUtils.getEGLErrorString(error));
-        }
-    }
+	public void checkGlError(String op)
+	{
+		int error;
+		while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+			Log.e("SurfaceTest",
+					op + ": glError " + GLUtils.getEGLErrorString(error));
+		}
+	}
 
+	
 
 }
