@@ -32,14 +32,14 @@ public class CompassAudio extends PApplet implements SensorEventListener
 	public void setup()
 	{
 		
-		compasAudioRotate = loadImage("storage/sdcard0/hiddenCities/images/compasAudioRotate.png");
+		compasAudioRotate = loadImage("storage/emulated/0/hiddenCities/images/compasAudioRotate.png");
 		orientation(PORTRAIT);
 		imageMode(CENTER);
 
 		mPaths = new String[2];
 		
-		mPaths[0] = "storage/sdcard0/hiddenCities/audio/compasAudio1.wav";
-		mPaths[1]= "storage/sdcard0/hiddenCities/audio/compasAudio2.wav";
+		mPaths[0] = "storage/emulated/0/hiddenCities/audio/compasAudio1.wav";
+		mPaths[1]= "storage/emulated/0/hiddenCities/audio/compasAudio2.wav";
 
 
 		mPlayManagers = new AudioPlayManager[mPaths.length];
@@ -65,13 +65,7 @@ public class CompassAudio extends PApplet implements SensorEventListener
 
         currentDegree = degree;
         
-    }
-	public void draw()
-	{
-		// println(frameRate);
-		background(0);
-		
-		if (currentDegree>180) {
+        if (currentDegree>180) {
 			tempDegree = currentDegree - 180.0f;
 
 			mPlayManagers[0].setVolume(map((float) tempDegree, 0.0f, 180.0f,0.0f, 1.0f));
@@ -84,6 +78,14 @@ public class CompassAudio extends PApplet implements SensorEventListener
 				mPlayManagers[1].setVolume(map((float) currentDegree, 0.0f, 180.0f,0.0f, 1.0f));
 		      
 		    }
+        
+    }
+	public void draw()
+	{
+		// println(frameRate);
+		background(0);
+		
+		
 		
 		    image(compasAudioRotate, 540, 960);
 		// println(mPlayManagers[0].getVolume());

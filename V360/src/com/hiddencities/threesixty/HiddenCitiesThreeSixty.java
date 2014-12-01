@@ -34,8 +34,7 @@ public class HiddenCitiesThreeSixty extends Activity implements PFAssetObserver 
 	Timer _scrubberMonitorTimer;
 	PFAssetObserver _observer;
 	ViewGroup _frameContainer;
-	String[] mPaths;
-	AudioPlayManager[] mPlayManagers;
+
 	boolean setter;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,21 +49,9 @@ public class HiddenCitiesThreeSixty extends Activity implements PFAssetObserver 
 		_frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
 		_frameContainer.setBackgroundColor(0xFF000000);
 		
-		loadVideo("storage/sdcard0/hiddenCities/video/360.mp4");
+		loadVideo("storage/emulated/0/hiddenCities/video/360.mp4");
 
-		mPaths = new String[4];
-		mPaths[0] = "storage/sdcard0/hiddenCities/audio/360ch1.wav";
-		mPaths[1] = "storage/sdcard0/hiddenCities/audio/360ch2.wav";
-		mPaths[2] = "storage/sdcard0/hiddenCities/audio/360ch3.wav";
-		mPaths[3] = "storage/sdcard0/hiddenCities/audio/360ch4.wav";
 
-		mPlayManagers = new AudioPlayManager[mPaths.length];
-		for (int i = 0; i < mPlayManagers.length; i++) {
-			mPlayManagers[i] = new AudioPlayManager(mPaths[i], 64); // buffersize																// = 64kb
-			mPlayManagers[i].setIsLooping(true);
-			//mPlayManagers[i].setVolume(0);
-			mPlayManagers[i].play();
-		}
 		
 		showControls(false);
 		_pfasset.play();
@@ -139,13 +126,7 @@ public class HiddenCitiesThreeSixty extends Activity implements PFAssetObserver 
 				_pfasset.pause();
 		}
 
-		mPlayManagers = new AudioPlayManager[mPaths.length];
-		for (int i = 0; i < mPlayManagers.length; i++) {
-			if (mPlayManagers[i].getIsPlaying()) {
-				mPlayManagers[i].pause();
-			}
 
-		}
 	}
 
 	public void onProgressChanged(SeekBar seekbar, int progress,
@@ -166,30 +147,6 @@ public class HiddenCitiesThreeSixty extends Activity implements PFAssetObserver 
 		_pfasset.play();
 	}
 
-		
-//		if (_Rotation > 0 && _Rotation < 90) {
-//			_calculatedRotation = _Rotation;
-//			mPlayManagers[0].setVolume(_calculatedRotation / 90);
-//			mPlayManagers[3].setVolume((90 - _calculatedRotation) / 90);
-//			
-//		}
-//		
-//		if (_Rotation > 90 && _Rotation < 180) {
-//			_calculatedRotation = _Rotation -90;
-//			mPlayManagers[1].setVolume(_calculatedRotation / 90);
-//			mPlayManagers[0].setVolume((90 - _calculatedRotation) / 90);
-//		}
-//		
-//		if (_Rotation > 180 && _Rotation < 270) {
-//			_calculatedRotation = _Rotation-180;
-//			mPlayManagers[2].setVolume(_calculatedRotation / 90);
-//			mPlayManagers[1].setVolume((90 - _calculatedRotation) / 90);
-//		}
-//		
-//		if (_Rotation > 270 && _Rotation < 360) {
-//			_calculatedRotation = _Rotation -270;
-//			mPlayManagers[3].setVolume(_calculatedRotation / 90);
-//			mPlayManagers[2].setVolume((90 - _calculatedRotation) / 90);
-//		}
+
 
 }

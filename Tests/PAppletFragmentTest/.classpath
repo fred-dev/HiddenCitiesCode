@@ -5,8 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/Ketai.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/Users/hesamohadi/Work Stuff/Code/Others/processing-android-fragment/bin"/>
-	<classpathentry kind="lib" path="/android-mode"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/panframe-1.9.jar"/>
 	<classpathentry kind="lib" path="libs/processingFragment-core.jar"/>
@@ -19,6 +17,10 @@
 	<classpathentry kind="lib" path="libs/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="libs/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/java_websocket.jar"/>
+<<<<<<< Updated upstream
 	<classpathentry kind="lib" path="libs/Vuforia.jar"/>
+=======
+	<classpathentry kind="lib" path="/Users/Fred/Dropbox/HiddenCitiesCode/Tests/Processing-Android Template/Processing_Android_Template/libs/processing-core.jar"/>
+>>>>>>> Stashed changes
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,0 +1,12 @@
+08:06:01 **** Build of configuration Default for project Processing_Android_Template ****
+/ndk-build 
+Cannot run program "/ndk-build": Unknown reason
+
+Error: Program "/ndk-build" not found in PATH
+PATH=[/usr/bin:/bin:/usr/sbin:/sbin]
+08:06:03 **** Auto Build of configuration Default for project Processing_Android_Template ****
+/ndk-build 
+Cannot run program "/ndk-build": Unknown reason
+
+Error: Program "/ndk-build" not found in PATH
+PATH=[/usr/bin:/bin:/usr/sbin:/sbin]
