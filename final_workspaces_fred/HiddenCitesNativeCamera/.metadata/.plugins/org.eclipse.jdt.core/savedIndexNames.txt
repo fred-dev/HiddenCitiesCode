@@ -1,0 +1,3 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitesNativeCamera/.metadata/.plugins/org.eclipse.jdt.core
+1745539399.index
+2339628580.index
