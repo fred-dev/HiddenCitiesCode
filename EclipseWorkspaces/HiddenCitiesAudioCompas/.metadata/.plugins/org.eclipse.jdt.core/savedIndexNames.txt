@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/EclipseWorkspaces/HiddenCitiesAudioCompas/.metadata/.plugins/org.eclipse.jdt.core
+3008226083.index
+842128269.index
+2339628580.index

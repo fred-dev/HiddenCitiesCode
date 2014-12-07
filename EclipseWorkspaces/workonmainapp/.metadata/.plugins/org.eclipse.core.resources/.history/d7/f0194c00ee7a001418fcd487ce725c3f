@@ -1,0 +1,33 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.pappletfragmenttest.PAppletFragmentTest"
+    tools:ignore="MergeRootFrame" >
+
+    <TextureView
+        android:id="@+id/textureView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+    <processing.test.ArUcoTest.MyJavaCameraView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        android:id="@+id/myJavaCameraView"
+        opencv:show_fps="true"
+        opencv:camera_id="any" />
+
+    <com.google.android.gms.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+    </com.google.android.gms.maps.MapView>
+
+    
+
+</FrameLayout>

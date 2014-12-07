@@ -1,0 +1,60 @@
+package com.example.hiddencitiesaudioplayer;
+
+
+import java.io.IOException;
+
+import android.app.Activity;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+
+public class AudioPlayer extends Activity implements MediaPlayer.OnPreparedListener {
+
+   private MediaPlayer mediaPlayer;
+   String url;
+   public static int oneTimeOnly = 0;
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_audio_player);
+      url = "storage/sdcard0/hiddenCities/audio/compasAudio1.wav";
+      
+      mediaPlayer.setOnPreparedListener(this); 
+      preparePlayer();
+
+   }
+   private void preparePlayer() {
+	
+	    try {
+	       
+			mediaPlayer.setDataSource(url);
+	        mediaPlayer.prepareAsync();
+
+	    } catch (IllegalArgumentException e) {
+	        
+	        e.printStackTrace();
+	    } catch (IllegalStateException e) {
+	        
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	 
+	        e.printStackTrace();
+	    }
+	}
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+   // Inflate the menu; this adds items to the action bar if it is present.
+   getMenuInflater().inflate(R.menu.audio_player, menu);
+   return true;
+   }
+@Override
+public void onPrepared(MediaPlayer mp) {
+	// TODO Auto-generated method stub
+	mp.start();
+	
+}
+
+ }

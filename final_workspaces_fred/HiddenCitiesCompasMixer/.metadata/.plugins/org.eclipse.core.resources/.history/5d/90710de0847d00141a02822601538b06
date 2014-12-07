@@ -1,0 +1,83 @@
+package com.example.hiddencitiescompasaudio;
+
+import java.io.File;
+
+import processing.test.AudioTest2.AudioPlayManager;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
+public class HiddenCitiesCompasAudio extends Activity implements SensorEventListener {
+	String[]			mPaths;
+	AudioPlayManager[]	mPlayManagers;
+	private float currentDegree = 0f;
+	private float tempDegree = 0f;
+
+    // device sensor manager
+    private SensorManager mSensorManager;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hidden_cities_compas_audio);
+        setWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 
+		 if (getActionBar().isShowing()) getActionBar().hide();
+
+		File root = Environment.getExternalStorageDirectory();
+//		ImageView IV = (ImageView) findViewById(R.id.imageView1);
+//		Bitmap bMap = BitmapFactory.decodeFile(root+"hiddenCities/images/hiddenCities.png");
+//		IV.setImageBitmap(bMap);
+		
+		mPaths[0]= root + "hiddenCities/audio/compasAudio1.wav";
+		mPaths[1]= root + "hiddenCities/audio/compasAudio2.wav";
+
+
+		mPlayManagers = new AudioPlayManager[mPaths.length];
+		for (int i = 0; i < mPlayManagers.length; i++) {
+			mPlayManagers[i] = new AudioPlayManager(mPaths[i], 64); // buffersize = 64kb
+			mPlayManagers[i].setIsLooping(true);
+			mPlayManagers[i].play();
+			
+
+		}
+
+
+		 mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.hidden_cities_compas_audio, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

@@ -1,0 +1,39 @@
+package com.example.hiddencitiesaudioplayer;
+
+
+import java.io.File;
+
+import android.app.Activity;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.Menu;
+
+public class AudioPlayer extends Activity {
+
+	File filecheck;
+	String flieLocation;
+   private MediaPlayer mediaPlayer;
+   
+   public static int oneTimeOnly = 0;
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_audio_player);
+      filecheck = new File(Environment.getExternalStorageDirectory() + "/hiddenCities/audio/IntroText.wav");
+      flieLocation= filecheck.getAbsolutePath();
+      mediaPlayer = MediaPlayer.create(this, Uri.parse(flieLocation));
+      mediaPlayer.start();
+
+   }
+
+
+   @Override
+   public boolean onCreateOptionsMenu(Menu menu) {
+   // Inflate the menu; this adds items to the action bar if it is present.
+   getMenuInflater().inflate(R.menu.audio_player, menu);
+   return true;
+   }
+
+ }

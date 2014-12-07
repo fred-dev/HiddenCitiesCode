@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/EclipseWorkspaces/Buttons For menu/.metadata/.plugins/org.eclipse.jdt.core
-1951587223.index
-2339628580.index
-1159216034.index

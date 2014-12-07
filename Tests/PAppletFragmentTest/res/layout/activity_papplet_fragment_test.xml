@@ -17,8 +17,7 @@
         android:layout_height="fill_parent"
         android:visibility="gone"
         android:id="@+id/myJavaCameraView"
-        opencv:show_fps="true"
-        opencv:camera_id="any" />
+        />
 
     <com.google.android.gms.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"

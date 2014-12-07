@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename Java project &apos;HiddenCitiesAudioComaps&apos; to &apos;HiddenCitiesAudioCompass&apos;&#x0A;- Original element: &apos;HiddenCitiesAudioComaps&apos;&#x0A;- Renamed element: &apos;HiddenCitiesAudioComaps&apos;&#x0A;- Update references to refactored element" description="Rename Java project &apos;HiddenCitiesAudioComaps&apos;" flags="7" id="org.eclipse.jdt.ui.rename.java.project" input="=HiddenCitiesAudioComaps" name="HiddenCitiesAudioCompass" references="true" stamp="1417890336497" version="1.0"/>
+</session>

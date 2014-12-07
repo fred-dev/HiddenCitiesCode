@@ -1,0 +1,5 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/EclipseWorkspaces/Vuforia/.metadata/.plugins/org.eclipse.jdt.core
+399859447.index
+2339628580.index
+1612118554.index
+582052260.index
