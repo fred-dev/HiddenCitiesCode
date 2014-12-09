@@ -1,0 +1,96 @@
+package com.example.saxparserbetter;
+
+import android.R.string;
+
+public class XmlValuesModel {
+	 
+    private  float markerLat;
+    private  float markerLong;
+    private  int markerId;
+    
+    private  float wayPointLat;
+    private  float wayPointLong;
+    private  int wayPointId;
+    private string userName;
+    private string userEmail;
+    
+ 
+     
+    /************* Define Setter Methods *********/
+     
+    public void setMarkerLat(Float markerLat)
+    {
+        this.markerLat = markerLat;
+    }
+    public void setMarkerLong(Float markerLong)
+    {
+        this.markerLong = markerLong;
+    }
+    public void setMarkerId(int markerId)
+    {
+        this.markerId = markerId;
+    }
+
+    public void setWayPointLat(Float wayPointLat)
+    {
+        this.wayPointLat = wayPointLat;
+    }
+    public void setWayPointLong(Float wayPointLong)
+    {
+        this.wayPointLong = wayPointLong;
+    }
+    public void setWayPointId(int wayPointId)
+    {
+        this.wayPointId = wayPointId;
+    }
+    public void setUsername(string userName)
+    {
+        this.userName = userName;
+    }
+    public void setUserEmail(string userEmail)
+    {
+        this.userEmail = userEmail;
+    }
+    
+    
+  
+    
+     
+    /************* Define Getter Methods *********/
+     
+    public Float getMarkerLat()
+    {
+        return markerLat;
+    }
+     
+    public float getMarkerLong()
+    {
+        return markerLong;
+    }
+    public int getMarkerId()
+    {
+        return markerId;
+    }
+    public float getWaypointLat()
+    {
+        return wayPointLat;
+    }
+    public float getWaypointLong()
+    {
+        return this.wayPointLong;
+    }
+    public int getWaypointId()
+    {
+        return this.wayPointId;
+    }
+    public string getUsername()
+    {
+    	return this.userName;
+    }
+    public string getUserEmail()
+    {
+    	return this.userEmail;
+    }
+    
+     
+} 

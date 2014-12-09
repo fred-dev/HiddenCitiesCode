@@ -1,0 +1,102 @@
+package com.example.saxparserbetter;
+
+public class XmlValuesModel {
+	 
+    private  Float markerLat;
+    private  Float markerLong;
+    private  int markerId;
+    
+    private  Float wayPointLat;
+    private  Float wayPointLong;
+    private  int wayPointId;
+    
+ 
+     
+    /************* Define Setter Methods *********/
+     
+    public void setMarkerLat(Float markerLat)
+    {
+        this.markerLat = markerLat;
+    }
+    public void setMarkerLong(Float markerLong)
+    {
+        this.markerLong = markerLong;
+    }
+    public void setMarkerId(int markerId)
+    {
+        this.markerId = markerId;
+    }
+
+    public void setWayPointLat(Float wayPointLat)
+    {
+        this.wayPointLat = wayPointLat;
+    }
+    public void setWayPointLong(Float wayPointLong)
+    {
+        this.wayPointLong = wayPointLong;
+    }
+    public void setWayPointId(int wayPointId)
+    {
+        this.wayPointId = wayPointId;
+    }
+    
+    
+     
+     
+     
+    /************* Define Getter Methods *********/
+     
+    public int getid()
+    {
+        return id;
+    }
+     
+    public String getdate()
+    {
+        return date;
+    }
+    public int getcompanyid()
+    {
+        return companyid;
+    }
+    public String getcompany()
+    {
+        return company;
+    }
+    public String getaddress()
+    {
+        return this.address;
+    }
+    public String getcity()
+    {
+        return this.city;
+    }
+     
+    public String getstate()
+    {
+        return this.state;
+    }
+     
+    public String getzipcode()
+    {
+        return this.zipcode;
+    }
+     
+    public String getcountry()
+    {
+        return this.country;
+    }
+     
+    public String gettelephone()
+    {
+        return this.telephone;
+    }
+    public void setforms(String forms)
+    {
+        this.forms = forms;
+    }
+    public String getforms()
+    {
+        return this.forms;
+    }
+} 

@@ -1,0 +1,101 @@
+package com.example.saxparserbetter;
+
+import java.io.InputStream;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+public class SaxParsing extends Activity {
+    List<XmlValuesModel> myData = null;
+     
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+ 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sax_parsing);
+         
+        final TextView output = (TextView) findViewById(R.id.output);
+        final Button bparsexml      = (Button) findViewById(R.id.bparsexml);
+         
+        //Static XML data which we will parse
+    
+         
+        String dataToBeParsed = "Click on button to parse XML.\n\n XML DATA : \n\n";
+        output.setText(dataToBeParsed);
+         
+        /****  Button Click Listener ********/
+      
+         
+                try{
+                 
+                	InputStream is = getAssets().open("file.xml");
+        			
+        			
+                    XMLParser parser=new XMLParser();
+                    SAXParserFactory factory=SAXParserFactory.newInstance();
+                    SAXParser sp=factory.newSAXParser();
+                    XMLReader reader=sp.getXMLReader();
+                    reader.setContentHandler(parser);
+                    sp.parse(is,parser);
+                     
+                    /************* Get Parse data in a ArrayList **********/
+                    myData=parser.markerList;
+                     
+                    if(myData!=null){
+                         
+                        String OutputData = "";
+                         
+                        /*************** Get Data From ArrayList *********/
+ 
+                        for (XmlValuesModel xmlRowData : myData) {
+                          if(xmlRowData!=null)
+                          {  
+                            int     markerId        = xmlRowData.getMarkerId();
+                            int     waypointId = xmlRowData.getWaypointId();
+                            String  username   = xmlRowData.getUsername();
+                            String  userEmail   = xmlRowData.getUserEmail();
+                            float  markerLat      = xmlRowData.getMarkerLat();
+                            float  markerLong     = xmlRowData.getMarkerLong();
+                            float  wayPointLat   = xmlRowData.getWaypointLat();
+                            float  wayPointLong   = xmlRowData.getWaypointLong();
+                       
+                             
+                             
+                            OutputData += 
+                            								+ markerId +" | "
+                                                           + waypointId    +" | "
+                                                      
+                                                           + markerLat    +" | "
+                                                           + markerLong    +" | "
+                                                           + wayPointLat  +" | "
+                                                           + wayPointLong       +" \n\n "
+                                                            
+                                                   ;
+                             
+                          }
+                          else
+                              Log.e("Jobs", "Jobs value null");
+                        }
+                         
+                        /******** Show Data *************/
+                        output.setText(OutputData);
+                    }   
+                }
+                catch(Exception e){Log.e("Jobs", "Exception parse xml :"+e);}
+            
+        
+    }
+}

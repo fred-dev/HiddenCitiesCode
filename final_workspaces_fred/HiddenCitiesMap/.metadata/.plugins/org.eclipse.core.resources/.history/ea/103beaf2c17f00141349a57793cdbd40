@@ -1,0 +1,344 @@
+package com.example.hiddencitiesmap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.view.WindowManager;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.XMLReader;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.TextView;
+
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.SupportMapFragment;
+
+import android.graphics.Color;
+import android.location.Location;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+@SuppressLint("ClickableViewAccessibility")
+public class MainActivity extends FragmentActivity 
+
+	implements
+    ConnectionCallbacks,
+    OnConnectionFailedListener,
+    LocationListener,
+    OnMyLocationButtonClickListener ,
+    View.OnTouchListener{
+	
+	List<XmlValuesModel> markerData = null;
+	List<XmlValuesModel> waypointData = null;
+
+	
+	LatLng[] waypointLatLongList;
+	LatLng[] markerLatLongList;
+	Marker[] markerList;
+	
+	
+//		private static final LatLng INSTALLATION01 = new LatLng(52.393100, 4.911760);
+//	    private static final LatLng INSTALLATION02 = new LatLng(52.393047, 4.911658);
+//	    private static final LatLng INSTALLATION03 = new LatLng(52.392792, 4.912575);
+//	    private static final LatLng INSTALLATION04 = new LatLng(52.392605, 4.913015);
+//	    private static final LatLng INSTALLATION05 = new LatLng(52.392723, 4.913133);
+//	   
+//	    
+//	    private Marker mInstallation01;
+//	    private Marker mInstallation02;
+//	    private Marker mInstallation03;
+//	    private Marker mInstallation04;
+//	    private Marker mInstallation05;
+	    
+	    private Polyline mMutablePolyline;
+
+private GoogleMap mMap;
+
+private GoogleApiClient mGoogleApiClient;
+
+private static final int[] BUTTON_IDS = { R.id.CameraButton, R.id.HelpButton
+
+};
+private List<Button> buttonList;
+
+Button mButton;
+
+static final ToneGenerator _toneGenerator = new ToneGenerator(
+		AudioManager.STREAM_MUSIC, 100);
+
+static int[] TONE_IDS = { ToneGenerator.TONE_DTMF_1,
+	ToneGenerator.TONE_DTMF_2,
+
+};
+//private TextView mMessageView;
+
+// These settings are the same as the settings for the map. They will in fact give you updates
+// at the maximal rates currently possible.
+
+private void parseSettings(){
+	try{
+    	String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+    	String path = Environment.getExternalStorageDirectory()+"/"+fileName;
+    	File file = new File(path);
+    	FileInputStream fileInputStream = new FileInputStream(file);
+        XMLParser parser=new XMLParser();
+        SAXParserFactory factory=SAXParserFactory.newInstance();
+        SAXParser sp=factory.newSAXParser();
+        XMLReader reader=sp.getXMLReader();
+        reader.setContentHandler(parser);
+        sp.parse(fileInputStream,parser);
+         
+        /************* Get Parse data in a ArrayList **********/
+        markerData=parser.markerList;
+        waypointData=parser.waypointList;
+         
+        if(markerData!=null){
+        	
+        	markerList = new Marker[markerData.size()];
+        	markerLatLongList = new LatLng[markerData.size()];
+        	
+            for (XmlValuesModel xmlRowData : markerData) {
+              if(xmlRowData!=null)
+              {  
+            	  markerLatLongList[XmlValuesModel: markerData].latitude=xmlRowData.getMarkerLat();
+                int     markerId        = xmlRowData.getMarkerId();
+                float  markerLat      = xmlRowData.getMarkerLat();
+                float  markerLong     = xmlRowData.getMarkerLong();
+                
+                
+          
+
+              }
+              else
+                  Log.e("Jobs", "Jobs value null");
+            }
+             
+            /******** Show Data *************/
+
+        }   
+    }
+    catch(Exception e){Log.e("Jobs", "Exception parse xml :"+e);}
+}
+private void addMarkersToMap() {
+    // Uses a colored icon.
+	mInstallation01 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION01)
+            .title("Installation 1"));
+
+    // Uses a custom icon with the info window popping out of the center of the icon.
+	mInstallation02 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION02)
+            .title("Installation 2"));
+
+    // Creates a draggable marker. Long press to drag.
+	mInstallation03 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION03)
+            .title("Installation 3"));
+
+    // A few more markers for good measure.
+	mInstallation04 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION04)
+            .title("Installation 4"));
+    
+	mInstallation05 = mMap.addMarker(new MarkerOptions()
+            .position(INSTALLATION05)
+            .title("Instlallation 5"));
+
+}
+private static final LocationRequest REQUEST = LocationRequest.create()
+        .setInterval(5000)         // 5 seconds
+        .setFastestInterval(16)    // 16ms = 60fps
+        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    
+    buttonList = new ArrayList<Button>();
+	for (int id : BUTTON_IDS) {
+		Button mButton = (Button) findViewById(id);
+		mButton.setOnTouchListener(this); // maybe
+		buttonList.add(mButton);
+	}
+   // mMessageView = (TextView) findViewById(R.id.message_text);
+}
+
+@Override
+protected void onResume() {
+    super.onResume();
+    
+	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+			WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	 
+	 if (getActionBar().isShowing()) getActionBar().hide();
+	
+    setUpMapIfNeeded();
+    setUpGoogleApiClientIfNeeded();
+    mGoogleApiClient.connect();
+}
+
+@Override
+public void onPause() {
+    super.onPause();
+    if (mGoogleApiClient != null) {
+        mGoogleApiClient.disconnect();
+    }
+}
+
+private void setUpMapIfNeeded() {
+    // Do a null check to confirm that we have not already instantiated the map.
+    if (mMap == null) {
+        // Try to obtain the map from the SupportMapFragment.
+        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                .getMap();
+        // Check if we were successful in obtaining the map.
+        if (mMap != null) {
+            mMap.setMyLocationEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(this);
+            addMarkersToMap();
+           
+            PolylineOptions options = new PolylineOptions()
+            .add(new LatLng(INSTALLATION01.latitude,INSTALLATION01.longitude))
+            .add(new LatLng(INSTALLATION02.latitude,INSTALLATION02.longitude))
+            .add(new LatLng(INSTALLATION03.latitude,INSTALLATION03.longitude))
+            .add(new LatLng(INSTALLATION04.latitude,INSTALLATION04.longitude))
+            .add(new LatLng(INSTALLATION05.latitude,INSTALLATION05.longitude))
+            .color(Color.BLUE)
+            .width(15);
+    
+    mMutablePolyline = mMap.addPolyline(options);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(INSTALLATION03, 17));
+           
+        }
+    }
+}
+
+private void setUpGoogleApiClientIfNeeded() {
+    if (mGoogleApiClient == null) {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+}
+
+/**
+ * Button to get current Location. This demonstrates how to get the current Location as required
+ * without needing to register a LocationListener.
+ */
+public void showMyLocation(View view) {
+    if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        String msg = "Location = "
+                + LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+}
+
+/**
+ * Implementation of {@link LocationListener}.
+ */
+@Override
+public void onLocationChanged(Location location) {
+   // mMessageView.setText("Location = " + location);
+}
+
+/**
+ * Callback called when connected to GCore. Implementation of {@link ConnectionCallbacks}.
+ */
+@Override
+public void onConnected(Bundle connectionHint) {
+    LocationServices.FusedLocationApi.requestLocationUpdates(
+            mGoogleApiClient,
+            REQUEST,
+            this);  // LocationListener
+}
+
+/**
+ * Callback called when disconnected from GCore. Implementation of {@link ConnectionCallbacks}.
+ */
+@Override
+public void onConnectionSuspended(int cause) {
+    // Do nothing
+}
+
+/**
+ * Implementation of {@link OnConnectionFailedListener}.
+ */
+@Override
+public void onConnectionFailed(ConnectionResult result) {
+    // Do nothing
+}
+
+@Override
+public boolean onMyLocationButtonClick() {
+    Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+    // Return false so that we don't consume the event and the default behavior still occurs
+    // (the camera animates to the user's current position).
+    return false;
+}
+
+@Override
+public boolean onTouch(View v, MotionEvent event) {
+	 int tempStore = 0;
+	if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		for (int j = 0; j < 2; j++) {
+			if (v.getId() == BUTTON_IDS[j]) {
+				tempStore = j;
+			}
+		}
+		_toneGenerator.startTone(TONE_IDS[tempStore]);
+		System.out.println(BUTTON_IDS[tempStore]);
+		Log.d("button number",Integer.toString(tempStore));
+	}
+	if (event.getAction() == MotionEvent.ACTION_UP) {
+		_toneGenerator.stopTone();
+		
+	}
+	return false;
+}
+
+}

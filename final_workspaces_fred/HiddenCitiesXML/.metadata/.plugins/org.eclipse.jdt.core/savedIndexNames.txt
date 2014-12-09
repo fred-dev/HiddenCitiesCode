@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitiesXML/.metadata/.plugins/org.eclipse.jdt.core
+2339628580.index
+312268465.index
+143041473.index

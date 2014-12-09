@@ -1,0 +1,109 @@
+package com.example.saxparserbetter;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.XMLReader;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.TextView;
+
+public class SaxParsing extends Activity {
+    List<XmlValuesModel> myData = null;
+     
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+ 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sax_parsing);
+         
+        final TextView output = (TextView) findViewById(R.id.output);
+        
+         
+        //Static XML data which we will parse
+    
+         
+        String dataToBeParsed = "Click on button to parse XML.\n\n XML DATA : \n\n";
+        output.setText(dataToBeParsed);
+         
+        /****  Button Click Listener ********/
+      
+         
+                try{
+                	String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+                	String path = Environment.getExternalStorageDirectory()+"/"+fileName;
+                	File file = new File(path);
+                	FileInputStream fileInputStream = new FileInputStream(file);
+                 
+            
+        			
+        			
+                    XMLParser parser=new XMLParser();
+                    SAXParserFactory factory=SAXParserFactory.newInstance();
+                    SAXParser sp=factory.newSAXParser();
+                    XMLReader reader=sp.getXMLReader();
+                    reader.setContentHandler(parser);
+                    sp.parse(fileInputStream,parser);
+                     
+                    /************* Get Parse data in a ArrayList **********/
+                    myData=parser.markerList;
+                     
+                    if(myData!=null){
+                         
+                        String OutputData = "";
+                         
+                        /*************** Get Data From ArrayList *********/
+ for(int i =0; i>myData.size();i++){
+	 XmlValuesModel xmlRowData = myData.get(i);
+	 if(xmlRowData!=null)
+     {  
+       int     markerId        = xmlRowData.getMarkerId();
+       int     waypointId = xmlRowData.getWaypointId();
+       String  username   = xmlRowData.getUsername();
+       String  userEmail   = xmlRowData.getUserEmail();
+       float  markerLat      = xmlRowData.getMarkerLat();
+       float  markerLong     = xmlRowData.getMarkerLong();
+       float  wayPointLat   = xmlRowData.getWaypointLat();
+       float  wayPointLong   = xmlRowData.getWaypointLong();
+  
+        
+        
+       OutputData += 
+       								+ markerId +" | "
+                                      + waypointId    +" | "
+                                      + username   +" | "
+                                      + userEmail   +" | "
+                                      + markerLat    +" | "
+                                      + markerLong    +" | "
+                                      + wayPointLat  +" | "
+                                      + wayPointLong       +" \n\n "
+                                       
+                              ;
+       Log.e("Jobs", "OutputData");
+       output.setText(OutputData);
+        
+     }
+     else
+         Log.e("Jobs", "Jobs value null");
+ }
+
+                        for (XmlValuesModel xmlRowData : myData) {
+                         
+                        }
+                         
+                        /******** Show Data *************/
+                        output.setText(OutputData);
+                    }   
+                }
+                catch(Exception e){Log.e("Jobs", "Exception parse xml :"+e);}
+            
+        
+    }
+}

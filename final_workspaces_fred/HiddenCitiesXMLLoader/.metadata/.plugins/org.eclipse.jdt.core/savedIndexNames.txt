@@ -1,3 +1,0 @@
-INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitiesXMLLoader/.metadata/.plugins/org.eclipse.jdt.core
-2094520809.index
-693997274.index

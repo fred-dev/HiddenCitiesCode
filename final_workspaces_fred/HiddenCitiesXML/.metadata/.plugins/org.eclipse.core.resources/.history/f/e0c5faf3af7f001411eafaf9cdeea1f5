@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+                           <markers>
+                             <marker>
+                                 <markerId>0</markerId>
+                                 <markerLat>4.432</markerLat>
+                                 <markerLong>5.32423</markerLong>
+                              </marker>
+                             <marker>
+                                  <markerId>1</markerId>
+                                  <markerLat>14.432</markerLat>
+                                  <markerLong>15.32423</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>2</markerId>
+                                  <markerLat>24.432</markerLat>
+                                  <markerLong>25.32423</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>3</markerId>
+                                  <markerLat>34.432</markerLat>
+                                  <markerLong>35.32423</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>4</markerId>
+                                  <markerLat>44.432</markerLat>
+                                  <markerLong>45.32423</markerLong>
+                             </marker>
+                            </markers>
+
+                          
+                        
