@@ -10,4 +10,6 @@
 <fullyQualifiedTypeName name="android.media.ToneGenerator"/>
 <fullyQualifiedTypeName name="android.media.AudioManager"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="android.content.IntentFilter"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
 </qualifiedTypeNameHistroy>

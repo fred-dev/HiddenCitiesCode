@@ -92,3 +92,91 @@ Caused by: org.eclipse.core.internal.resources.ResourceException: Resource is ou
 
 !ENTRY org.eclipse.ui 2 2 2014-12-07 18:22:23.093
 !MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+!SESSION 2014-12-10 15:31:18.802 -----------------------------------------------
+eclipse.buildId=M20130204-1200
+java.version=1.6.0_65
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.adtproduct -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.adtproduct -data /Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitesNativeCamera -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-12-10 15:31:23.110
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.ui 2 2 2014-12-10 15:31:57.004
+!MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-10 15:32:40.932
+!MESSAGE Failed to load properties file for project 'HiddenCitiesNativeCamera'
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-10 15:32:42.960
+!MESSAGE Exception in checkAndLoadTargetData.
+!STACK 0
+java.lang.UnsupportedClassVersionError: Unsupported major.minor version 51.0
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:621)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:471)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidJarLoader.defineAndCacheClass(AndroidJarLoader.java:336)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidJarLoader.findClass(AndroidJarLoader.java:312)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidTargetParser.collectPermissions(AndroidTargetParser.java:336)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidTargetParser.run(AndroidTargetParser.java:107)
+	at com.android.ide.eclipse.adt.internal.sdk.Sdk$6.run(Sdk.java:712)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-10 15:32:42.962
+!MESSAGE Parsing Data for android-21 failed
+!STACK 0
+java.lang.UnsupportedClassVersionError: Unsupported major.minor version 51.0
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClassCond(ClassLoader.java:637)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:621)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:471)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidJarLoader.defineAndCacheClass(AndroidJarLoader.java:336)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidJarLoader.findClass(AndroidJarLoader.java:312)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidTargetParser.collectPermissions(AndroidTargetParser.java:336)
+	at com.android.ide.eclipse.adt.internal.sdk.AndroidTargetParser.run(AndroidTargetParser.java:107)
+	at com.android.ide.eclipse.adt.internal.sdk.Sdk$6.run(Sdk.java:712)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)
+!SESSION 2014-12-10 15:39:59.495 -----------------------------------------------
+eclipse.buildId=M20130204-1200
+java.version=1.6.0_65
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.adtproduct -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.adtproduct -data /Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitesNativeCamera -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.resources 2 10035 2014-12-10 15:40:00.769
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.core.net 1 0 2014-12-10 15:40:02.905
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.ui 2 2 2014-12-10 15:40:54.056
+!MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+!SESSION 2014-12-10 15:51:27.834 -----------------------------------------------
+eclipse.buildId=M20130204-1200
+java.version=1.7.0_71
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-12-10 15:51:32.417
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.ui 2 2 2014-12-10 15:53:37.020
+!MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-10 15:59:00.361
+!MESSAGE Failed to load properties file for project 'HiddenCitiiesNativeCamera'
+
+!ENTRY com.android.ide.eclipse.adt 2 0 2014-12-10 16:00:48.934
+!MESSAGE activity_hcnative_camera.xml: Couldn't resolve resource @string/Capture
+
+!ENTRY com.android.ide.eclipse.adt 2 0 2014-12-10 16:00:50.502
+!MESSAGE activity_hcnative_camera.xml: Couldn't resolve resource @string/Capture

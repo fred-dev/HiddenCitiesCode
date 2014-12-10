@@ -11,12 +11,18 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.XMLReader;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -42,7 +48,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("ClickableViewAccessibility")
-public class MainActivity extends FragmentActivity 
+public class MainActivity extends FragmentActivity  
 
 	implements
     ConnectionCallbacks,
@@ -57,7 +63,7 @@ public class MainActivity extends FragmentActivity
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
 	Marker[] markerList= null;
-	
+	Vibrator mVibrator = null;
 	
 private GoogleMap mMap;
 
@@ -76,18 +82,24 @@ private static final LocationRequest REQUEST = LocationRequest.create()
         .setFastestInterval(16)    // 16ms = 60fps
         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+private BroadcastReceiver myReceiver;
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	if (getActionBar().isShowing()) getActionBar().hide();
+	mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+	
     buttonList = new ArrayList<Button>();
 	for (int id : BUTTON_IDS) {
 		Button mButton = (Button) findViewById(id);
 		mButton.setOnTouchListener(this); // maybe
 		buttonList.add(mButton);
 	}
+	myReceiver = new MusicIntentReceiver();
+
 }
 
 @Override
@@ -97,7 +109,11 @@ protected void onResume() {
     setUpMapIfNeeded();
     setUpGoogleApiClientIfNeeded();
     mGoogleApiClient.connect();
+    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+    registerReceiver(myReceiver, filter);
+    
 }
+//handler for received Intents for the "my-event" event 
 
 @Override
 public void onPause() {
@@ -105,6 +121,10 @@ public void onPause() {
     if (mGoogleApiClient != null) {
         mGoogleApiClient.disconnect();
     }
+    unregisterReceiver(myReceiver);
+}
+void doVibrate(){
+	mVibrator.vibrate(1000);
 }
 void parseSettings() {
 	try {
@@ -214,6 +234,7 @@ public void onLocationChanged(Location location) {
     		locationMarker.setLongitude(markerLatLongList[l].longitude);
     		distance = locationMarker.distanceTo(location);
     		if(distance<10){
+    			mVibrator.vibrate(1000);
     			Toast.makeText(getApplicationContext(), "We are close to waypoint" + Integer.toString(l), Toast.LENGTH_SHORT).show();
     		}
     	}
@@ -239,7 +260,24 @@ public boolean onMyLocationButtonClick() {
     Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
     return false;
 }
-
+private class MusicIntentReceiver extends BroadcastReceiver {
+    @Override public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+            int state = intent.getIntExtra("state", -1);
+            switch (state) {
+            case 0:
+                Log.d("Here", "Headset is unplugged");
+                doVibrate();
+                break;
+            case 1:
+                Log.d("Here", "Headset is plugged");
+                break;
+            default:
+                Log.d("Here", "I have no idea what the headset state is");
+            }
+        }
+    }
+}
 @Override
 public boolean onTouch(View v, MotionEvent event) {
 	 int tempStore = 0;
@@ -250,6 +288,7 @@ public boolean onTouch(View v, MotionEvent event) {
 			}
 		}
 		_toneGenerator.startTone(TONE_IDS[tempStore]);
+		doVibrate();
 	}
 	if (event.getAction() == MotionEvent.ACTION_UP) {
 		_toneGenerator.stopTone();
