@@ -2,6 +2,7 @@ package com.example.hiddencitiesmap;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.XMLReader;
 
+import android.media.MediaPlayer;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -23,7 +25,6 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -57,7 +58,8 @@ public class MainActivity extends FragmentActivity
     OnConnectionFailedListener,
     LocationListener,
     OnMyLocationButtonClickListener ,
-    View.OnTouchListener{
+    View.OnTouchListener,
+    MediaPlayer.OnPreparedListener{
 	
 	List<XmlValuesModel> markerData = null;
 	List<XmlValuesModel> waypointData = null;
@@ -90,6 +92,11 @@ PendingIntent pendingIntent;
 AlarmManager alarmManager;
 BroadcastReceiver mReceiver;
 
+private MediaPlayer mediaPlayer;
+File mediaRoot;
+String audioRoot;
+
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -106,6 +113,11 @@ protected void onCreate(Bundle savedInstanceState) {
 	}
 	myReceiver = new MusicIntentReceiver();
 	RegisterAlarmBroadcast();
+	
+	mediaRoot = Environment.getExternalStorageDirectory();
+	audioRoot=mediaRoot +"/hiddenCities/audio/";
+
+ 
 
 }
 
@@ -299,6 +311,7 @@ private void RegisterAlarmBroadcast()
         public void onReceive(Context context, Intent intent)
         {
             Toast.makeText(context, "Alarm time has been reached", Toast.LENGTH_LONG).show();
+            preparePlayer("IntroText.wav");
         }
     };
 
@@ -332,11 +345,44 @@ public boolean onTouch(View v, MotionEvent event) {
 	return false;
 }
 
+private void preparePlayer(String fileName) {
+	if(mediaPlayer.isPlaying()){
+		mediaPlayer.stop();
+		mediaPlayer=null;
+	}
+	   mediaPlayer = new MediaPlayer();
+	   mediaPlayer.setOnPreparedListener(this);
+	   mediaPlayer.setLooping(false);
+	   try {
+		mediaPlayer.setDataSource(audioRoot + fileName);
+	} catch (IllegalArgumentException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (SecurityException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (IllegalStateException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	   mediaPlayer.prepareAsync();
+	
+	   
+	}
 @Override
 protected void onDestroy() 
 {
     unregisterReceiver(mReceiver);
     super.onDestroy();
   }
+
+@Override
+public void onPrepared(MediaPlayer mp) {
+	 mp.start();
+	
+}
  
 }
