@@ -11,6 +11,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.XMLReader;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -84,6 +86,10 @@ private static final LocationRequest REQUEST = LocationRequest.create()
 
 private BroadcastReceiver myReceiver;
 
+PendingIntent pendingIntent;
+AlarmManager alarmManager;
+BroadcastReceiver mReceiver;
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -99,6 +105,7 @@ protected void onCreate(Bundle savedInstanceState) {
 		buttonList.add(mButton);
 	}
 	myReceiver = new MusicIntentReceiver();
+	RegisterAlarmBroadcast();
 
 }
 
@@ -266,18 +273,45 @@ private class MusicIntentReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra("state", -1);
             switch (state) {
             case 0:
-                Log.d("Here", "Headset is unplugged");
+                Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
                 doVibrate();
                 break;
             case 1:
-                Log.d("Here", "Headset is plugged");
+                Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
                 break;
             default:
-                Log.d("Here", "I have no idea what the headset state is");
+                Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
             }
         }
     }
 }
+
+void setAlarmWithDelay(long delay){
+
+	alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +delay, pendingIntent);
+}
+
+private void RegisterAlarmBroadcast()
+{       
+    mReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Alarm time has been reached", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    registerReceiver(mReceiver, new IntentFilter("sample") );
+    pendingIntent = PendingIntent.getBroadcast( this, 0, new Intent("sample"),0 );
+    alarmManager = (AlarmManager)(this.getSystemService( Context.ALARM_SERVICE ));
+}
+private void UnregisterAlarmBroadcast()
+{
+    alarmManager.cancel(pendingIntent); 
+    getBaseContext().unregisterReceiver(mReceiver);
+}
+
 @Override
 public boolean onTouch(View v, MotionEvent event) {
 	 int tempStore = 0;
@@ -289,6 +323,7 @@ public boolean onTouch(View v, MotionEvent event) {
 		}
 		_toneGenerator.startTone(TONE_IDS[tempStore]);
 		doVibrate();
+		setAlarmWithDelay(2000);
 	}
 	if (event.getAction() == MotionEvent.ACTION_UP) {
 		_toneGenerator.stopTone();
@@ -297,4 +332,11 @@ public boolean onTouch(View v, MotionEvent event) {
 	return false;
 }
 
+@Override
+protected void onDestroy() 
+{
+    unregisterReceiver(mReceiver);
+    super.onDestroy();
+  }
+ 
 }
