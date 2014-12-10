@@ -130,13 +130,10 @@ void parseSettings() {
 		if (markerData != null) {
 			markerList = new Marker[markerData.size()];
 			markerLatLongList = new LatLng[markerData.size()];
-			Log.e("markerList size", Integer.toString(markerData.size()));
-			Log.e("waypointData size", Integer.toString(waypointData.size()));
-			
 			for (int i = 0; i < markerData.size(); i++) {
 				XmlValuesModel xmlRowData = markerData.get(i);
 				if (xmlRowData != null) {
-					markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLat());
+					markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
 				} else
 					Log.e("Markers", "Markers value null");
 			}
@@ -158,11 +155,13 @@ void parseSettings() {
 	}
 }
 
-private void addNewMarker(LatLng point, Marker myMarker, String title){
-	myMarker = mMap.addMarker(new MarkerOptions()
-    .position(point)
-    .title(title));
+private void addNewMarker(LatLng point, String title){
+	MarkerOptions markerOptions = new MarkerOptions();
+    markerOptions.position(point);
+    markerOptions.title(title);
+    mMap.addMarker(markerOptions);
 }
+
 private void setUpMapIfNeeded() {
     if (mMap == null) {
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -172,11 +171,7 @@ private void setUpMapIfNeeded() {
             mMap.setOnMyLocationButtonClickListener(this);
             if(markerLatLongList!=null){
             	for(int l =0; l<markerLatLongList.length; l++){
-            		addNewMarker(markerLatLongList[l],markerList[l],Integer.toString(l));
-            		//Log.e("Marker", markerList[l].getTitle());
-            		
-            		//mMap.addMarker(markerList[l]);
-            		//markerList[i] = mMap.addMarker(new MarkerOptions().position(markerLatLongList[i]).title("Installation"+Integer.toString(i)));
+            		addNewMarker(markerLatLongList[l],Integer.toString(l));
             	}
             }
             
@@ -188,10 +183,6 @@ private void setUpMapIfNeeded() {
         	   mMap.addPolyline(options);
         	   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(waypointLatLongList[0], 17));
            }
-           else{
-        	   LatLng centreO = new LatLng(52.393100,4.911760);
-        	   mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centreO, 17));
-           } 
         }
     }
 }

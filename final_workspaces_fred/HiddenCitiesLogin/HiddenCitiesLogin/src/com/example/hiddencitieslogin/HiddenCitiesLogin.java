@@ -1,12 +1,25 @@
 package com.example.hiddencitieslogin;
 
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,8 +68,11 @@ import android.widget.Toast;
 	   }
 	 
    else{
+	   SaveToXml(username.getText().toString(), "username", 0);
+	   SaveToXml(email.getText().toString(), "useremail", 0);
       Toast.makeText(getApplicationContext(), "Logging in, I'll just be a moment",
       Toast.LENGTH_SHORT).show();
+      
    }
 }
    @Override
@@ -81,9 +97,35 @@ import android.widget.Toast;
 	    Matcher matcher = pattern.matcher(inputStr);
 	    if (matcher.matches()) {
 	        isValid = true;
+	       
 	    }
 	    return isValid;
 	}
+   private void SaveToXml(String value, String tagName, int Item) {
+
+	    String destFile = Environment.getExternalStorageDirectory().toString()+"/hiddenCities/hiddenCitiesSettings.xml";
+	    try {
+
+            File fXmlFile = new File(destFile);
+        	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        	Document doc = dBuilder.parse(fXmlFile);
+
+	        Node path = doc.getElementsByTagName(tagName).item(Item);
+	        path.setTextContent(value);
+
+	        TransformerFactory transFactory = TransformerFactory.newInstance();
+	        Transformer trans = transFactory.newTransformer();
+	        trans.setOutputProperty(OutputKeys.INDENT, "yes");
+	        DOMSource source = new DOMSource(doc);
+	        StreamResult result = new StreamResult(new File(destFile));
+	        trans.transform(source, result);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+   }
+	    
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       // Inflate the menu; this adds items to the action bar if it is present.

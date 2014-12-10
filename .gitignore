@@ -23,4 +23,5 @@ switchBetweenActivities/
 HiddenCitiesInterface/
 vuforia-sdk-android-3-0-9/
 vuforiaWorkspace/
-copy_to_phone/
+copy_to_phone/hiddenCities/video/
+copy_to_phone/hiddenCities/Vuforia/video/
