@@ -206,7 +206,19 @@ public void showMyLocation(View view) {
 
 @Override
 public void onLocationChanged(Location location) {
-   
+	if(markerLatLongList!=null){
+    	for(int l =0; l<markerLatLongList.length; l++){
+    		double distance = 0;
+    		Location locationMarker = new Location("A");
+    		locationMarker.setLatitude(markerLatLongList[l].latitude);
+    		locationMarker.setLongitude(markerLatLongList[l].longitude);
+    		distance = locationMarker.distanceTo(location);
+    		if(distance<10){
+    			Toast.makeText(getApplicationContext(), "We are close to waypoint" + Integer.toString(l), Toast.LENGTH_SHORT).show();
+    		}
+    	}
+    }
+
 }
 
 @Override
