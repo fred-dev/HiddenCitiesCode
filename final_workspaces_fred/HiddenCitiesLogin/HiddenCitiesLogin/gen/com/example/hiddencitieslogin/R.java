@@ -32,9 +32,9 @@ public final class R {
         public static final int button1=0x7f090005;
         public static final int editText1=0x7f090002;
         public static final int editText2=0x7f090004;
-        public static final int textView1=0x7f090000;
-        public static final int textView2=0x7f090001;
-        public static final int textView3=0x7f090003;
+        public static final int emailText=0x7f090003;
+        public static final int usernameText=0x7f090001;
+        public static final int welcomeText=0x7f090000;
     }
     public static final class layout {
         public static final int activity_hidden_cities_login=0x7f030000;

@@ -127,6 +127,8 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_main);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	if (getActionBar().isShowing()) getActionBar().hide();
+	//Here we can override the system font and load whatever we like- should be loaded from Assest, must change to SDcard to get access to RTL fonts
+	//FontUtility.overrideFont(getApplicationContext(), "SERIF", "assets/fonts/Roboto-Regular.ttf");
 	mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 	
     buttonList = new ArrayList<Button>();

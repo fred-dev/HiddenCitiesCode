@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import com.example.hiddencitiesmap.MyFTP;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -27,7 +27,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
@@ -74,6 +73,8 @@ public class MainActivity extends FragmentActivity
 	
 	List<XmlValuesModel> markerData = null;
 	List<XmlValuesModel> waypointData = null;
+	List<XmlValuesModel> networkData = null;
+
 
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
@@ -108,12 +109,17 @@ File mediaRoot;
 String audioRoot;
 
 private WebSocketClient	mWSClient;
-private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
-private String			mUserId;
+private static String	mWsServerPath;
+private String			mWSUserId;
 private boolean			mIsConnected	= false;
 
 private static final int CAM_REQUREST = 1313;
 public static final int MEDIA_TYPE_IMAGE = 1;
+
+MyFTP				mFTP;
+String				mFtpIP, mFtpUserName, mFtpPassword,mFtpRemotePath;
+static String 				mLocalPathForFTP;
+static String				mRemoteFileNameFTP;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -134,47 +140,58 @@ protected void onCreate(Bundle savedInstanceState) {
 	
 	mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-	mUserId = "arash";
+	parseSettings();
 	setupWebSocket();
 	mWSClient.connect();
- 
+	mFTP = new MyFTP();
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+
 
 }
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
+	
 
-			if (requestCode == CAM_REQUREST) {
+			if (requestCode == CAM_REQUREST ) {
+				Intent x = getIntent();
 				if (resultCode == RESULT_OK) {
-					Toast.makeText(this, "Image saved to:\n" + data.getData(),
+					Toast.makeText(this, "Image saved to:\n" + mLocalPathForFTP,
 							Toast.LENGTH_LONG).show();
+					uploadToFtp(mLocalPathForFTP,mRemoteFileNameFTP);
 				} else if (resultCode == RESULT_CANCELED) {
 					// User cancelled the image capture
 				} else {
 					// Image capture failed, advise user
 				}
-			}
+			
 		}
 	}
 public void takePhoto(){
 	Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 	Uri photoUri;
-	photoUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-	
+	photoUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image	
 	cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
     startActivityForResult(cameraIntent, CAM_REQUREST);
     
 }
+
+public void uploadToFtp(String aFilePath, String aServerFilePath) {
+	if (mFTP.isConnected()) {
+		mFTP.uploadFile(aFilePath, aServerFilePath);
+	} else
+		mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+		mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
+}
+	
 private static Uri getOutputMediaFileUri(int type){
     return Uri.fromFile(getOutputMediaFile(type));
 }
 
 /** Create a File for saving an image or video */
 private static File getOutputMediaFile(int type){
-  File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES), "Hidden Cities Photos");
+  File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "hiddenCities/userPhotos");
  
   if (! mediaStorageDir.exists()){
       if (! mediaStorageDir.mkdirs()){
@@ -189,6 +206,8 @@ private static File getOutputMediaFile(int type){
   if (type == MEDIA_TYPE_IMAGE){
       mediaFile = new File(mediaStorageDir.getPath() + File.separator +
       "IMG_"+ timeStamp + ".jpg");
+      mRemoteFileNameFTP = "IMG_"+ timeStamp + ".jpg";
+      mLocalPathForFTP = mediaFile.getAbsolutePath();
       Log.d("Media File", mediaFile.getAbsolutePath());
   
   } else {
@@ -200,14 +219,13 @@ private static File getOutputMediaFile(int type){
 @Override
 protected void onResume() {
     super.onResume();
-	parseSettings();
+	
     setUpMapIfNeeded();
     setUpGoogleApiClientIfNeeded();
     mGoogleApiClient.connect();
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     registerReceiver(myReceiver, filter);
-    
-    
+
 }
 //handler for received Intents for the "my-event" event 
 
@@ -222,54 +240,71 @@ public void onPause() {
 void doVibrate(){
 	mVibrator.vibrate(1000);
 }
-void parseSettings() {
-	try {
-		String fileName = "hiddenCities/hiddenCitiesSettings.xml";
-		String path = Environment.getExternalStorageDirectory() + "/" + fileName;
-		File file = new File(path);
-		if(file.exists()) {
-			Log.e("File", "Yes file is there");
-		}
-		   
-		FileInputStream fileInputStream = new FileInputStream(file);
-		XMLParser parser = new XMLParser();
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser sp = factory.newSAXParser();
-		XMLReader reader = sp.getXMLReader();
-		reader.setContentHandler(parser);
-		sp.parse(fileInputStream, parser);
-		
-		markerData = parser.markerList;
-		waypointData = parser.waypointList;
-		
-		
-		if (markerData != null) {
-			markerList = new Marker[markerData.size()];
-			markerLatLongList = new LatLng[markerData.size()];
-			for (int i = 0; i < markerData.size(); i++) {
-				XmlValuesModel xmlRowData = markerData.get(i);
-				if (xmlRowData != null) {
-					markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
-				} else
-					Log.e("Markers", "Markers value null");
+
+	void parseSettings() {
+		try {
+			String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+			String path = Environment.getExternalStorageDirectory() + "/"+ fileName;
+			File file = new File(path);
+			if (file.exists()) {
+				Log.d("File", "Yes file is there");
 			}
-		}
-		if (waypointData != null) {
-			
-			waypointLatLongList = new LatLng[waypointData.size()];
-		
-			for (int k = 0; k < waypointData.size(); k++) {
-				XmlValuesModel xmlRowData = waypointData.get(k);
-				if (xmlRowData != null) {
-					waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
-				} else
-					Log.e("Waypoints", "Waypoint value null");
+
+			FileInputStream fileInputStream = new FileInputStream(file);
+			XMLParser parser = new XMLParser();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser sp = factory.newSAXParser();
+			XMLReader reader = sp.getXMLReader();
+			reader.setContentHandler(parser);
+			sp.parse(fileInputStream, parser);
+
+			markerData = parser.markerList;
+			waypointData = parser.waypointList;
+			networkData = parser.networkList;
+
+			if (markerData != null) {
+				markerList = new Marker[markerData.size()];
+				markerLatLongList = new LatLng[markerData.size()];
+				for (int i = 0; i < markerData.size(); i++) {
+					XmlValuesModel xmlRowData = markerData.get(i);
+					if (xmlRowData != null) {
+						markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
+					} else
+						Log.e("Markers", "Markers value null");
+				}
 			}
+			if (waypointData != null) {
+
+				waypointLatLongList = new LatLng[waypointData.size()];
+
+				for (int k = 0; k < waypointData.size(); k++) {
+					XmlValuesModel xmlRowData = waypointData.get(k);
+					if (xmlRowData != null) {
+						waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
+					} else
+						Log.e("Waypoints", "Waypoint value null");
+				}
+			}
+			Log.d("Progress", "we got here");
+			if (networkData != null) {
+				for (int m = 0; m < networkData.size(); m++) {
+					XmlValuesModel xmlRowData = networkData.get(m);
+					if (xmlRowData != null) {
+						mFtpIP=xmlRowData.getFtpAddress();
+						mFtpUserName=xmlRowData.getFtpUser();
+						mFtpPassword=xmlRowData.getFtpPassword();
+						mFtpRemotePath=xmlRowData.getFtpRemotePath();
+						mWsServerPath=xmlRowData.getWebSocketAdress();	
+						mWSUserId=xmlRowData.getWebSocketUser();
+					} else
+						Log.e("Network Info", "Network Info value null");
+				}
+			}
+
+		} catch (Exception e) {
+			Log.e("XML parse", "Exception parse xml :" + e);
 		}
-	} catch (Exception e) {
-		Log.e("Jobs", "Exception parse xml :" + e);
 	}
-}
 
 private void addNewMarker(LatLng point, String title){
 	MarkerOptions markerOptions = new MarkerOptions();
@@ -473,7 +508,7 @@ public void setupWebSocket()
 	//		Draft draft = new Draft_17();
 
 	try {
-		mWSClient = new WebSocketClient(new URI(mServerPath + mUserId)) {
+		mWSClient = new WebSocketClient(new URI(mWsServerPath + mWSUserId)) {
 
 			@Override
 			public void onClose(int aCode, String aReason, boolean aRemote)
