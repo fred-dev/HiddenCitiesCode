@@ -9,6 +9,12 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.java_websocket.WebSocketImpl;
+import org.java_websocket.handshake.*;
+import org.java_websocket.client.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.xml.sax.XMLReader;
 
 import android.media.MediaPlayer;
@@ -96,6 +102,10 @@ private MediaPlayer mediaPlayer;
 File mediaRoot;
 String audioRoot;
 
+private WebSocketClient	mWSClient;
+private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
+private String			mUserId;
+private boolean			mIsConnected	= false;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +126,9 @@ protected void onCreate(Bundle savedInstanceState) {
 	
 	mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-
+	mUserId = "arash";
+	setupWebSocket();
+	mWSClient.connect();
  
 
 }
@@ -258,6 +270,10 @@ public void onLocationChanged(Location location) {
     		}
     	}
     }
+	if (mIsConnected) {
+		mWSClient.send("map/" + location.getLatitude() + "/"
+				+ location.getLongitude());
+	}
 
 }
 
@@ -383,6 +399,102 @@ protected void onDestroy()
 public void onPrepared(MediaPlayer mp) {
 	 mp.start();
 	
+}
+public void setupWebSocket()
+{
+	WebSocketImpl.DEBUG = true;
+	//		Draft draft = new Draft_17();
+
+	try {
+		mWSClient = new WebSocketClient(new URI(mServerPath + mUserId)) {
+
+			@Override
+			public void onClose(int aCode, String aReason, boolean aRemote)
+			{
+				System.out.print("You have been disconnected from"
+						+ getURI() + "; Code:" + aCode + " " + aReason
+						+ "\n");
+				mIsConnected = false;
+				mWSClient.connect();
+
+			}
+
+			@Override
+			public void onError(Exception aError)
+			{
+				System.out.print("Exception occured ...\n" + aError + "\n");
+				mIsConnected = false;
+				mWSClient.close();
+				mWSClient.connect();
+
+			}
+
+			@Override
+			public void onMessage(String aMessage)
+			{
+				System.out.println(aMessage);
+				if (aMessage.equals("Attach Mouse Lines")
+						|| aMessage.equals("Tester")) {
+					
+					System.out.println("Switch == 0");
+				} else if (aMessage.equals("Attach Mouse Circles")) {
+					
+					System.out.println("Switch == 1");
+				} else if (aMessage.equals("Attach Compass Video")) {
+				
+					System.out.println("Switch == 2");
+				} else if (aMessage.equals("Attach CameraFTP")) {
+				
+					System.out.println("Switch == 3");
+				} else if (aMessage.equals("Attach Compass Audio")) {
+				
+					System.out.println("Switch == 4");
+				} else if (aMessage.equals("Attach CameraFTP With Map")) {
+				
+					System.out.println("Switch == 5");
+				} else if (aMessage.equals("Attach Aruco Scene")) {
+				
+					System.out.println("Switch == 6");
+				} else if (aMessage.equals("Attach Vuforia Scene")) {
+				
+					System.out.println("Switch == 7");
+				} else if (aMessage.equals("Trigger Error")) {
+			
+					System.out.println("Switch == 666");
+				}
+
+			}
+
+			@Override
+			public void onOpen(ServerHandshake aHandshake)
+			{
+				System.out.print("You are connected to the server:"
+						+ getURI() + "\n");
+				mIsConnected = true;
+			}
+
+		};
+
+	} catch (URISyntaxException ex) {
+		System.out.println("Is not a valid WebSocker URI");
+	}
+}
+public void onProviderDisabled(String arg0)
+{
+	// TODO Auto-generated method stub
+
+}
+
+public void onProviderEnabled(String arg0)
+{
+	// TODO Auto-generated method stub
+
+}
+
+public void onStatusChanged(String arg0, int arg1, Bundle arg2)
+{
+	// TODO Auto-generated method stub
+
 }
  
 }

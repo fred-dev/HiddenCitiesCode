@@ -1,0 +1,20 @@
+INDEX VERSION 1.126+/Users/Fred/Dropbox/HiddenCitiesCode/final_workspaces_fred/HiddenCitiesAllScenes/.metadata/.plugins/org.eclipse.jdt.core
+2171616616.index
+654001693.index
+3806143702.index
+1887947031.index
+765999539.index
+1502307382.index
+3015389939.index
+1364595887.index
+2339628580.index
+1901424032.index
+3884141510.index
+3552819258.index
+1415693123.index
+909467974.index
+854381096.index
+4227620585.index
+3306752257.index
+2977311681.index
+1377487182.index
