@@ -83,7 +83,9 @@ public class CameraFTP extends PApplet
 		mRect.setFill(color(255));
 		//mRect.tint(255, 0, 0);
 		mFTP = new MyFTP();
-		//		mFTP.connnectWithFTP(mIP, mUserName, mPassword);
+     
+          
+          mFTP.connnectWithFTP(mIP, mUserName, mPassword);
 
 	}
 

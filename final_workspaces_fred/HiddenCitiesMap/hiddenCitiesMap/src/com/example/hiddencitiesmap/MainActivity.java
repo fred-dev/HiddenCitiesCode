@@ -3,9 +3,11 @@ package com.example.hiddencitiesmap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import com.example.hiddencitiesmap.MyFTP;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -29,9 +31,11 @@ import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -104,8 +108,16 @@ String audioRoot;
 
 private WebSocketClient	mWSClient;
 private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
-private String			mUserId;
+private String			mWSUserId;
 private boolean			mIsConnected	= false;
+
+private static final int CAM_REQUREST = 1313;
+public static final int MEDIA_TYPE_IMAGE = 1;
+
+MyFTP				mFTP;
+String				mIP, mUserName, mPassword,mRemotePath;
+static String 				mLocalPathForFTP;
+static String				mRemoteFileNameFTP;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +138,86 @@ protected void onCreate(Bundle savedInstanceState) {
 	
 	mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-	mUserId = "arash";
+	mWSUserId = "arash";
 	setupWebSocket();
 	mWSClient.connect();
+	mIP ="ftp.greenhost.nl";
+	mUserName="webmaster@fredrodrigues.net";
+	mPassword="ifUjWys3";
+	
+	mFTP = new MyFTP();
+    mFTP.connnectWithFTP(mIP, mUserName, mPassword);
  
 
 }
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+	
+
+			if (requestCode == CAM_REQUREST ) {
+				Intent x = getIntent();
+				if (resultCode == RESULT_OK) {
+					Toast.makeText(this, "Image saved to:\n" + mLocalPathForFTP,
+							Toast.LENGTH_LONG).show();
+					uploadToFtp(mLocalPathForFTP,mRemoteFileNameFTP);
+				} else if (resultCode == RESULT_CANCELED) {
+					// User cancelled the image capture
+				} else {
+					// Image capture failed, advise user
+				}
+			
+		}
+	}
+public void takePhoto(){
+	Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+	Uri photoUri;
+	photoUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image	
+	cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+    startActivityForResult(cameraIntent, CAM_REQUREST);
+    
+}
+
+public void uploadToFtp(String aFilePath, String aServerFilePath) {
+	if (mFTP.isConnected()) {
+		mFTP.uploadFile(aFilePath, aServerFilePath);
+	} else
+		mFTP.connnectWithFTP(mIP, mUserName, mPassword);
+		mFTP.uploadFile(aFilePath, mRemotePath + aServerFilePath);
+}
+	
+private static Uri getOutputMediaFileUri(int type){
+    return Uri.fromFile(getOutputMediaFile(type));
+}
+
+/** Create a File for saving an image or video */
+private static File getOutputMediaFile(int type){
+  File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "hiddenCities/userPhotos");
+ 
+  if (! mediaStorageDir.exists()){
+      if (! mediaStorageDir.mkdirs()){
+          Log.d("MyCameraApp", "failed to create directory");
+          return null;
+      }
+  }
+
+  // Create a media file name
+  String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+  File mediaFile;
+  if (type == MEDIA_TYPE_IMAGE){
+      mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+      "IMG_"+ timeStamp + ".jpg");
+      mRemoteFileNameFTP = "IMG_"+ timeStamp + ".jpg";
+      mLocalPathForFTP = mediaFile.getAbsolutePath();
+      Log.d("Media File", mediaFile.getAbsolutePath());
+  
+  } else {
+      return null;
+  }
+
+  return mediaFile;
+}
 @Override
 protected void onResume() {
     super.onResume();
@@ -142,7 +227,7 @@ protected void onResume() {
     mGoogleApiClient.connect();
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     registerReceiver(myReceiver, filter);
-    
+
 }
 //handler for received Intents for the "my-event" event 
 
@@ -348,11 +433,13 @@ public boolean onTouch(View v, MotionEvent event) {
 		for (int j = 0; j < 2; j++) {
 			if (v.getId() == BUTTON_IDS[j]) {
 				tempStore = j;
+				takePhoto();
 			}
 		}
+		
 		_toneGenerator.startTone(TONE_IDS[tempStore]);
-		doVibrate();
-		setAlarmWithDelay(2000);
+		//doVibrate();
+		//setAlarmWithDelay(2000);
 	}
 	if (event.getAction() == MotionEvent.ACTION_UP) {
 		_toneGenerator.stopTone();
@@ -406,7 +493,7 @@ public void setupWebSocket()
 	//		Draft draft = new Draft_17();
 
 	try {
-		mWSClient = new WebSocketClient(new URI(mServerPath + mUserId)) {
+		mWSClient = new WebSocketClient(new URI(mServerPath + mWSUserId)) {
 
 			@Override
 			public void onClose(int aCode, String aReason, boolean aRemote)
