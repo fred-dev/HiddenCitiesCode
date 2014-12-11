@@ -14,6 +14,8 @@ public class XMLParser extends DefaultHandler
           List<XmlValuesModel> markerList=null;
           List<XmlValuesModel> waypointList=null;
           List<XmlValuesModel> idList=null;
+          List<XmlValuesModel> networkList=null;
+          List<XmlValuesModel> messageList=null;
            
           // string builder acts as a buffer
           StringBuilder builder;
@@ -21,6 +23,8 @@ public class XMLParser extends DefaultHandler
           XmlValuesModel markerValues=null;
           XmlValuesModel waypointValues=null;
           XmlValuesModel idValues = null;
+          XmlValuesModel networkValues = null;
+          XmlValuesModel messageValues = null;
            
            
            // Initialize the arraylist
@@ -32,6 +36,8 @@ public class XMLParser extends DefaultHandler
         	  markerList = new ArrayList<XmlValuesModel>();
         	  waypointList = new ArrayList<XmlValuesModel>();
         	  idList = new ArrayList<XmlValuesModel>();
+        	  networkList= new ArrayList<XmlValuesModel>();
+        	  messageList= new ArrayList<XmlValuesModel>();
           }
        
             
@@ -56,19 +62,29 @@ public class XMLParser extends DefaultHandler
                    
               }
               else if(localName.equals("marker")){
-                   
-                  // Log.i("parse","----Job start----");
-                  /********** Create Model Object  *********/
+  
             	  markerValues = new XmlValuesModel();
               }
               else if(localName.equals("waypoints")){
                   
               }
               else if(localName.equals("waypoint")){
-                   
-                  // Log.i("parse","----Job start----");
-                  /********** Create Model Object  *********/
+
             	  waypointValues = new XmlValuesModel();
+              }
+              if(localName.equals("networkInfos")){
+            	  
+              }
+              else if(localName.equals("networkInfo")){
+
+            	  networkValues= new XmlValuesModel();
+              }
+              if(localName.equals("messageStrings")){
+            	  
+              }
+              else if(localName.equals("messageString")){
+
+            	  messageValues= new XmlValuesModel();
               }
           }
            
@@ -97,6 +113,18 @@ public class XMLParser extends DefaultHandler
             	  waypointList.add( waypointValues );
                    
               }
+              if(localName.equals("networkInfo")){
+
+                  /** finished reading a job xml node, add it to the arraylist **/
+            	  networkList.add( networkValues );
+                   
+              }
+              if(localName.equals("messageString")){
+
+                  /** finished reading a job xml node, add it to the arraylist **/
+            	  messageList.add( messageValues );
+                   
+              }
        
               else  if(localName.equalsIgnoreCase("user")){
             	  idList.add( idValues );
@@ -122,7 +150,6 @@ public class XMLParser extends DefaultHandler
             	  markerValues.setMarkerLong(Float.parseFloat(builder.toString()));
               }
               
-              
               else  if(localName.equalsIgnoreCase("waypointId")){  
 
             	  waypointValues.setWayPointId(Integer.parseInt(builder.toString()));
@@ -134,6 +161,85 @@ public class XMLParser extends DefaultHandler
               else if(localName.equalsIgnoreCase("waypointLong")){
             	  waypointValues.setWayPointLong(Float.parseFloat(builder.toString()));
               }
+              
+              
+              else  if(localName.equalsIgnoreCase("ftpAddress")){  
+
+            	  networkValues.setFtpAddress(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("ftpUser")){
+
+            	  networkValues.setFtpUser(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("ftpPassword")){
+            	  networkValues.setFtpPassword(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("ftpRemotePath")){
+            	  networkValues.setFtpRemotePath(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("webSocketAdress")){
+            	  networkValues.setWebSocketAdress(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("webSocketUser")){
+            	  networkValues.setWebSocketUser(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("welcomeString")){
+            	  messageValues.setWelcomeString(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("emailString")){
+            	  messageValues.setEmailString(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("usernameString")){
+            	  messageValues.setUsernameString(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("instructionStringOne")){
+            	  messageValues.setInstructionStringOne(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("instructionStringTwo")){
+            	  messageValues.setInstructionStringTwo(builder.toString());
+              }
+            
+              else if(localName.equalsIgnoreCase("instructionStringThree")){
+            	  messageValues.setInstructionStringThree(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("instructionStringFour")){
+            	  messageValues.setInstructionStringFour(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("instructionStringFive")){
+            	  messageValues.setInstructionStringFive(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("instructionStringSix")){
+            	  messageValues.setInstructionStringSix(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("instructionStringSeven")){
+            	  messageValues.setInstructionStringSeven(builder.toString());
+              }
+            
+              else if(localName.equalsIgnoreCase("errorStringOne")){
+            	  messageValues.setErrorStringOne(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("errorStringTwo")){
+            	  messageValues.setErrorStringTwo(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("errorStringThree")){
+            	  messageValues.setErrorStringThree(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("errorStringFour")){
+            	  messageValues.setErrorStringFour(builder.toString());
+              }	
+              
+          
+            
             
 
                

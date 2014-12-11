@@ -73,6 +73,8 @@ public class MainActivity extends FragmentActivity
 	
 	List<XmlValuesModel> markerData = null;
 	List<XmlValuesModel> waypointData = null;
+	List<XmlValuesModel> networkData = null;
+
 
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
@@ -107,7 +109,7 @@ File mediaRoot;
 String audioRoot;
 
 private WebSocketClient	mWSClient;
-private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
+private static String	mWsServerPath;
 private String			mWSUserId;
 private boolean			mIsConnected	= false;
 
@@ -115,7 +117,7 @@ private static final int CAM_REQUREST = 1313;
 public static final int MEDIA_TYPE_IMAGE = 1;
 
 MyFTP				mFTP;
-String				mIP, mUserName, mPassword,mRemotePath;
+String				mFtpIP, mFtpUserName, mFtpPassword,mFtpRemotePath;
 static String 				mLocalPathForFTP;
 static String				mRemoteFileNameFTP;
 
@@ -138,16 +140,12 @@ protected void onCreate(Bundle savedInstanceState) {
 	
 	mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-	mWSUserId = "arash";
+	parseSettings();
 	setupWebSocket();
 	mWSClient.connect();
-	mIP ="ftp.greenhost.nl";
-	mUserName="webmaster@fredrodrigues.net";
-	mPassword="ifUjWys3";
-	
 	mFTP = new MyFTP();
-    mFTP.connnectWithFTP(mIP, mUserName, mPassword);
- 
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+
 
 }
 
@@ -183,8 +181,8 @@ public void uploadToFtp(String aFilePath, String aServerFilePath) {
 	if (mFTP.isConnected()) {
 		mFTP.uploadFile(aFilePath, aServerFilePath);
 	} else
-		mFTP.connnectWithFTP(mIP, mUserName, mPassword);
-		mFTP.uploadFile(aFilePath, mRemotePath + aServerFilePath);
+		mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+		mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
 }
 	
 private static Uri getOutputMediaFileUri(int type){
@@ -221,7 +219,7 @@ private static File getOutputMediaFile(int type){
 @Override
 protected void onResume() {
     super.onResume();
-	parseSettings();
+	
     setUpMapIfNeeded();
     setUpGoogleApiClientIfNeeded();
     mGoogleApiClient.connect();
@@ -242,54 +240,71 @@ public void onPause() {
 void doVibrate(){
 	mVibrator.vibrate(1000);
 }
-void parseSettings() {
-	try {
-		String fileName = "hiddenCities/hiddenCitiesSettings.xml";
-		String path = Environment.getExternalStorageDirectory() + "/" + fileName;
-		File file = new File(path);
-		if(file.exists()) {
-			Log.e("File", "Yes file is there");
-		}
-		   
-		FileInputStream fileInputStream = new FileInputStream(file);
-		XMLParser parser = new XMLParser();
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser sp = factory.newSAXParser();
-		XMLReader reader = sp.getXMLReader();
-		reader.setContentHandler(parser);
-		sp.parse(fileInputStream, parser);
-		
-		markerData = parser.markerList;
-		waypointData = parser.waypointList;
-		
-		
-		if (markerData != null) {
-			markerList = new Marker[markerData.size()];
-			markerLatLongList = new LatLng[markerData.size()];
-			for (int i = 0; i < markerData.size(); i++) {
-				XmlValuesModel xmlRowData = markerData.get(i);
-				if (xmlRowData != null) {
-					markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
-				} else
-					Log.e("Markers", "Markers value null");
+
+	void parseSettings() {
+		try {
+			String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+			String path = Environment.getExternalStorageDirectory() + "/"+ fileName;
+			File file = new File(path);
+			if (file.exists()) {
+				Log.d("File", "Yes file is there");
 			}
-		}
-		if (waypointData != null) {
-			
-			waypointLatLongList = new LatLng[waypointData.size()];
-		
-			for (int k = 0; k < waypointData.size(); k++) {
-				XmlValuesModel xmlRowData = waypointData.get(k);
-				if (xmlRowData != null) {
-					waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
-				} else
-					Log.e("Waypoints", "Waypoint value null");
+
+			FileInputStream fileInputStream = new FileInputStream(file);
+			XMLParser parser = new XMLParser();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser sp = factory.newSAXParser();
+			XMLReader reader = sp.getXMLReader();
+			reader.setContentHandler(parser);
+			sp.parse(fileInputStream, parser);
+
+			markerData = parser.markerList;
+			waypointData = parser.waypointList;
+			networkData = parser.networkList;
+
+			if (markerData != null) {
+				markerList = new Marker[markerData.size()];
+				markerLatLongList = new LatLng[markerData.size()];
+				for (int i = 0; i < markerData.size(); i++) {
+					XmlValuesModel xmlRowData = markerData.get(i);
+					if (xmlRowData != null) {
+						markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
+					} else
+						Log.e("Markers", "Markers value null");
+				}
 			}
+			if (waypointData != null) {
+
+				waypointLatLongList = new LatLng[waypointData.size()];
+
+				for (int k = 0; k < waypointData.size(); k++) {
+					XmlValuesModel xmlRowData = waypointData.get(k);
+					if (xmlRowData != null) {
+						waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
+					} else
+						Log.e("Waypoints", "Waypoint value null");
+				}
+			}
+			Log.d("Progress", "we got here");
+			if (networkData != null) {
+				for (int m = 0; m < networkData.size(); m++) {
+					XmlValuesModel xmlRowData = networkData.get(m);
+					if (xmlRowData != null) {
+						mFtpIP=xmlRowData.getFtpAddress();
+						mFtpUserName=xmlRowData.getFtpUser();
+						mFtpPassword=xmlRowData.getFtpPassword();
+						mFtpRemotePath=xmlRowData.getFtpRemotePath();
+						mWsServerPath=xmlRowData.getWebSocketAdress();	
+						mWSUserId=xmlRowData.getWebSocketUser();
+					} else
+						Log.e("Network Info", "Network Info value null");
+				}
+			}
+
+		} catch (Exception e) {
+			Log.e("XML parse", "Exception parse xml :" + e);
 		}
-	} catch (Exception e) {
-		Log.e("Jobs", "Exception parse xml :" + e);
 	}
-}
 
 private void addNewMarker(LatLng point, String title){
 	MarkerOptions markerOptions = new MarkerOptions();
@@ -493,7 +508,7 @@ public void setupWebSocket()
 	//		Draft draft = new Draft_17();
 
 	try {
-		mWSClient = new WebSocketClient(new URI(mServerPath + mWSUserId)) {
+		mWSClient = new WebSocketClient(new URI(mWsServerPath + mWSUserId)) {
 
 			@Override
 			public void onClose(int aCode, String aReason, boolean aRemote)

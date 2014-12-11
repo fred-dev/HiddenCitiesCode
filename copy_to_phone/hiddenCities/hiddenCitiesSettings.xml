@@ -19,6 +19,7 @@
           <messageString>
                <welcomeString>Welcome to Hidden Cities, please enter your name and email address</welcomeString>
                <emailString>Email</emailString>
+               <usernameString>Username</usernameString>
                <instructionStringOne>Instructiion One</instructionStringOne>
                <instructionStringTwo>Instructiion Two</instructionStringTwo>
                <instructionStringThree>Instructiion Three</instructionStringThree>
@@ -26,7 +27,6 @@
                <instructionStringFive>Instructiion Five</instructionStringFive>
                <instructionStringSix>Instructiion Six</instructionStringSix>
                <instructionStringSeven>Instructiion Seven</instructionStringSeven>
-               <usernameString>Username</usernameString>
                <errorStringOne>Error One</errorStringOne>
                <errorStringTwo>Error One</errorStringTwo>
                <errorStringThree>Error One</errorStringThree>
