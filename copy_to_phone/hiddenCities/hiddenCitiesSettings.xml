@@ -9,7 +9,7 @@
           <networkInfo>
                <ftpAddress>ftp.greenhost.nl</ftpAddress>
                <ftpUser>webmaster@fredrodrigues.net</ftpUser>
-               <ftpPassword>ifUjWys3</ftpPassword>
+               <ftpPassword>insertHere</ftpPassword>
                <ftpRemotePath>/domains/photos/</ftpRemotePath>
                <webSocketAdress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAdress>
                <webSocketUser>arash</webSocketUser>
@@ -38,54 +38,74 @@
                <markerId>0</markerId>
                <markerLat>52.393100</markerLat>
                <markerLong>4.911760</markerLong>
+               <installationType>360Video</installationType>
           </marker>
           <marker>
                <markerId>1</markerId>
                <markerLat>52.393047</markerLat>
                <markerLong>4.911658</markerLong>
+               <installationType>compasAudio</installationType>
           </marker>
           <marker>
                <markerId>2</markerId>
                <markerLat>52.392792</markerLat>
                <markerLong>4.912575</markerLong>
+               <installationType>portholes</installationType>
           </marker>
           <marker>
                <markerId>3</markerId>
                <markerLat>52.392605</markerLat>
                <markerLong>4.913015</markerLong>
+               <installationType>invisibleWall</installationType>
           </marker>
           <marker>
                <markerId>4</markerId>
                <markerLat>52.392723</markerLat>
                <markerLong>4.913133</markerLong>
+               <installationType>conductor</installationType>
           </marker>
      </markers>
+     
      
      <waypoints>
           <waypoint>
                <waypointId>0</waypointId>
                <waypointLat>52.393100</waypointLat>
                <waypointLong>4.911760</waypointLong>
+               <narrationPlayer>IntroText.wav</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>1</waypointId>
                <waypointLat>52.393047</waypointLat>
                <waypointLong>4.911658</waypointLong>
+               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>2</waypointId>
                <waypointLat>52.392792</waypointLat>
                <waypointLong>4.912575</waypointLong>
+               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>3</waypointId>
                <waypointLat>52.392605</waypointLat>
                <waypointLong>4.913015</waypointLong>
+               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>4</waypointId>
                <waypointLat>52.392723</waypointLat>
                <waypointLong>4.913133</waypointLong>
+               <narrationPlayer>none</narrationPlayer>
           </waypoint>
      </waypoints>
+     
+     <portholes>
+          <porthole>
+               <dataDat>DataSet.dat</dataDat>
+               <dataXML>DataSet.xml</dataXML>
+               <image>porthole1.jpg</image>
+               <video>porthole1.m4v</video>
+          </porthole>
+     </portholes>
 </settings>
