@@ -2,9 +2,9 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
-		<item value="220" key="DIALOG_Y_ORIGIN"/>
+		<item value="254" key="DIALOG_Y_ORIGIN"/>
 		<item value="399" key="DIALOG_HEIGHT"/>
-		<item value="946" key="DIALOG_X_ORIGIN"/>
+		<item value="1109" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Yes file" key="selection"/>
+		<item value="preparePlayer" key="selection"/>
 		<list key="findhistory">
+			<item value="preparePLayer"/>
+			<item value="toast"/>
+			<item value="preparePlayer"/>
+			<item value="handleMessage what - 7"/>
+			<item value="audioRoot"/>
+			<item value="IntroText.wav"/>
 			<item value="yes file"/>
 			<item value="parse"/>
-			<item value="arash"/>
-			<item value="setupWebSocket"/>
-			<item value="mServerPath"/>
-			<item value="mRemotePath"/>
-			<item value="mPassword"/>
-			<item value="mUserName"/>
 		</list>
 		<list key="replacehistory">
 			<item value="mWsServerPath"/>

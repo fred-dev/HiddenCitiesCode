@@ -5,10 +5,12 @@ public class XmlValuesModel {
     private  float markerLat;
     private  float markerLong;
     private  int markerId;
+    private String installationId;
     
     private  float wayPointLat;
     private  float wayPointLong;
     private  int wayPointId;
+    private String wayPointNarrationPlayer;
     
     private String userName;
     private String userEmail;
@@ -21,7 +23,13 @@ public class XmlValuesModel {
     private String webSocketAdress;
     private String webSocketUser;
     
- 
+    private String portholeDataDat;
+    private String portholeDataXML;
+    private String portholeImage;
+    private String portholeVideo;
+    
+    private String colourName;
+    private String colourHexValue;
     
     private String welcomeString;
     private String emailString;
@@ -52,7 +60,13 @@ public class XmlValuesModel {
     {
         this.markerId = markerId;
     }
+    public void setMarkerInstallationId(String installationId)
+    {
+        this.installationId = installationId;
+    }
 
+    
+    
     public void setWayPointLat(Float wayPointLat)
     {
         this.wayPointLat = wayPointLat;
@@ -65,6 +79,13 @@ public class XmlValuesModel {
     {
         this.wayPointId = wayPointId;
     }
+    public void setWayPointNarrationPlayer(String wayPointNarrationPlayer)
+    {
+        this.wayPointNarrationPlayer = wayPointNarrationPlayer;
+    }
+    
+    
+    
     public void setUsername(String userName)
     {
         this.userName = userName;
@@ -73,6 +94,39 @@ public class XmlValuesModel {
     {
         this.userEmail = userEmail;
     }
+    
+    
+    
+    public void setPortholeDataXML(String portholeDataXML)
+    {
+        this.portholeDataXML = portholeDataXML;
+    }
+    public void setPortholeDataDat(String portholeDataDat)
+    {
+        this.portholeDataDat = portholeDataDat;
+    }
+    public void setPortholeImage(String portholeImage)
+    {
+        this.portholeImage = portholeImage;
+    }
+    public void setPortholeVideo(String portholeVideo)
+    {
+        this.portholeVideo = portholeVideo;
+    }
+   
+    
+    
+    public void setColourName(String colourName)
+    {
+    	this.colourName = colourName;
+    }
+    public void setColourHexValue(String colourHexValue)
+    {
+    	this.colourHexValue = colourHexValue;
+    }
+   
+    
+    
     public void setFtpAddress(String ftpAddress)
     {
         this.ftpAddress = ftpAddress;
@@ -97,10 +151,9 @@ public class XmlValuesModel {
     {
         this.webSocketUser = webSocketUser;
     }
-    public void setWelcomeString(String welcomeString)
-    {
-        this.welcomeString = welcomeString;
-    }
+    
+    
+    
     public void setEmailString(String emailString)
     {
         this.emailString = emailString;
@@ -108,6 +161,13 @@ public class XmlValuesModel {
     public void setUsernameString(String usernameString)
     {
         this.usernameString = usernameString;
+    }
+    
+    
+    
+    public void setWelcomeString(String welcomeString)
+    {
+        this.welcomeString = welcomeString;
     }
     public void setInstructionStringOne(String instructionStringOne)
     {
@@ -137,6 +197,9 @@ public class XmlValuesModel {
     {
         this.instructionStringSeven = instructionStringSeven;
     }
+    
+    
+    
     public void setErrorStringOne(String errorStringOne)
     {
         this.errorStringOne = errorStringOne;
@@ -171,6 +234,13 @@ public class XmlValuesModel {
     {
         return markerId;
     }
+    public String getMarkerInstallationId()
+    {
+        return installationId;
+    }
+    
+    
+    
     public float getWaypointLat()
     {
         return wayPointLat;
@@ -183,6 +253,13 @@ public class XmlValuesModel {
     {
         return this.wayPointId;
     }
+    public String getWayPointNarrationPlayer()
+    {
+    	return this.wayPointNarrationPlayer;
+    }
+    
+    
+    
     public String getUsername()
     {
     	return this.userName;
@@ -191,6 +268,39 @@ public class XmlValuesModel {
     {
     	return this.userEmail;
     }
+    
+    
+    
+    public String getPortholeDataDat()
+    {
+    	return this.portholeDataDat;
+    }
+    public String getPortholeDataXML()
+    {
+    	return this.portholeDataXML;
+    }
+    public String getPortholeImage()
+    {
+    	return this.portholeImage;
+    }
+    public String getPortholeVideo()
+    {
+    	return this.portholeVideo;
+    }
+    
+    
+    
+    public String getColourName()
+    {
+        return colourName;
+    }
+    public String getColourHexValue()
+    {
+        return colourHexValue;
+    }
+    
+    
+    
     public String getFtpAddress()
     {
     	return this.ftpAddress;
@@ -215,6 +325,9 @@ public class XmlValuesModel {
     {
     	return this.webSocketUser;
     }
+    
+    
+    
     public String getWelcomeString()
     {
     	return this.welcomeString;
@@ -255,6 +368,9 @@ public class XmlValuesModel {
     {
     	return this.instructionStringSeven;
     }
+    
+    
+    
     public String getErrorStringOne()
     {
     	return this.errorStringOne;

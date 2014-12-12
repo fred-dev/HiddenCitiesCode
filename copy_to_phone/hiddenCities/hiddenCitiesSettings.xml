@@ -65,47 +65,66 @@
                <installationType>conductor</installationType>
           </marker>
      </markers>
-     
-     
+     <narrationPlayers>
+          <narrationPlayer>
+               <narrationPlayerId>1</narrationPlayerId>
+               <narrationPlayerLat>52.393100</narrationPlayerLat>
+               <narrationPlayerLong>4.911760</narrationPlayerLong>
+               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
+          </narrationPlayer>
+          <narrationPlayer>
+               <narrationPlayerId>1</narrationPlayerId>
+               <narrationPlayerLat>52.393047</narrationPlayerLat>
+               <narrationPlayerLong>4.911658</narrationPlayerLong>
+               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
+          </narrationPlayer>
+          <narrationPlayer>
+               <narrationPlayerId>1</narrationPlayerId>
+               <narrationPlayerLat>52.392605</narrationPlayerLat>
+               <narrationPlayerLong>4.913015</narrationPlayerLong>
+               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
+          </narrationPlayer>
+     </narrationPlayers>
      <waypoints>
           <waypoint>
                <waypointId>0</waypointId>
                <waypointLat>52.393100</waypointLat>
                <waypointLong>4.911760</waypointLong>
-               <narrationPlayer>IntroText.wav</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>1</waypointId>
                <waypointLat>52.393047</waypointLat>
                <waypointLong>4.911658</waypointLong>
-               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>2</waypointId>
                <waypointLat>52.392792</waypointLat>
                <waypointLong>4.912575</waypointLong>
-               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>3</waypointId>
                <waypointLat>52.392605</waypointLat>
                <waypointLong>4.913015</waypointLong>
-               <narrationPlayer>none</narrationPlayer>
           </waypoint>
           <waypoint>
                <waypointId>4</waypointId>
                <waypointLat>52.392723</waypointLat>
                <waypointLong>4.913133</waypointLong>
-               <narrationPlayer>none</narrationPlayer>
           </waypoint>
      </waypoints>
      
      <portholes>
           <porthole>
-               <dataDat>DataSet.dat</dataDat>
-               <dataXML>DataSet.xml</dataXML>
-               <image>porthole1.jpg</image>
-               <video>porthole1.m4v</video>
+               <portholeDataDat>DataSet.dat</portholeDataDat>
+               <portholeDataXML>DataSet.xml</portholeDataXML>
+               <portholeImage>porthole1.jpg</portholeImage>
+               <portholeVideo>porthole1.m4v</portholeVideo>
           </porthole>
      </portholes>
+     <colours>
+          <colour>
+               <colourName>blue</colourName>
+               <colourHexValue>245</colourHexValue>
+          </colour>
+     </colours>
 </settings>

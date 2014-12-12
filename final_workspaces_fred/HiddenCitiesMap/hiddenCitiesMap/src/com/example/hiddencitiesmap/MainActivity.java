@@ -75,11 +75,14 @@ public class MainActivity extends FragmentActivity
 	List<XmlValuesModel> markerData = null;
 	List<XmlValuesModel> waypointData = null;
 	List<XmlValuesModel> networkData = null;
+	List<XmlValuesModel> portholeData = null;
+	List<XmlValuesModel> colourData = null;
 
 
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
 	Marker[] markerList= null;
+	String[] markerSceneIdList = null;
 	Vibrator mVibrator = null;
 	
 private GoogleMap mMap;
@@ -151,7 +154,12 @@ protected void onCreate(Bundle savedInstanceState) {
 
 
 }
-
+public boolean doesWaypointHaveAudioTrigger(){
+	
+	
+	return true;
+	
+}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -234,6 +242,8 @@ protected void onResume() {
     mGoogleApiClient.connect();
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     registerReceiver(myReceiver, filter);
+    mediaRoot = Environment.getExternalStorageDirectory();
+	audioRoot=mediaRoot +"/hiddenCities/audio/";
     parseSettings();
 	setupWebSocket();
 	mWSClient.connect();
@@ -275,6 +285,7 @@ void doVibrate(){
 			markerData = parser.markerList;
 			waypointData = parser.waypointList;
 			networkData = parser.networkList;
+			
 
 			if (markerData != null) {
 				markerList = new Marker[markerData.size()];
@@ -407,7 +418,9 @@ public void onConnectionFailed(ConnectionResult result) {
 @Override
 public boolean onMyLocationButtonClick() {
     Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+   
     return false;
+    
 }
 private class MusicIntentReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
@@ -441,7 +454,7 @@ private void RegisterAlarmBroadcast()
         public void onReceive(Context context, Intent intent)
         {
             Toast.makeText(context, "Alarm time has been reached", Toast.LENGTH_LONG).show();
-            preparePlayer("IntroText.wav");
+            preparePlayer("ConductorScene.wav");
         }
     };
 
@@ -463,6 +476,7 @@ public boolean onTouch(View v, MotionEvent event) {
 			if (v.getId() == BUTTON_IDS[j]) {
 				tempStore = j;
 				takePhoto();
+				 
 			}
 		}
 		
@@ -478,30 +492,25 @@ public boolean onTouch(View v, MotionEvent event) {
 }
 
 private void preparePlayer(String fileName) {
-	if(mediaPlayer.isPlaying()){
-		mediaPlayer.stop();
-		mediaPlayer=null;
-	}
-	   mediaPlayer = new MediaPlayer();
-	   mediaPlayer.setOnPreparedListener(this);
-	   mediaPlayer.setLooping(false);
-	   try {
-		mediaPlayer.setDataSource(audioRoot + fileName);
-	} catch (IllegalArgumentException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (SecurityException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (IllegalStateException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-	   mediaPlayer.prepareAsync();
-	
+     mediaPlayer = new MediaPlayer();
+     mediaPlayer.setOnPreparedListener(this);
+     try {
+          mediaPlayer.setDataSource(audioRoot + fileName);
+          
+     } catch (IllegalArgumentException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (SecurityException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (IllegalStateException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (IOException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     }
+     mediaPlayer.prepareAsync();
 	   
 	}
 @Override
@@ -575,7 +584,7 @@ public void setupWebSocket()
 				
 					System.out.println("Switch == 7");
 				} else if (aMessage.equals("Trigger Error")) {
-			
+					preparePlayer("ConductorScene.wav");
 					System.out.println("Switch == 666");
 				}else if (aMessage.equals("Cancel Photo")) {
 					cancelPhoto();
@@ -598,6 +607,9 @@ public void setupWebSocket()
 	} catch (URISyntaxException ex) {
 		System.out.println("Is not a valid WebSocker URI");
 	}
+}
+public void testPath(String fileName){
+	System.out.println(audioRoot +fileName);
 }
 public void onProviderDisabled(String arg0)
 {

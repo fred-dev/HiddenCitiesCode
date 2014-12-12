@@ -16,6 +16,8 @@ public class XMLParser extends DefaultHandler
           List<XmlValuesModel> idList=null;
           List<XmlValuesModel> networkList=null;
           List<XmlValuesModel> messageList=null;
+          List<XmlValuesModel> colourList=null;
+          List<XmlValuesModel> portholeList=null;
            
           // string builder acts as a buffer
           StringBuilder builder;
@@ -25,6 +27,8 @@ public class XMLParser extends DefaultHandler
           XmlValuesModel idValues = null;
           XmlValuesModel networkValues = null;
           XmlValuesModel messageValues = null;
+          XmlValuesModel colourValues = null;
+          XmlValuesModel portholeValues = null;
            
            
            // Initialize the arraylist
@@ -38,6 +42,8 @@ public class XMLParser extends DefaultHandler
         	  idList = new ArrayList<XmlValuesModel>();
         	  networkList= new ArrayList<XmlValuesModel>();
         	  messageList= new ArrayList<XmlValuesModel>();
+        	  colourList=new ArrayList<XmlValuesModel>();
+              portholeList=new ArrayList<XmlValuesModel>();
           }
        
             
@@ -79,6 +85,20 @@ public class XMLParser extends DefaultHandler
 
             	  networkValues= new XmlValuesModel();
               }
+              if(localName.equals("colours")){
+            	  
+              }
+              else if(localName.equals("colour")){
+
+            	  colourValues= new XmlValuesModel();
+              }
+              if(localName.equals("portholes")){
+            	  
+              }
+              else if(localName.equals("porthole")){
+
+            	  portholeValues= new XmlValuesModel();
+              }
               if(localName.equals("messageStrings")){
             	  
               }
@@ -119,6 +139,18 @@ public class XMLParser extends DefaultHandler
             	  networkList.add( networkValues );
                    
               }
+              if(localName.equals("colour")){
+
+                  /** finished reading a job xml node, add it to the arraylist **/
+            	  colourList.add( colourValues );
+                   
+              }
+              if(localName.equals("porthole")){
+
+                  /** finished reading a job xml node, add it to the arraylist **/
+            	  portholeList.add( portholeValues );
+                   
+              }
               if(localName.equals("messageString")){
 
                   /** finished reading a job xml node, add it to the arraylist **/
@@ -131,12 +163,7 @@ public class XMLParser extends DefaultHandler
               }
               
               
-              else  if(localName.equalsIgnoreCase("useremail")){
-            	  idValues.setUserEmail(builder.toString());
-              }
-              else  if(localName.equalsIgnoreCase("username")){
-            	  idValues.setUsername(builder.toString());
-              }
+              
               
               else  if(localName.equalsIgnoreCase("markerId")){  
 
@@ -149,6 +176,11 @@ public class XMLParser extends DefaultHandler
               else if(localName.equalsIgnoreCase("markerLong")){
             	  markerValues.setMarkerLong(Float.parseFloat(builder.toString()));
               }
+              else if(localName.equalsIgnoreCase("installationType")){
+            	  markerValues.setMarkerInstallationId(builder.toString());
+              }
+              
+              
               
               else  if(localName.equalsIgnoreCase("waypointId")){  
 
@@ -161,7 +193,37 @@ public class XMLParser extends DefaultHandler
               else if(localName.equalsIgnoreCase("waypointLong")){
             	  waypointValues.setWayPointLong(Float.parseFloat(builder.toString()));
               }
+              else if(localName.equalsIgnoreCase("wayPointNarrationPlayer")){
+            	  waypointValues.setWayPointNarrationPlayer(builder.toString());
+              }
               
+              
+              
+              else  if(localName.equalsIgnoreCase("useremail")){
+            	  idValues.setUserEmail(builder.toString());
+              }
+              else  if(localName.equalsIgnoreCase("username")){
+            	  idValues.setUsername(builder.toString());
+              }
+              
+              else if(localName.equalsIgnoreCase("portholeDataDat")){
+            	  portholeValues.setPortholeDataDat(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("portholeDataXML")){
+            	  portholeValues.setPortholeDataXML(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("portholeImage")){
+            	  portholeValues.setPortholeImage(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("portholeVideo")){
+            	  portholeValues.setPortholeVideo(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("colourName")){
+            	  colourValues.setColourName(builder.toString());
+              }
+              else if(localName.equalsIgnoreCase("colourHexValue")){
+            	  colourValues.setColourHexValue(builder.toString());
+              }
               
               else  if(localName.equalsIgnoreCase("ftpAddress")){  
 
@@ -187,10 +249,11 @@ public class XMLParser extends DefaultHandler
             	  networkValues.setWebSocketUser(builder.toString());
               }
               
+              
+                         
               else if(localName.equalsIgnoreCase("welcomeString")){
             	  messageValues.setWelcomeString(builder.toString());
               }
-              
               else if(localName.equalsIgnoreCase("emailString")){
             	  messageValues.setEmailString(builder.toString());
               }
