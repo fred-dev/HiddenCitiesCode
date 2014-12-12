@@ -83,15 +83,13 @@ public class HiddenCitiesHelpDialer extends Activity implements
 		}
 			mPlayManagers[0].play();
 			mPlayManagers[1].pause();
-			
-			ImageView IV = (ImageView) findViewById(R.id.imageView1);
-			Bitmap bMap = BitmapFactory.decodeFile(root + "/hiddenCities/images/hiddencitieshelpscreen.png");
-			IV.setImageBitmap(bMap);
+	
 	}
 	 @Override
 	    protected void onResume() {
 	  
 	        super.onResume();
+
 	  
 	    }
 

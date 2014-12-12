@@ -42,8 +42,8 @@ public final class R {
         public static final int ButtonHash=0x7f09000d;
         public static final int Buttonstar=0x7f09000b;
         public static final int action_settings=0x7f09000f;
-        public static final int imageView1=0x7f090001;
         public static final int relative=0x7f090000;
+        public static final int usernameText=0x7f090001;
     }
     public static final class layout {
         public static final int activity_hidden_cities_help_dialer=0x7f030000;
@@ -52,6 +52,7 @@ public final class R {
         public static final int hidden_cities_help_dialer=0x7f080000;
     }
     public static final class string {
+        public static final int HelpScreenMessage=0x7f060003;
         public static final int action_settings=0x7f060002;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060001;

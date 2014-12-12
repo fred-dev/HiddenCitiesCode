@@ -2,6 +2,7 @@ package com.hiddencities.threesixty;
 
 import java.io.File;
 import java.util.Timer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.panframe.android.samples.SimplePlayer.R;
 
 
 
+@SuppressLint("NewApi")
 public class HiddenCitiesThreeSixty extends Activity implements PFAssetObserver {
 
 	PFView _pfview;

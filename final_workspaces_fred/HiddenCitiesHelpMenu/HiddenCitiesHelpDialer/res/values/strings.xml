@@ -4,5 +4,6 @@
     <string name="app_name">HiddenCitiesHelpDialer</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="HelpScreenMessage">Welcome to the Hidden Cities Help desk, please listen to the menu and make your choice</string>
 
 </resources>

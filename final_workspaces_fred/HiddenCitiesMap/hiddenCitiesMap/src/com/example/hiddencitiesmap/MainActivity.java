@@ -27,6 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
@@ -170,6 +171,12 @@ protected void onCreate(Bundle savedInstanceState) {
 			
 		}
 	}
+	public void cancelPhoto(){
+		PackageManager p = getPackageManager();
+		String myPackage = getApplicationContext().getPackageName();
+		Intent intent = p.getLaunchIntentForPackage(myPackage);
+		startActivity(intent);
+	}
 public void takePhoto(){
 	Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 	Uri photoUri;
@@ -227,6 +234,11 @@ protected void onResume() {
     mGoogleApiClient.connect();
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     registerReceiver(myReceiver, filter);
+    parseSettings();
+	setupWebSocket();
+	mWSClient.connect();
+	mFTP = new MyFTP();
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
 
 }
 //handler for received Intents for the "my-event" event 
@@ -565,7 +577,11 @@ public void setupWebSocket()
 				} else if (aMessage.equals("Trigger Error")) {
 			
 					System.out.println("Switch == 666");
+				}else if (aMessage.equals("Cancel Photo")) {
+					cancelPhoto();
+					System.out.println("Switch == 666");
 				}
+				
 
 			}
 
