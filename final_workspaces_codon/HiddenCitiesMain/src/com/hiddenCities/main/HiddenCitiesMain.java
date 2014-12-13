@@ -214,7 +214,6 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		parseSettings();
 		System.out.println("Parsed Settings!!!!");
 		attachMapScene();
-		attachAugmentedRealityScene();
 		detachLoginScene();
 		setupWebSocket();
 		System.out.println("Setup Sockets!!!!");
