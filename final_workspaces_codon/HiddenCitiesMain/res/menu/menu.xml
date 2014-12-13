@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single"
+        android:enabled="true"
+        android:menuCategory="container"
+        android:visible="true" >
+        <item
+            android:id="@+id/CompassVideo"
+            android:title="360 Video">
+        </item>
+        <item
+            android:id="@+id/Camera"
+            android:title="Camera">
+        </item>
+        <item
+            android:id="@+id/CompassAudio"
+            android:title="Compass Audio">
+        </item>
+        <item
+            android:id="@+id/Map"
+            android:title="Map">
+        </item>
+        <item
+            android:id="@+id/VuforiaScene"
+            android:title="Vuforia Scene">
+        </item>
+        <item
+            android:id="@+id/Error"
+            android:title="Error Trigger">
+        </item>
+    </group>
+
+</menu>

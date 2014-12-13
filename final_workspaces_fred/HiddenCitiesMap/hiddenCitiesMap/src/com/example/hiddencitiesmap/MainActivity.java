@@ -409,51 +409,7 @@ public boolean onMyLocationButtonClick() {
     Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
     return false;
 }
-private class MusicIntentReceiver extends BroadcastReceiver {
-    @Override public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-            int state = intent.getIntExtra("state", -1);
-            switch (state) {
-            case 0:
-                Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
-                doVibrate();
-                break;
-            case 1:
-                Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-}
 
-void setAlarmWithDelay(long delay){
-
-	alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +delay, pendingIntent);
-}
-
-private void RegisterAlarmBroadcast()
-{       
-    mReceiver = new BroadcastReceiver()
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            Toast.makeText(context, "Alarm time has been reached", Toast.LENGTH_LONG).show();
-            preparePlayer("IntroText.wav");
-        }
-    };
-
-    registerReceiver(mReceiver, new IntentFilter("sample") );
-    pendingIntent = PendingIntent.getBroadcast( this, 0, new Intent("sample"),0 );
-    alarmManager = (AlarmManager)(this.getSystemService( Context.ALARM_SERVICE ));
-}
-private void UnregisterAlarmBroadcast()
-{
-    alarmManager.cancel(pendingIntent); 
-    getBaseContext().unregisterReceiver(mReceiver);
-}
 
 @Override
 public boolean onTouch(View v, MotionEvent event) {
@@ -516,6 +472,7 @@ public void onPrepared(MediaPlayer mp) {
 	 mp.start();
 	
 }
+
 public void setupWebSocket()
 {
 	WebSocketImpl.DEBUG = true;

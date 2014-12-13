@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><settings>
+    					   <users>
+       						 <user>
+    							<username>hg</username>
+    							<useremail>hg@gnail.com</useremail>
+   							</user>
+   						   </users>
+   						   
+                           <markers>
+                             <marker>
+                                 <markerId>0</markerId>
+                                 <markerLat>52.393100</markerLat>
+                                 <markerLong>4.911760</markerLong>
+                              </marker>
+                             <marker>
+                                  <markerId>1</markerId>
+                                  <markerLat>52.393047</markerLat>
+                                  <markerLong>4.911658</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>2</markerId>
+                                  <markerLat>52.392792</markerLat>
+                                  <markerLong>4.912575</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>3</markerId>
+                                  <markerLat>52.392605</markerLat>
+                                  <markerLong>4.913015</markerLong>
+                             </marker>
+                             <marker>
+                                  <markerId>4</markerId>
+                                  <markerLat>52.392723</markerLat>
+                                  <markerLong>4.913133</markerLong>
+                             </marker>
+                            </markers>
+
+                           <waypoints>
+                                <waypoint>
+                                     <waypointId>0</waypointId>
+                                     <waypointLat>52.393100</waypointLat>
+                                     <waypointLong>4.911760</waypointLong>
+                                </waypoint>
+                                <waypoint>
+                                     <waypointId>1</waypointId>
+                                     <waypointLat>52.393047</waypointLat>
+                                     <waypointLong>4.911658</waypointLong>
+                                </waypoint>
+                                <waypoint>
+                                     <waypointId>2</waypointId>
+                                     <waypointLat>52.392792</waypointLat>
+                                     <waypointLong>4.912575</waypointLong>
+                                </waypoint>
+                                <waypoint>
+                                     <waypointId>3</waypointId>
+                                     <waypointLat>52.392605</waypointLat>
+                                     <waypointLong>4.913015</waypointLong>
+                                </waypoint>
+                                <waypoint>
+                                     <waypointId>4</waypointId>
+                                     <waypointLat>52.392723</waypointLat>
+                                     <waypointLong>4.913133</waypointLong>
+                                </waypoint>
+                           </waypoints>
+
+                           <networkInfo>
+                           	<networkInfo>
+                           		
+                           		<ftpAddress>184.107.78.188</ftpAddress>
+                           		<ftpUser>hesam@arashakbari.com</ftpUser>
+                           		<ftpPassword>chosoo12345</ftpPassword>
+                           		<ftpRemotePath> </ftpRemotePath>
+                           		<webSocketAddress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAddress>
+                           		<webSocketUser>arash</webSocketUser>
+
+                           	</networkInfo>
+                           </networkInfo>
+                          </settings>
