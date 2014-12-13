@@ -27,6 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
@@ -73,10 +74,15 @@ public class MainActivity extends FragmentActivity
 	
 	List<XmlValuesModel> markerData = null;
 	List<XmlValuesModel> waypointData = null;
+	List<XmlValuesModel> networkData = null;
+	List<XmlValuesModel> portholeData = null;
+	List<XmlValuesModel> colourData = null;
+
 
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
 	Marker[] markerList= null;
+	String[] markerSceneIdList = null;
 	Vibrator mVibrator = null;
 	
 private GoogleMap mMap;
@@ -107,18 +113,17 @@ File mediaRoot;
 String audioRoot;
 
 private WebSocketClient	mWSClient;
-private static String	mServerPath		= "ws://mprint-hiddencities.rhcloud.com:8000/";
-private String			mUserId;
+private static String	mWsServerPath;
+private String			mWSUserId;
 private boolean			mIsConnected	= false;
 
 private static final int CAM_REQUREST = 1313;
 public static final int MEDIA_TYPE_IMAGE = 1;
 
 MyFTP				mFTP;
-String				mIP, mUserName, mPassword;
+String				mFtpIP, mFtpUserName, mFtpPassword,mFtpRemotePath;
 static String 				mLocalPathForFTP;
 static String				mRemoteFileNameFTP;
-static File mFTPmediaFile;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,8 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_main);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	if (getActionBar().isShowing()) getActionBar().hide();
+	//Here we can override the system font and load whatever we like- should be loaded from Assest, must change to SDcard to get access to RTL fonts
+	//FontUtility.overrideFont(getApplicationContext(), "SERIF", "assets/fonts/Roboto-Regular.ttf");
 	mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 	
     buttonList = new ArrayList<Button>();
@@ -139,19 +146,20 @@ protected void onCreate(Bundle savedInstanceState) {
 	
 	mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-	mUserId = "arash";
+	parseSettings();
 	setupWebSocket();
 	mWSClient.connect();
-	mIP ="ftp.greenhost.nl";
-	mUserName="webmaster@fredrodrigues.net";
-	mPassword="ifUjWys3";
-	
 	mFTP = new MyFTP();
-    mFTP.connnectWithFTP(mIP, mUserName, mPassword);
- 
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+
 
 }
-
+public boolean doesWaypointHaveAudioTrigger(){
+	
+	
+	return true;
+	
+}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -162,7 +170,7 @@ protected void onCreate(Bundle savedInstanceState) {
 				if (resultCode == RESULT_OK) {
 					Toast.makeText(this, "Image saved to:\n" + mLocalPathForFTP,
 							Toast.LENGTH_LONG).show();
-					uploadToFtp(mLocalPathForFTP,"/domains/photos/"+mRemoteFileNameFTP);
+					uploadToFtp(mLocalPathForFTP,mRemoteFileNameFTP);
 				} else if (resultCode == RESULT_CANCELED) {
 					// User cancelled the image capture
 				} else {
@@ -170,6 +178,12 @@ protected void onCreate(Bundle savedInstanceState) {
 				}
 			
 		}
+	}
+	public void cancelPhoto(){
+		PackageManager p = getPackageManager();
+		String myPackage = getApplicationContext().getPackageName();
+		Intent intent = p.getLaunchIntentForPackage(myPackage);
+		startActivity(intent);
 	}
 public void takePhoto(){
 	Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -184,8 +198,8 @@ public void uploadToFtp(String aFilePath, String aServerFilePath) {
 	if (mFTP.isConnected()) {
 		mFTP.uploadFile(aFilePath, aServerFilePath);
 	} else
-		mFTP.connnectWithFTP(mIP, mUserName, mPassword);
-		mFTP.uploadFile(aFilePath, aServerFilePath);
+		mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+		mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
 }
 	
 private static Uri getOutputMediaFileUri(int type){
@@ -205,13 +219,13 @@ private static File getOutputMediaFile(int type){
 
   // Create a media file name
   String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
+  File mediaFile;
   if (type == MEDIA_TYPE_IMAGE){
-	  mFTPmediaFile = new File(mediaStorageDir.getPath() + File.separator +
+      mediaFile = new File(mediaStorageDir.getPath() + File.separator +
       "IMG_"+ timeStamp + ".jpg");
       mRemoteFileNameFTP = "IMG_"+ timeStamp + ".jpg";
-      mLocalPathForFTP = mFTPmediaFile.getAbsolutePath();
-      Log.d("Media File", mFTPmediaFile.getAbsolutePath());
+      mLocalPathForFTP = mediaFile.getAbsolutePath();
+      Log.d("Media File", mediaFile.getAbsolutePath());
   
   } else {
       return null;
@@ -222,12 +236,19 @@ private static File getOutputMediaFile(int type){
 @Override
 protected void onResume() {
     super.onResume();
-	parseSettings();
+	
     setUpMapIfNeeded();
     setUpGoogleApiClientIfNeeded();
     mGoogleApiClient.connect();
     IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
     registerReceiver(myReceiver, filter);
+    mediaRoot = Environment.getExternalStorageDirectory();
+	audioRoot=mediaRoot +"/hiddenCities/audio/";
+    parseSettings();
+	setupWebSocket();
+	mWSClient.connect();
+	mFTP = new MyFTP();
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
 
 }
 //handler for received Intents for the "my-event" event 
@@ -243,54 +264,72 @@ public void onPause() {
 void doVibrate(){
 	mVibrator.vibrate(1000);
 }
-void parseSettings() {
-	try {
-		String fileName = "hiddenCities/hiddenCitiesSettings.xml";
-		String path = Environment.getExternalStorageDirectory() + "/" + fileName;
-		File file = new File(path);
-		if(file.exists()) {
-			Log.e("File", "Yes file is there");
-		}
-		   
-		FileInputStream fileInputStream = new FileInputStream(file);
-		XMLParser parser = new XMLParser();
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser sp = factory.newSAXParser();
-		XMLReader reader = sp.getXMLReader();
-		reader.setContentHandler(parser);
-		sp.parse(fileInputStream, parser);
-		
-		markerData = parser.markerList;
-		waypointData = parser.waypointList;
-		
-		
-		if (markerData != null) {
-			markerList = new Marker[markerData.size()];
-			markerLatLongList = new LatLng[markerData.size()];
-			for (int i = 0; i < markerData.size(); i++) {
-				XmlValuesModel xmlRowData = markerData.get(i);
-				if (xmlRowData != null) {
-					markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
-				} else
-					Log.e("Markers", "Markers value null");
+
+	void parseSettings() {
+		try {
+			String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+			String path = Environment.getExternalStorageDirectory() + "/"+ fileName;
+			File file = new File(path);
+			if (file.exists()) {
+				Log.d("File", "Yes file is there");
 			}
-		}
-		if (waypointData != null) {
+
+			FileInputStream fileInputStream = new FileInputStream(file);
+			XMLParser parser = new XMLParser();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser sp = factory.newSAXParser();
+			XMLReader reader = sp.getXMLReader();
+			reader.setContentHandler(parser);
+			sp.parse(fileInputStream, parser);
+
+			markerData = parser.markerList;
+			waypointData = parser.waypointList;
+			networkData = parser.networkList;
 			
-			waypointLatLongList = new LatLng[waypointData.size()];
-		
-			for (int k = 0; k < waypointData.size(); k++) {
-				XmlValuesModel xmlRowData = waypointData.get(k);
-				if (xmlRowData != null) {
-					waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
-				} else
-					Log.e("Waypoints", "Waypoint value null");
+
+			if (markerData != null) {
+				markerList = new Marker[markerData.size()];
+				markerLatLongList = new LatLng[markerData.size()];
+				for (int i = 0; i < markerData.size(); i++) {
+					XmlValuesModel xmlRowData = markerData.get(i);
+					if (xmlRowData != null) {
+						markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
+					} else
+						Log.e("Markers", "Markers value null");
+				}
 			}
+			if (waypointData != null) {
+
+				waypointLatLongList = new LatLng[waypointData.size()];
+
+				for (int k = 0; k < waypointData.size(); k++) {
+					XmlValuesModel xmlRowData = waypointData.get(k);
+					if (xmlRowData != null) {
+						waypointLatLongList[k] = new LatLng(xmlRowData.getWaypointLat(),xmlRowData.getWaypointLong());
+					} else
+						Log.e("Waypoints", "Waypoint value null");
+				}
+			}
+			Log.d("Progress", "we got here");
+			if (networkData != null) {
+				for (int m = 0; m < networkData.size(); m++) {
+					XmlValuesModel xmlRowData = networkData.get(m);
+					if (xmlRowData != null) {
+						mFtpIP=xmlRowData.getFtpAddress();
+						mFtpUserName=xmlRowData.getFtpUser();
+						mFtpPassword=xmlRowData.getFtpPassword();
+						mFtpRemotePath=xmlRowData.getFtpRemotePath();
+						mWsServerPath=xmlRowData.getWebSocketAdress();	
+						mWSUserId=xmlRowData.getWebSocketUser();
+					} else
+						Log.e("Network Info", "Network Info value null");
+				}
+			}
+
+		} catch (Exception e) {
+			Log.e("XML parse", "Exception parse xml :" + e);
 		}
-	} catch (Exception e) {
-		Log.e("Jobs", "Exception parse xml :" + e);
 	}
-}
 
 private void addNewMarker(LatLng point, String title){
 	MarkerOptions markerOptions = new MarkerOptions();
@@ -379,7 +418,9 @@ public void onConnectionFailed(ConnectionResult result) {
 @Override
 public boolean onMyLocationButtonClick() {
     Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+   
     return false;
+    
 }
 private class MusicIntentReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
@@ -413,7 +454,7 @@ private void RegisterAlarmBroadcast()
         public void onReceive(Context context, Intent intent)
         {
             Toast.makeText(context, "Alarm time has been reached", Toast.LENGTH_LONG).show();
-            preparePlayer("IntroText.wav");
+            preparePlayer("ConductorScene.wav");
         }
     };
 
@@ -435,6 +476,7 @@ public boolean onTouch(View v, MotionEvent event) {
 			if (v.getId() == BUTTON_IDS[j]) {
 				tempStore = j;
 				takePhoto();
+				 
 			}
 		}
 		
@@ -450,30 +492,25 @@ public boolean onTouch(View v, MotionEvent event) {
 }
 
 private void preparePlayer(String fileName) {
-	if(mediaPlayer.isPlaying()){
-		mediaPlayer.stop();
-		mediaPlayer=null;
-	}
-	   mediaPlayer = new MediaPlayer();
-	   mediaPlayer.setOnPreparedListener(this);
-	   mediaPlayer.setLooping(false);
-	   try {
-		mediaPlayer.setDataSource(audioRoot + fileName);
-	} catch (IllegalArgumentException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (SecurityException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (IllegalStateException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-	   mediaPlayer.prepareAsync();
-	
+     mediaPlayer = new MediaPlayer();
+     mediaPlayer.setOnPreparedListener(this);
+     try {
+          mediaPlayer.setDataSource(audioRoot + fileName);
+          
+     } catch (IllegalArgumentException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (SecurityException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (IllegalStateException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     } catch (IOException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+     }
+     mediaPlayer.prepareAsync();
 	   
 	}
 @Override
@@ -494,7 +531,7 @@ public void setupWebSocket()
 	//		Draft draft = new Draft_17();
 
 	try {
-		mWSClient = new WebSocketClient(new URI(mServerPath + mUserId)) {
+		mWSClient = new WebSocketClient(new URI(mWsServerPath + mWSUserId)) {
 
 			@Override
 			public void onClose(int aCode, String aReason, boolean aRemote)
@@ -547,9 +584,13 @@ public void setupWebSocket()
 				
 					System.out.println("Switch == 7");
 				} else if (aMessage.equals("Trigger Error")) {
-			
+					preparePlayer("ConductorScene.wav");
+					System.out.println("Switch == 666");
+				}else if (aMessage.equals("Cancel Photo")) {
+					cancelPhoto();
 					System.out.println("Switch == 666");
 				}
+				
 
 			}
 
@@ -566,6 +607,9 @@ public void setupWebSocket()
 	} catch (URISyntaxException ex) {
 		System.out.println("Is not a valid WebSocker URI");
 	}
+}
+public void testPath(String fileName){
+	System.out.println(audioRoot +fileName);
 }
 public void onProviderDisabled(String arg0)
 {

@@ -12,7 +12,7 @@
                <ftpPassword>insertHere</ftpPassword>
                <ftpRemotePath>/domains/photos/</ftpRemotePath>
                <webSocketAdress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAdress>
-               <webSocketUser>arash</webSocketUser>
+               <webSocketUser>fred</webSocketUser>
           </networkInfo>
      </networkInfos>
      <messageStrings>
