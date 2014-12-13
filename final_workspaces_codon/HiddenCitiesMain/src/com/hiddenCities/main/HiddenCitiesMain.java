@@ -80,7 +80,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	List<XmlValuesModel>	mWaypointData		= null;
 	List<XmlValuesModel>	mNetworkData		= null;
 	List<XmlValuesModel>	mIdData				= null;
-	
+
 	public String			mUserName, mUserEmail;
 
 	Vibrator				mVibrator			= null;
@@ -139,7 +139,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	public void onPause()
 	{
 		super.onPause();
-//		mWSClient.close();
+		//		mWSClient.close();
 		unregisterReceiver(mReceiver);
 	}
 
@@ -223,13 +223,67 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		mFTP = new MyFTP();
 		mFTP.connnectWithFTP(mFTPIP, mFTPUserName, mFTPPassword);
 		System.out.println("Made and Connected FTP!!!!");
-		
+
 	}
 
 	//For sending the data to login Fragment
 	public void login(View view)
 	{
 		((HiddenCitiesLogin) mFragmentManager.findFragmentByTag("LoginScene")).login(view);
+	}
+
+	public void attachScene(String aName)
+	{
+		Fragment fragment = null;
+		switch (aName) {
+			case "CompassAudioScene":
+				fragment = new HiddenCitiesCompassAudio();
+				break;
+			case "CompassVideoScene":
+				fragment = new HiddenCitiesCompassVideo();
+				break;
+			case "MapScene":
+				fragment = new HiddenCitiesMap(mMarkerData, mWaypointData);
+				break;
+			case "LoginScene":
+				fragment = new HiddenCitiesLogin();
+				break;
+			case "HelpDialerScene":
+				fragment = new HiddenCitiesHelpDialer();
+				break;
+			case "CameraScene":
+				fragment = new HiddenCitiesCamera();
+				break;
+			case "AugmentedRealityScene":
+				fragment = new HiddenCitiesAugmentedReality();
+				break;
+		}
+		if (fragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, fragment, aName);
+			mManagerWatcher.add(aName);
+			fragmentTransaction.commit();
+
+		}
+		//		fragmentTransaction.replace(R.id.container, mScenes[2]);
+	}
+
+	public void detachScene(String aName)
+	{
+		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+		Fragment fragment = mFragmentManager.findFragmentByTag(aName);
+		if (fragment != null) {
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(fragment);
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals(aName))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
+
+		}
 	}
 
 	public void attachCompassAudioScene()
@@ -399,7 +453,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		}
 		fragmentTransaction.commit();
 	}
-	
+
 	public void attachAugmentedRealityScene()
 	{
 		//		emptyFragmentManager();
@@ -521,7 +575,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 				}
 
 			}
-			
+
 			if (mIdData != null) {
 				for (int m = 0; m < mIdData.size(); m++) {
 					XmlValuesModel xmlRowData = mIdData.get(m);
