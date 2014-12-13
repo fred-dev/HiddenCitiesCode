@@ -444,6 +444,7 @@ private class MusicIntentReceiver extends BroadcastReceiver {
 void setAlarmWithDelay(long delay){
 
 	alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +delay, pendingIntent);
+	
 }
 
 private void RegisterAlarmBroadcast()
