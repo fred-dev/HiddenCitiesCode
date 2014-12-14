@@ -65,26 +65,26 @@
                <installationType>conductor</installationType>
           </marker>
      </markers>
-     <narrationPlayers>
-          <narrationPlayer>
-               <narrationPlayerId>1</narrationPlayerId>
-               <narrationPlayerLat>52.393100</narrationPlayerLat>
-               <narrationPlayerLong>4.911760</narrationPlayerLong>
-               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
-          </narrationPlayer>
-          <narrationPlayer>
-               <narrationPlayerId>1</narrationPlayerId>
-               <narrationPlayerLat>52.393047</narrationPlayerLat>
-               <narrationPlayerLong>4.911658</narrationPlayerLong>
-               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
-          </narrationPlayer>
-          <narrationPlayer>
-               <narrationPlayerId>1</narrationPlayerId>
-               <narrationPlayerLat>52.392605</narrationPlayerLat>
-               <narrationPlayerLong>4.913015</narrationPlayerLong>
-               <narrationPlayerAudioFile>IntroText.wav</narrationPlayerAudioFile>
-          </narrationPlayer>
-     </narrationPlayers>
+     <gpsAudioPlayers>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+     </gpsAudioPlayer>
      <waypoints>
           <waypoint>
                <waypointId>0</waypointId>

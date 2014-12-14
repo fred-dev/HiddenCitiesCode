@@ -82,7 +82,6 @@ public class MainActivity extends FragmentActivity
 	LatLng[] markerLatLongList= null;
 	LatLng[] gpsAudioPlayLatLongList = null;
 	String[] gpsAudioPlayerFileNames = null;
-	boolean[] gpsAudioHasPlayed = null;
 	boolean[] markerVisitedList = null;
 	
 	Marker[] markerList= null;
@@ -369,13 +368,11 @@ public void uploadToFtp(String aFilePath, String aServerFilePath) {
 			if(gpsAudioPlayData !=null){
 				gpsAudioPlayerFileNames = new String[gpsAudioPlayData.size()];
 				gpsAudioPlayLatLongList = new LatLng[gpsAudioPlayData.size()];
-				gpsAudioHasPlayed = new boolean[gpsAudioPlayData.size()];
 				for (int n = 0; n < gpsAudioPlayData.size(); n++) {
 					XmlValuesModel xmlRowData = gpsAudioPlayData.get(n);
 					if (xmlRowData != null) {
 						gpsAudioPlayLatLongList[n] = new LatLng(xmlRowData.getGpsAudioPlayerLat() ,xmlRowData.getGpsAudioPlayerLong());
 						gpsAudioPlayerFileNames[n] = xmlRowData.getGpsAudioPlayerAudioFile();
-						gpsAudioHasPlayed[n]= false;
 					}
 				}
 				
@@ -449,31 +446,46 @@ public void locationAlarm(int locationId){
 				locationMarker.setLongitude(markerLatLongList[l].longitude);
 				distance = locationMarker.distanceTo(location);
 				if (distance < 20) {
-					locationAlarm(l);
-					preparePlayer("01 Way Out in the World.mp3");
-					markerVisitedList[l] = true;
+
+					switch (l) {
+
+					case 0:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("01 Way Out in the World.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 1:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("1-05%20Survival.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 2:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("04%20Deep%20Sea%20Diver.m4a");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 3:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("09%20Dagga%20Puff.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+
+					}
 				}
 			}
-	
 		}
-		
-		if (gpsAudioPlayLatLongList != null) {
-			for (int l = 0; l < gpsAudioPlayLatLongList.length; l++) {
-				double distance = 0;
-				Location locationMarker = new Location("A");
-				locationMarker.setLatitude(gpsAudioPlayLatLongList[l].latitude);
-				locationMarker.setLongitude(gpsAudioPlayLatLongList[l].longitude);
-				distance = locationMarker.distanceTo(location);
-				if (distance < 20) {
-					if(gpsAudioHasPlayed[l]==false){
-						preparePlayer(gpsAudioPlayerFileNames[l]);
-						gpsAudioHasPlayed[l] = true;
-					}	
-				}
-			}
-	
-		}
-	
 		if (mIsWsConnected) {
 			mWSClient.send("map/" + location.getLatitude() + "/"
 					+ location.getLongitude());

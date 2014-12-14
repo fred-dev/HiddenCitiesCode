@@ -270,19 +270,19 @@ public class XmlValuesModel {
         return this.wayPointId;
     }
   
-    public int getGpsAudioPlayerId(){
+    public int getGpsAudioPlayerId(int gpsAduioPlayerId){
     	return this.gpsAduioPlayerId;
     }
     
-    public float getGpsAudioPlayerLat(){
+    public float getGpsAudioPlayerLat(float gpsAudioPlayerLat){
     	return this.gpsAudioPlayerLat;
     }
     
-    public float getGpsAudioPlayerLong(){
+    public float getGpsAudioPlayerLong(float gpsAudioPlayerLong){
     	return this.gpsAudioPlayerLong;	
     }
     
-    public String getGpsAudioPlayerAudioFile(){
+    public String getGpsAudioPlayerAudioFile(String gpsAudioPlayerFile){
     	return this.gpsAudioPlayerFile;
     }
     

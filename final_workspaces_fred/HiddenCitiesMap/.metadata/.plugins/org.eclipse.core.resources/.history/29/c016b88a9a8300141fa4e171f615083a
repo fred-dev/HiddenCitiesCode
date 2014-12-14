@@ -47,7 +47,6 @@ public class XMLParser extends DefaultHandler
         	  messageList= new ArrayList<XmlValuesModel>();
         	  colourList=new ArrayList<XmlValuesModel>();
               portholeList=new ArrayList<XmlValuesModel>();
-              gpsAudioPlayerList=new ArrayList<XmlValuesModel>();
           }
        
             
@@ -74,13 +73,6 @@ public class XMLParser extends DefaultHandler
               else if(localName.equals("marker")){
   
             	  markerValues = new XmlValuesModel();
-              }
-              else if(localName.equals("gpsAudioPlayers")){
-                  
-              }
-              else if(localName.equals("gpsAudioPlayer")){
-
-            	  gpsAudioPlayerValues = new XmlValuesModel();
               }
               else if(localName.equals("waypoints")){
                   
@@ -144,12 +136,6 @@ public class XMLParser extends DefaultHandler
             	  waypointList.add( waypointValues );
                    
               }
-              if(localName.equals("gpsAudioPlayer")){
-
-                  /** finished reading a job xml node, add it to the arraylist **/
-            	  gpsAudioPlayerList.add( gpsAudioPlayerValues );
-                   
-              }
               if(localName.equals("networkInfo")){
 
                   /** finished reading a job xml node, add it to the arraylist **/
@@ -210,21 +196,10 @@ public class XMLParser extends DefaultHandler
               else if(localName.equalsIgnoreCase("waypointLong")){
             	  waypointValues.setWayPointLong(Float.parseFloat(builder.toString()));
               }
-             
-              else  if(localName.equalsIgnoreCase("gpsAudioPlayerId")){  
-
-            	  gpsAudioPlayerValues.setGpsAudioPlayerId(Integer.parseInt(builder.toString()));
+              else if(localName.equalsIgnoreCase("wayPointNarrationPlayer")){
+            	  waypointValues.setWayPointNarrationPlayer(builder.toString());
               }
-              else if(localName.equalsIgnoreCase("gpsAudioPlayerLat")){
-
-            	  gpsAudioPlayerValues.setGpsAudioPlayerLat(Float.parseFloat(builder.toString()));
-              }
-              else if(localName.equalsIgnoreCase("gpsAudioPlayerLong")){
-            	  gpsAudioPlayerValues.setGpsAudioPlayerLong(Float.parseFloat(builder.toString()));
-              }
-              else if(localName.equalsIgnoreCase("gpsAudioPlayerAudioFile")){
-            	  gpsAudioPlayerValues.setGpsAudioPlayerAudioFile(builder.toString());
-              }
+              
               
               
               else  if(localName.equalsIgnoreCase("useremail")){

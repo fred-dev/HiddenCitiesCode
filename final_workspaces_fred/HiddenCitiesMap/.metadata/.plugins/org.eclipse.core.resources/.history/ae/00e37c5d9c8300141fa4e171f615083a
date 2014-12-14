@@ -10,11 +10,7 @@ public class XmlValuesModel {
     private  float wayPointLat;
     private  float wayPointLong;
     private  int wayPointId;
-    
-    private int gpsAduioPlayerId;
-    private  float gpsAudioPlayerLat;
-    private  float gpsAudioPlayerLong;
-    private String gpsAudioPlayerFile;
+    private String wayPointNarrationPlayer;
     
     private String userName;
     private String userEmail;
@@ -83,21 +79,9 @@ public class XmlValuesModel {
     {
         this.wayPointId = wayPointId;
     }
-   
-    public void setGpsAudioPlayerId(int gpsAduioPlayerId){
-    	this.gpsAduioPlayerId=gpsAduioPlayerId;
-    }
-    
-    public void setGpsAudioPlayerLat(float gpsAudioPlayerLat){
-    	this.gpsAudioPlayerLat=gpsAudioPlayerLat;
-    }
-    
-    public void setGpsAudioPlayerLong(float gpsAudioPlayerLong){
-    	this.gpsAudioPlayerLong=gpsAudioPlayerLong;	
-    }
-    
-    public void setGpsAudioPlayerAudioFile(String gpsAudioPlayerFile){
-    	this.gpsAudioPlayerFile=gpsAudioPlayerFile;
+    public void setWayPointNarrationPlayer(String wayPointNarrationPlayer)
+    {
+        this.wayPointNarrationPlayer = wayPointNarrationPlayer;
     }
     
     
@@ -269,22 +253,12 @@ public class XmlValuesModel {
     {
         return this.wayPointId;
     }
-  
-    public int getGpsAudioPlayerId(){
-    	return this.gpsAduioPlayerId;
+    public String getWayPointNarrationPlayer()
+    {
+    	return this.wayPointNarrationPlayer;
     }
     
-    public float getGpsAudioPlayerLat(){
-    	return this.gpsAudioPlayerLat;
-    }
     
-    public float getGpsAudioPlayerLong(){
-    	return this.gpsAudioPlayerLong;	
-    }
-    
-    public String getGpsAudioPlayerAudioFile(){
-    	return this.gpsAudioPlayerFile;
-    }
     
     public String getUsername()
     {
