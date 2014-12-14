@@ -3,23 +3,21 @@ package com.example.hiddencitiesmap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.example.hiddencitiesmap.MyFTP;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.java_websocket.WebSocketImpl;
-import org.java_websocket.handshake.*;
-import org.java_websocket.client.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
 import org.xml.sax.XMLReader;
 
-import android.media.MediaPlayer;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -31,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,10 +64,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class MainActivity extends FragmentActivity  
 
 	implements
+	OnMyLocationButtonClickListener,
     ConnectionCallbacks,
     OnConnectionFailedListener,
     LocationListener,
-    OnMyLocationButtonClickListener ,
     View.OnTouchListener,
     MediaPlayer.OnPreparedListener{
 	
@@ -81,6 +80,8 @@ public class MainActivity extends FragmentActivity
 
 	LatLng[] waypointLatLongList = null;
 	LatLng[] markerLatLongList= null;
+	boolean[] markerVisitedList = null;
+	
 	Marker[] markerList= null;
 	String[] markerSceneIdList = null;
 	Vibrator mVibrator = null;
@@ -115,7 +116,7 @@ String audioRoot;
 private WebSocketClient	mWSClient;
 private static String	mWsServerPath;
 private String			mWSUserId;
-private boolean			mIsConnected	= false;
+private boolean			mIsWsConnected	= false;
 
 private static final int CAM_REQUREST = 1313;
 public static final int MEDIA_TYPE_IMAGE = 1;
@@ -124,36 +125,93 @@ MyFTP				mFTP;
 String				mFtpIP, mFtpUserName, mFtpPassword,mFtpRemotePath;
 static String 				mLocalPathForFTP;
 static String				mRemoteFileNameFTP;
+private IntentFilter filter;
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    
+    //this makes us fullscreen
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	if (getActionBar().isShowing()) getActionBar().hide();
+	
 	//Here we can override the system font and load whatever we like- should be loaded from Assest, must change to SDcard to get access to RTL fonts
 	//FontUtility.overrideFont(getApplicationContext(), "SERIF", "assets/fonts/Roboto-Regular.ttf");
+	
+	//Turn on Vibrator
 	mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 	
+	//setup buttons
     buttonList = new ArrayList<Button>();
 	for (int id : BUTTON_IDS) {
 		Button mButton = (Button) findViewById(id);
 		mButton.setOnTouchListener(this); // maybe
 		buttonList.add(mButton);
 	}
+	
+	//This is to know if the headphones are in or out
 	myReceiver = new MusicIntentReceiver();
 	RegisterAlarmBroadcast();
+	filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+	registerReceiver(myReceiver, filter);
 	
-	mediaRoot = Environment.getExternalStorageDirectory();
+	//We set the media root folder for audio here
+    mediaRoot = Environment.getExternalStorageDirectory();
 	audioRoot=mediaRoot +"/hiddenCities/audio/";
-	parseSettings();
+	
+    parseSettings();
+    
 	setupWebSocket();
 	mWSClient.connect();
 	mFTP = new MyFTP();
     mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
 
+    //get the maps going
+    setUpMapIfNeeded();
+    setUpGoogleApiClientIfNeeded();
+    mGoogleApiClient.connect();
 
 }
+@Override
+protected void onResume() {
+    super.onResume();
+	
+    setUpMapIfNeeded();
+    setUpGoogleApiClientIfNeeded();
+    mGoogleApiClient.connect();
+    registerReceiver(myReceiver, filter);
+    setupWebSocket();
+	mWSClient.connect();
+	mFTP = new MyFTP();
+    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+
+}
+//handler for received Intents for the "my-event" event 
+
+@Override
+public void onPause() {
+    super.onPause();
+//    mWSClient.close();
+//    mWSClient=null;
+    mIsWsConnected=false;
+    mFTP=null;
+    if (mGoogleApiClient != null) {
+        mGoogleApiClient.disconnect();
+    }
+    unregisterReceiver(myReceiver);
+    
+    
+}
+
+@Override
+protected void onDestroy() 
+{
+    unregisterReceiver(mReceiver);
+    super.onDestroy();
+  }
+
+
 public boolean doesWaypointHaveAudioTrigger(){
 	
 	
@@ -166,25 +224,21 @@ public boolean doesWaypointHaveAudioTrigger(){
 	
 
 			if (requestCode == CAM_REQUREST ) {
-				Intent x = getIntent();
-				if (resultCode == RESULT_OK) {
-					Toast.makeText(this, "Image saved to:\n" + mLocalPathForFTP,
-							Toast.LENGTH_LONG).show();
-					uploadToFtp(mLocalPathForFTP,mRemoteFileNameFTP);
-				} else if (resultCode == RESULT_CANCELED) {
-					// User cancelled the image capture
-				} else {
-					// Image capture failed, advise user
-				}
+				
+//				if (resultCode == RESULT_OK) {
+//					Toast.makeText(this, "Image saved to:\n" + mLocalPathForFTP,
+//							Toast.LENGTH_LONG).show();
+//					uploadToFtp(mLocalPathForFTP,mRemoteFileNameFTP);
+//				} else if (resultCode == RESULT_CANCELED) {
+//					// User cancelled the image capture
+//				} else {
+//					// Image capture failed, advise user
+//				}
 			
 		}
 	}
-	public void cancelPhoto(){
-		PackageManager p = getPackageManager();
-		String myPackage = getApplicationContext().getPackageName();
-		Intent intent = p.getLaunchIntentForPackage(myPackage);
-		startActivity(intent);
-	}
+	
+//The next methods launch the native camera and set the file location of where we will store the photo if it is taken. We can calso close the camera
 public void takePhoto(){
 	Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 	Uri photoUri;
@@ -193,20 +247,13 @@ public void takePhoto(){
     startActivityForResult(cameraIntent, CAM_REQUREST);
     
 }
-
-public void uploadToFtp(String aFilePath, String aServerFilePath) {
-	if (mFTP.isConnected()) {
-		mFTP.uploadFile(aFilePath, aServerFilePath);
-	} else
-		mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
-		mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
-}
 	
 private static Uri getOutputMediaFileUri(int type){
     return Uri.fromFile(getOutputMediaFile(type));
 }
 
 /** Create a File for saving an image or video */
+@SuppressLint("SimpleDateFormat")
 private static File getOutputMediaFile(int type){
   File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "hiddenCities/userPhotos");
  
@@ -233,36 +280,20 @@ private static File getOutputMediaFile(int type){
 
   return mediaFile;
 }
-@Override
-protected void onResume() {
-    super.onResume();
-	
-    setUpMapIfNeeded();
-    setUpGoogleApiClientIfNeeded();
-    mGoogleApiClient.connect();
-    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-    registerReceiver(myReceiver, filter);
-    mediaRoot = Environment.getExternalStorageDirectory();
-	audioRoot=mediaRoot +"/hiddenCities/audio/";
-    parseSettings();
-	setupWebSocket();
-	mWSClient.connect();
-	mFTP = new MyFTP();
-    mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
-
+public void cancelPhoto(){
+	PackageManager p = getPackageManager();
+	String myPackage = getApplicationContext().getPackageName();
+	Intent intent = p.getLaunchIntentForPackage(myPackage);
+	startActivity(intent);
 }
-//handler for received Intents for the "my-event" event 
 
-@Override
-public void onPause() {
-    super.onPause();
-    if (mGoogleApiClient != null) {
-        mGoogleApiClient.disconnect();
-    }
-    unregisterReceiver(myReceiver);
-}
-void doVibrate(){
-	mVibrator.vibrate(1000);
+
+public void uploadToFtp(String aFilePath, String aServerFilePath) {
+	if (mFTP.isConnected()) {
+		mFTP.uploadFile(aFilePath, aServerFilePath);
+	} else
+		mFTP.connnectWithFTP(mFtpIP, mFtpUserName, mFtpPassword);
+		mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
 }
 
 	void parseSettings() {
@@ -289,11 +320,13 @@ void doVibrate(){
 
 			if (markerData != null) {
 				markerList = new Marker[markerData.size()];
+				markerVisitedList = new boolean[markerData.size()];
 				markerLatLongList = new LatLng[markerData.size()];
 				for (int i = 0; i < markerData.size(); i++) {
 					XmlValuesModel xmlRowData = markerData.get(i);
 					if (xmlRowData != null) {
 						markerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(),xmlRowData.getMarkerLong());
+						markerVisitedList[i] = false;
 					} else
 						Log.e("Markers", "Markers value null");
 				}
@@ -379,28 +412,72 @@ public void showMyLocation(View view) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
-
+public void locationAlarm(int locationId){
+	mVibrator.vibrate(1000);
+	Toast.makeText(getApplicationContext(), "We are close to waypoint" + Integer.toString(locationId), Toast.LENGTH_SHORT).show();
+}
 @Override
-public void onLocationChanged(Location location) {
-	if(markerLatLongList!=null){
-    	for(int l =0; l<markerLatLongList.length; l++){
-    		double distance = 0;
-    		Location locationMarker = new Location("A");
-    		locationMarker.setLatitude(markerLatLongList[l].latitude);
-    		locationMarker.setLongitude(markerLatLongList[l].longitude);
-    		distance = locationMarker.distanceTo(location);
-    		if(distance<10){
-    			mVibrator.vibrate(1000);
-    			Toast.makeText(getApplicationContext(), "We are close to waypoint" + Integer.toString(l), Toast.LENGTH_SHORT).show();
-    		}
-    	}
-    }
-	if (mIsConnected) {
-		mWSClient.send("map/" + location.getLatitude() + "/"
-				+ location.getLongitude());
+	public void onLocationChanged(Location location) {
+		if (markerLatLongList != null) {
+			for (int l = 0; l < markerLatLongList.length; l++) {
+				double distance = 0;
+				Location locationMarker = new Location("A");
+				locationMarker.setLatitude(markerLatLongList[l].latitude);
+				locationMarker.setLongitude(markerLatLongList[l].longitude);
+				distance = locationMarker.distanceTo(location);
+				if (distance < 20) {
+
+					switch (l) {
+
+					case 0:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("01 Way Out in the World.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 1:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("1-05%20Survival.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 2:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("04%20Deep%20Sea%20Diver.m4a");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+					case 3:
+						if (markerVisitedList[l] == false) {
+							locationAlarm(l);
+							preparePlayer("09%20Dagga%20Puff.mp3");
+							markerVisitedList[l] = true;
+						}
+
+						break;
+
+					}
+				}
+			}
+		}
+		if (mIsWsConnected) {
+			mWSClient.send("map/" + location.getLatitude() + "/"
+					+ location.getLongitude());
+		}
+
 	}
 
+
+void doVibrate(){
+	mVibrator.vibrate(1000);
 }
+
 
 @Override
 public void onConnected(Bundle connectionHint) {
@@ -415,13 +492,15 @@ public void onConnectionSuspended(int cause) {
 public void onConnectionFailed(ConnectionResult result) {
 }
 
-@Override
-public boolean onMyLocationButtonClick() {
-    Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-   
-    return false;
-    
-}
+//@Override
+//public boolean onMyLocationButtonClick() {
+//    Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+//   
+//    return false;
+//    
+//}
+
+// this is the receiver to know if the headphones are in or out
 private class MusicIntentReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
@@ -441,10 +520,10 @@ private class MusicIntentReceiver extends BroadcastReceiver {
     }
 }
 
+//this sets an alarm, basically just a time stamp, the setexact method is as close as we can get to getting a precise time.
 void setAlarmWithDelay(long delay){
 
 	alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() +delay, pendingIntent);
-	
 }
 
 private void RegisterAlarmBroadcast()
@@ -463,12 +542,16 @@ private void RegisterAlarmBroadcast()
     pendingIntent = PendingIntent.getBroadcast( this, 0, new Intent("sample"),0 );
     alarmManager = (AlarmManager)(this.getSystemService( Context.ALARM_SERVICE ));
 }
+
+@SuppressWarnings("unused")
 private void UnregisterAlarmBroadcast()
 {
     alarmManager.cancel(pendingIntent); 
     getBaseContext().unregisterReceiver(mReceiver);
 }
 
+
+//buttony things
 @Override
 public boolean onTouch(View v, MotionEvent event) {
 	 int tempStore = 0;
@@ -492,6 +575,7 @@ public boolean onTouch(View v, MotionEvent event) {
 	return false;
 }
 
+//we use async loading for our media files
 private void preparePlayer(String fileName) {
      mediaPlayer = new MediaPlayer();
      mediaPlayer.setOnPreparedListener(this);
@@ -514,13 +598,8 @@ private void preparePlayer(String fileName) {
      mediaPlayer.prepareAsync();
 	   
 	}
-@Override
-protected void onDestroy() 
-{
-    unregisterReceiver(mReceiver);
-    super.onDestroy();
-  }
 
+//once the media file is loaded we will play it
 @Override
 public void onPrepared(MediaPlayer mp) {
 	 mp.start();
@@ -540,7 +619,7 @@ public void setupWebSocket()
 				System.out.print("You have been disconnected from"
 						+ getURI() + "; Code:" + aCode + " " + aReason
 						+ "\n");
-				mIsConnected = false;
+				mIsWsConnected = false;
 				mWSClient.connect();
 
 			}
@@ -549,7 +628,7 @@ public void setupWebSocket()
 			public void onError(Exception aError)
 			{
 				System.out.print("Exception occured ...\n" + aError + "\n");
-				mIsConnected = false;
+				mIsWsConnected = false;
 				mWSClient.close();
 				mWSClient.connect();
 
@@ -585,10 +664,11 @@ public void setupWebSocket()
 				
 					System.out.println("Switch == 7");
 				} else if (aMessage.equals("Trigger Error")) {
+					cancelPhoto();
 					preparePlayer("ConductorScene.wav");
 					System.out.println("Switch == 666");
 				}else if (aMessage.equals("Cancel Photo")) {
-					cancelPhoto();
+					
 					System.out.println("Switch == 666");
 				}
 				
@@ -600,12 +680,12 @@ public void setupWebSocket()
 			{
 				System.out.print("You are connected to the server:"
 						+ getURI() + "\n");
-				mIsConnected = true;
+				mIsWsConnected = true;
 			}
 
 		};
 
-	} catch (URISyntaxException ex) {
+	} catch (URISyntaxException ex) {	
 		System.out.println("Is not a valid WebSocker URI");
 	}
 }
@@ -628,6 +708,11 @@ public void onStatusChanged(String arg0, int arg1, Bundle arg2)
 {
 	// TODO Auto-generated method stub
 
+}
+@Override
+public boolean onMyLocationButtonClick() {
+	// TODO Auto-generated method stub
+	return false;
 }
  
 }
