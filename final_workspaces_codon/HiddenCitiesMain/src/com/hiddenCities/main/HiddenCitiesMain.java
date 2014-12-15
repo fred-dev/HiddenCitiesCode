@@ -14,12 +14,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
@@ -65,39 +71,50 @@ import javax.xml.transform.stream.StreamResult;
 public class HiddenCitiesMain extends Activity implements LocationListener, MediaPlayer.OnPreparedListener
 {
 
-	Fragment[]				mScenes;
-	ArrayList<String>		mManagerWatcher;
-	FragmentManager			mFragmentManager;
+	Fragment[]					mScenes;
+	ArrayList<String>			mManagerWatcher;
+	FragmentManager				mFragmentManager;
 
-	public WebSocketClient	mWSClient;
-	public String			mWSServerPath;
-	public String			mWSUserId;
+	public WebSocketClient		mWSClient;
+	public String				mWSServerPath;
+	public String				mWSUserId;
 
-	public LocationManager	mLocationManager;
-	public boolean			mIsConnected		= false;
+	public LocationManager		mLocationManager;
+	public boolean				mIsConnected			= false;
 
-	List<XmlValuesModel>	mMarkerData			= null;
-	List<XmlValuesModel>	mWaypointData		= null;
-	List<XmlValuesModel>	mNetworkData		= null;
-	List<XmlValuesModel>	mIdData				= null;
+	List<XmlValuesModel>		mMarkerData				= null;
+	List<XmlValuesModel>		mWaypointData			= null;
+	List<XmlValuesModel>		mNetworkData			= null;
+	List<XmlValuesModel>		mIdData					= null;
 
-	public String			mUserName, mUserEmail;
+	public String				mUserName, mUserEmail;
 
-	Vibrator				mVibrator			= null;
-	File					mMediaRoot;
-	String					mAudioRoot;
+	Vibrator					mVibrator				= null;
+	File						mMediaRoot;
+	String						mAudioRoot;
 
-	MyFTP					mFTP;
-	String					mFTPIP, mFTPUserName, mFTPPassword, mFtpRemotePath;
-	static String			mLocalPathForFTP;
-	static String			mRemoteFileNameFTP;
-	boolean					mHasParsedSettings	= false;
+	MyFTP						mFTP;
+	String						mFTPIP					= "", mFTPUserName = "", mFTPPassword = "",
+			mFTPRemotePath = "";
+	static String				mLocalPathForFTP;
+	static String				mRemoteFileNameFTP;
+	boolean						mHasParsedSettings		= false;
 
-	PendingIntent			mPendingIntent;
-	AlarmManager			mAlarmManager;
-	BroadcastReceiver		mReceiver;
+	PendingIntent				mPendingIntent;
+	AlarmManager				mAlarmManager;
+	BroadcastReceiver			mReceiver;
 
-	public MediaPlayer		mMediaPlayer;
+	public MediaPlayer			mMediaPlayer;
+
+	// Storage for camera image URI components
+	private final static String	CAPTURED_PHOTO_PATH_KEY	= "mCurrentPhotoPath";
+	private final static String	CAPTURED_PHOTO_URI_KEY	= "mCapturedImageURI";
+
+	// Required for camera operations in order to save the image file on resume.
+	private String				mCurrentPhotoPath		= null;
+	private Uri					mCapturedImageURI		= null;
+
+	Handler						mHandler;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -107,6 +124,58 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		if (savedInstanceState == null) {
 			mFragmentManager = getFragmentManager();
 			mManagerWatcher = new ArrayList<String>();
+			mHandler = new Handler(Looper.getMainLooper()) {
+				@Override
+				public void handleMessage(Message inputMessage)
+				{
+					String task = (String) inputMessage.obj;
+					System.out.print("Got Handler Message \n" + task + "\n");
+					switch (task) {
+						case "attachCameraScene":
+							attachCameraScene();
+						break;
+						case "detachCameraScene":
+							detachCameraScene();
+						break;
+						case "attachLoginScene":
+							attachLoginScene();
+						break;
+						case "detachLoginScene":
+							detachLoginScene();
+						break;
+						case "attachAugmentedRealityScene":
+							attachAugmentedRealityScene();
+						break;
+						case "detachAugmentedRealityScene":
+							detachAugmentedRealityScene();
+						break;
+						case "attachHelpDialerScene":
+							attachHelpDialerScene();
+						break;
+						case "detachHelpDialerScene":
+							detachHelpDialerScene();
+						break;
+						case "attachMapScene":
+							attachMapScene();
+						break;
+						case "detachMapScene":
+							detachMapScene();
+						break;
+						case "attachCompassVideoScene":
+							attachCompassVideoScene();
+						break;
+						case "detachCompassVideoScene":
+							detachCompassVideoScene();
+						break;
+						case "attachCompassAudioScene":
+							attachCompassAudioScene();
+						break;
+						case "detachCompassAudioScene":
+							detachCompassAudioScene();
+						break;
+					}
+				}
+			};
 			//			mScenes = new Fragment[5];
 			//			mScenes[0] = (Fragment) new MouseCircle();
 			//			mScenes[1] = (Fragment) new MouseLines();
@@ -123,7 +192,32 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 			mMediaRoot = Environment.getExternalStorageDirectory();
 			mAudioRoot = mMediaRoot + "/hiddenCities/audio/";
 			attachLoginScene();
+
 		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		if (mCurrentPhotoPath != null) {
+			savedInstanceState.putString(CAPTURED_PHOTO_PATH_KEY, mCurrentPhotoPath);
+		}
+		if (mCapturedImageURI != null) {
+			savedInstanceState.putString(CAPTURED_PHOTO_URI_KEY, mCapturedImageURI.toString());
+		}
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		if (savedInstanceState.containsKey(CAPTURED_PHOTO_PATH_KEY)) {
+			mCurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
+		}
+		if (savedInstanceState.containsKey(CAPTURED_PHOTO_URI_KEY)) {
+			mCapturedImageURI = Uri.parse(savedInstanceState.getString(CAPTURED_PHOTO_URI_KEY));
+		}
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -208,6 +302,15 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		return super.onOptionsItemSelected(item);
 	}
 
+	public boolean uploadFile(String aFilePath)
+	{
+		System.out.println("Adding file to FTP queue");
+		if (!mFTP.isConnected())
+			return false;
+		return mFTP.uploadFile(aFilePath, getDeviceInfo(),
+				mUserName + "___" + aFilePath.substring(aFilePath.lastIndexOf('/') + 1));
+	}
+
 	public void login()
 	{
 		System.out.println("mayday mayday, Logging in!!!!");
@@ -237,25 +340,25 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 		switch (aName) {
 			case "CompassAudioScene":
 				fragment = new HiddenCitiesCompassAudio();
-				break;
+			break;
 			case "CompassVideoScene":
 				fragment = new HiddenCitiesCompassVideo();
-				break;
+			break;
 			case "MapScene":
 				fragment = new HiddenCitiesMap(mMarkerData, mWaypointData);
-				break;
+			break;
 			case "LoginScene":
 				fragment = new HiddenCitiesLogin();
-				break;
+			break;
 			case "HelpDialerScene":
 				fragment = new HiddenCitiesHelpDialer();
-				break;
+			break;
 			case "CameraScene":
 				fragment = new HiddenCitiesCamera();
-				break;
+			break;
 			case "AugmentedRealityScene":
 				fragment = new HiddenCitiesAugmentedReality();
-				break;
+			break;
 		}
 		if (fragment != null) {
 			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
@@ -427,7 +530,6 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	public void attachCameraScene()
 	{
 		//		emptyFragmentManager();
-
 		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		fragmentTransaction.add(R.id.container, new HiddenCitiesCamera(), "CameraScene");
@@ -464,7 +566,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
 
-		fragmentTransaction.commit();
+		fragmentTransaction.commitAllowingStateLoss();
 
 	}
 
@@ -566,7 +668,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 						mFTPIP = xmlRowData.getFtpAddress();
 						mFTPUserName = xmlRowData.getFtpUser();
 						mFTPPassword = xmlRowData.getFtpPassword();
-						mFtpRemotePath = xmlRowData.getFtpRemotePath();
+						mFTPRemotePath = xmlRowData.getFtpRemotePath();
 						mWSServerPath = xmlRowData.getWebSocketAdress();
 						mWSUserId = xmlRowData.getWebSocketUser();
 					} else
@@ -617,6 +719,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 					System.out.print("Exception occured ...\n" + aError + "\n");
 					mIsConnected = false;
 					mWSClient.close();
+					setupWebSocket();
 					mWSClient.connect();
 
 				}
@@ -624,30 +727,10 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 				@Override
 				public void onMessage(String aMessage)
 				{
-					System.out.println(aMessage);
-					if (aMessage.equals("Attach CompassVideo")) {
-						attachCompassVideoScene();
-						System.out.println("Switch == CompassVideo");
-					} else if (aMessage.equals("Attach CompassAudio")) {
-						attachCompassAudioScene();
-						System.out.println("Switch == CompassAudio");
-					} else if (aMessage.equals("Attach CameraScene")) {
-						attachCameraScene();
-						System.out.println("Switch == CameraFTP");
-						//					} else if (aMessage.equals("Attach CompassAudio")) {
-						//						attachCompassAudio();
-						//						System.out.println("Switch == CompassAudio");
-						//					} else if (aMessage.equals("Attach Map")) {
-						//						attachCameraFTPWithMap();
-						//						System.out.println("Switch == Map");
-						//					} else if (aMessage.equals("Attach VuforiaScene")) {
-						//						attachVuforia();
-						//						System.out.println("Switch == VuforiaScene");
-						//					} else if (aMessage.equals("Trigger Error")) {
-						triggerError();
-						System.out.println("Switch == 666ErrrrrRRRRoooOOOOoooRRrr");
-					}
-
+					System.out.print("Got WS Message \n" + aMessage + "\n");
+					Message msg = Message.obtain();
+					msg.obj = (String) aMessage;
+					mHandler.sendMessage(msg);
 				}
 
 				@Override
@@ -661,16 +744,6 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 		} catch (URISyntaxException ex) {
 			System.out.println("Is not a valid WebSocker URI");
-		}
-	}
-
-	public void uploadToFtp(String aFilePath, String aServerFilePath)
-	{
-		if (mFTP.isConnected()) {
-			mFTP.uploadFile(aFilePath, aServerFilePath);
-		} else {
-			mFTP.connnectWithFTP(mFTPIP, mFTPUserName, mFTPPassword);
-			mFTP.uploadFile(aFilePath, mFtpRemotePath + aServerFilePath);
 		}
 	}
 
@@ -787,6 +860,52 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	{
 		mp.start();
 
+	}
+
+	public String getCurrentPhotoPath()
+	{
+		return mCurrentPhotoPath;
+	}
+
+	public void setCurrentPhotoPath(String mCurrentPhotoPath)
+	{
+		this.mCurrentPhotoPath = mCurrentPhotoPath;
+	}
+
+	public Uri getCapturedImageURI()
+	{
+		return mCapturedImageURI;
+	}
+
+	public void setCapturedImageURI(Uri mCapturedImageURI)
+	{
+		this.mCapturedImageURI = mCapturedImageURI;
+	}
+
+	public String getDeviceInfo()
+	{
+		String manufacturer = Build.MANUFACTURER;
+		String model = Build.MODEL;
+		String serial = Build.SERIAL;
+		if (model.startsWith(manufacturer)) {
+			return capitalize(model + serial);
+		} else {
+			return capitalize(manufacturer) + model + serial;
+		}
+	}
+
+	public String capitalize(String s)
+	{
+		if (s == null || s.length() == 0) {
+			return "";
+		}
+		char first = s.charAt(0);
+		if (Character.isUpperCase(first)) {
+			return s;
+		} else {
+			return Character.toUpperCase(first) + s.substring(1);
+
+		}
 	}
 
 }

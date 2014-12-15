@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.hiddenCities.R;
+import com.hiddenCities.main.HiddenCitiesMain;
 
 public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchListener
 {
@@ -47,7 +48,7 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 	Button						mButton;
 	AudioPlayManager[]			mPlayManagers;
 
-	Activity					mActivity;
+	HiddenCitiesMain					mActivity;
 	View						mView;
 
 	@Override
@@ -59,7 +60,7 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		mActivity = getActivity();
+		mActivity = (HiddenCitiesMain) getActivity();
 		mView = inflater.inflate(R.layout.help_dialer_layout, container, false);
 
 		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -158,7 +159,9 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 				break;
 			}
 		}
-
+		if (v.getId()==R.id.ButtonEndCall){
+			mActivity.detachHelpDialerScene();
+		}
 		return false;
 	}
 

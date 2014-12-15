@@ -1,35 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    tools:context=".camera.HiddenCitiesCamera" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:id="@+id/innerRelativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:alpha="1"
-        android:background="@color/black" >
-
-        <Button
-            android:id="@+id/button_capture"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp"
-            android:text="Capture" />
-    </RelativeLayout>
-
-    <TextureView
-        android:id="@+id/textureView"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/innerRelativeLayout"
-        android:layout_alignParentLeft="true" />
-
-</RelativeLayout>
+</FrameLayout>

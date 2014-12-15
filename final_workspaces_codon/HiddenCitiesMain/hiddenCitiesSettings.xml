@@ -65,8 +65,8 @@
                            <networkInfo>
                            	<networkInfo>
                            		
-                           		<ftpAddress>184.107.78.188</ftpAddress>
-                           		<ftpUser>hesam@arashakbari.com</ftpUser>
+                           		<ftpAddress>163.47.73.225</ftpAddress>
+                           		<ftpUser>hiddencities@codon.im</ftpUser>
                            		<ftpPassword>chosoo12345</ftpPassword>
                            		<ftpRemotePath> </ftpRemotePath>
                            		<webSocketAddress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAddress>

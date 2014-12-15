@@ -9,23 +9,27 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import android.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MyFTP
 {
-	FTPClient	mFTPClient;
-	FTPFile[]	mFTPFiles;
-	boolean		mIsConnected	= false;
-	String		mIP;
-	String		mUserName, mPassword;
-	Thread		mThread;
+	FTPClient		mFTPClient;
+	boolean			mIsConnected	= false;
+	String			mIP;
+	String			mUserName, mPassword;
+	Thread			mThread;
+	ExecutorService	mExecutor;
 
 	public MyFTP()
 	{
 		mFTPClient = new FTPClient();
+		mExecutor = Executors.newFixedThreadPool(2);
+
 	}
 
 	public boolean getIsConnected()
@@ -52,7 +56,7 @@ public class MyFTP
 	{
 		return mIP;
 	}
-	
+
 	public boolean isConnected()
 	{
 		return mIsConnected;
@@ -92,13 +96,14 @@ public class MyFTP
 				mIsConnected = false;
 				try {
 
-					mFTPClient.setConnectTimeout(10 * 1000);
+					mFTPClient.setConnectTimeout(40 * 1000);
 					mFTPClient.connect(InetAddress.getByName(mIP));
 					mIsConnected = mFTPClient.login(mUserName, mPassword);
 					if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
 						mFTPClient.setFileType(FTP.ASCII_FILE_TYPE);
+						mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
 						mFTPClient.enterLocalPassiveMode();
-						mFTPFiles = mFTPClient.listFiles();
+						mFTPClient.changeToParentDirectory();
 					}
 				} catch (SocketException e) {
 					e.printStackTrace();
@@ -108,7 +113,6 @@ public class MyFTP
 					e.printStackTrace();
 				}
 				mIsConnected = true;
-				Log.d("FTP", "Connected");
 			}
 		});
 		mThread.start();
@@ -121,25 +125,24 @@ public class MyFTP
 		}
 		final File file = aFile;
 		final String serverFilePath = aServerFilePath;
-		mThread = new Thread(new Runnable() {
+		Runnable workerThread = new Runnable() {
 			@Override
 			public void run()
 			{
 				try {
 					FileInputStream srcFileStream = new FileInputStream(file);
-					boolean didStoreFile = mFTPClient.storeFile(
-							serverFilePath, srcFileStream);
-					Log.e("FTP File Store Status", String.valueOf(didStoreFile));
+					boolean didStoreFile = mFTPClient.storeFile(serverFilePath, srcFileStream);
+					Log.e("Status", String.valueOf(didStoreFile));
 					srcFileStream.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});
-		mThread.start();
+		};
+		mExecutor.execute(workerThread);
 		return true;
 	}
-	
+
 	public boolean uploadFile(String aFilePath, String aServerFilePath)
 	{
 		if (!mIsConnected) {
@@ -147,22 +150,64 @@ public class MyFTP
 		}
 		final File file = new File(aFilePath);
 		final String serverFilePath = aServerFilePath;
-		mThread = new Thread(new Runnable() {
+		Runnable workerThread = new Runnable() {
 			@Override
 			public void run()
 			{
 				try {
 					FileInputStream srcFileStream = new FileInputStream(file);
-					boolean didStoreFile = mFTPClient.storeFile(
-							serverFilePath, srcFileStream);
-					Log.e("FTP File Store Status", String.valueOf(didStoreFile));
+					boolean didStoreFile = mFTPClient.storeFile(serverFilePath, srcFileStream);
+					Log.e("Status", String.valueOf(didStoreFile));
 					srcFileStream.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});
-		mThread.start();
+		};
+		mExecutor.execute(workerThread);
+		return true;
+	}
+
+	public boolean uploadFile(String aFilePath, String aServerFilePath, String aFileName)
+	{
+		if (!mIsConnected) {
+			return false;
+		}
+		System.out.println("File path is " + aFilePath);
+		final File file = new File(aFilePath);
+		final String serverFilePath = aServerFilePath;
+		System.out.println("Server Path is " + serverFilePath);
+		final String fileName = aFileName;
+		System.out.println("File name is " + fileName);
+		
+		Runnable workerThread = new Runnable() {
+			@Override
+			public void run()
+			{
+				try {
+					mFTPClient.changeToParentDirectory();
+					FileInputStream srcFileStream = new FileInputStream(file);
+					System.out.println("Working Directory is " + mFTPClient.printWorkingDirectory());
+					if (!mFTPClient.changeWorkingDirectory(serverFilePath)) {
+						System.out.println("making directory");
+						mFTPClient.makeDirectory(serverFilePath);
+						System.out.println("made directory");
+						mFTPClient.changeWorkingDirectory(serverFilePath);
+
+					}
+					System.out.println("Working Directory is " + mFTPClient.printWorkingDirectory());
+					boolean didStoreFile = mFTPClient.storeFile(fileName, srcFileStream);
+					Log.e("Status", String.valueOf(didStoreFile));
+					if (didStoreFile) {
+						System.out.println("Uploaded File");
+					}
+					srcFileStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		mExecutor.execute(workerThread);
 		return true;
 	}
 
