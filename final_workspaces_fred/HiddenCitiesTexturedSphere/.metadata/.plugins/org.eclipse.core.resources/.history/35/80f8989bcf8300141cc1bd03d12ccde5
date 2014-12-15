@@ -1,0 +1,70 @@
+package com.example.fred360;
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.util.Log;
+import com.panframe.android.lib.a.g;
+import com.panframe.android.lib.a.i;
+import java.io.File;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class PFObjectFactory
+{
+  public static PFAsset assetFromUri(Context paramContext, Uri paramUri, PFAssetObserver paramPFAssetObserver)
+  {
+    (paramContext = new g(paramContext, paramUri)).a(paramPFAssetObserver);
+    return paramContext;
+  }
+
+  public static PFAsset assetFromUrl(Activity paramActivity, String paramString, PFAssetObserver paramPFAssetObserver)
+  {
+    (paramActivity = new g(paramActivity, paramString)).a(paramPFAssetObserver);
+    return paramActivity;
+  }
+
+  private static String getMd5Hash(String paramString)
+  {
+    try
+    {
+      MessageDigest localMessageDigest;
+      paramString = (localMessageDigest = MessageDigest.getInstance("MD5")).digest(paramString.getBytes());
+      for (paramString = (paramString = new BigInteger(1, paramString)).toString(16); paramString.length() < 32; paramString = "0" + paramString);
+      return paramString;
+    }
+    catch (NoSuchAlgorithmException localNoSuchAlgorithmException)
+    {
+      Log.e("MD5", localNoSuchAlgorithmException.getLocalizedMessage());
+    }
+    return null;
+  }
+
+  public static boolean assetFromUrlExists(Activity paramActivity, String paramString)
+  {
+    Object localObject = paramActivity.getPackageManager();
+    paramActivity = paramActivity.getPackageName();
+    try
+    {
+      paramActivity = (localObject = ((PackageManager)localObject).getPackageInfo(paramActivity, 0)).applicationInfo.dataDir;
+    }
+    catch (PackageManager.NameNotFoundException localNameNotFoundException)
+    {
+      Log.w("yourtag", "Error Package name not found ", localNameNotFoundException);
+    }
+    String str = paramActivity + "/" + getMd5Hash(paramString) + ".mp4";
+    Log.i("info", str);
+    return (paramActivity = new File(str)).exists();
+  }
+
+  public static PFView view(Activity paramActivity)
+  {
+    return paramActivity = new i(paramActivity);
+  }
+}

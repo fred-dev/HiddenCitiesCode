@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy source folder &apos;gen&apos; to &apos;appcompat_v7&apos;&#x0A;- Original project: &apos;fred360Video&apos;&#x0A;- Destination element: &apos;appcompat_v7&apos;&#x0A;- Original element: &apos;fred360Video/gen&apos;" description="Copy source folder" destination="=appcompat_v7" element1="/gen" flags="6" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyRoots" roots="1" stamp="1418587840178" version="1.0"/>
+</session>

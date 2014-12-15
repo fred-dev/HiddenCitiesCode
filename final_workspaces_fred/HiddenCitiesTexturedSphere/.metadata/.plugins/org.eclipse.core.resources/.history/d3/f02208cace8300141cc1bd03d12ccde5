@@ -1,0 +1,6 @@
+package com.panframe.android.lib.a;
+
+public abstract interface a
+{
+  public abstract void a();
+}
