@@ -1,7 +1,5 @@
 package com.hiddenCities.augmentedReality;
 
-import processing.core.PApplet;
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;

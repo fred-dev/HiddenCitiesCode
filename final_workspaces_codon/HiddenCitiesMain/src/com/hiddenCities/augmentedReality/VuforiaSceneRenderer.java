@@ -36,7 +36,6 @@ import com.qualcomm.vuforia.Vec2F;
 import com.qualcomm.vuforia.Vec3F;
 import com.qualcomm.vuforia.Vuforia;
 
-import processing.core.PApplet;
 import com.hiddenCities.augmentedReality.PVuforia.VuforiaSession;
 import com.hiddenCities.augmentedReality.utils.SampleMath;
 import com.hiddenCities.augmentedReality.utils.SampleUtils;
@@ -255,7 +254,7 @@ public class VuforiaSceneRenderer implements GLSurfaceView.Renderer
 		//    	PApplet.println("OnDrawFrame Renderer");
 		if (!mIsActive)
 			return;
-		PApplet.println("is acctually drawing");
+		System.out.println("is acctually drawing");
 
 		for (int i = 0; i < HiddenCitiesAugmentedReality.NUM_TARGETS; i++) {
 			if (mVideoPlayerHelper[i] != null) {
@@ -518,7 +517,7 @@ public class VuforiaSceneRenderer implements GLSurfaceView.Renderer
 						|| trackable.getId() == mScene.mTargetsIds[i]) {
 					currentTarget = i;
 					
-					PApplet.println("found trackable with name "
+					System.out.println("found trackable with name "
 							+ mScene.mTargetsNames[i]);
 				}
 			}

@@ -26,7 +26,7 @@ import com.hiddenCities.main.HiddenCitiesMain;
 public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchListener
 {
 
-	static final ToneGenerator	_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+	static ToneGenerator	_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
 	private static final int[]	BUTTON_IDS		= { R.id.Button1, R.id.Button2, R.id.Button3, R.id.Button4,
 			R.id.Button5, R.id.Button6, R.id.Button7, R.id.Button8, R.id.Button9, R.id.Buttonstar, R.id.Button0,
@@ -102,7 +102,15 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 	{
 
 		super.onResume();
+		mPlayManagers = new AudioPlayManager[mediaPaths.length];
+		for (int i = 0; i < mPlayManagers.length; i++) {
 
+			mPlayManagers[i] = new AudioPlayManager(mediaPaths[i], 64); // buffersize = 64kb
+			mPlayManagers[i].setIsLooping(true);
+		}
+		mPlayManagers[0].play();
+		mPlayManagers[1].pause();
+		_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 	}
 
 	@Override
@@ -113,6 +121,22 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 
 			mPlayManagers[i].pause();
 		}
+		_toneGenerator.stopTone();
+		
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onPause();
+		for (int i = 0; i < mPlayManagers.length; i++) {
+
+			mPlayManagers[i].stop();
+			mPlayManagers[i].release();
+		}
+		_toneGenerator.stopTone();
+		_toneGenerator.release();
+		
 	}
 
 	public boolean onTouch(View v, MotionEvent event)
