@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LocalActivityManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -543,16 +544,27 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void detachCameraScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("CameraScene"));
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("CameraScene"))
-				iter.remove();
+		HiddenCitiesCamera cameraFragment = (HiddenCitiesCamera) mFragmentManager.findFragmentByTag("CameraScene");
+		if (cameraFragment != null) {
+			if (cameraFragment.hasActivity()) {
+				this.finishActivity(cameraFragment.REQUEST_TAKE_PHOTO);
+				cameraFragment.mHasActivity = false;
+			}
+			if (!cameraFragment.hasActivity()) {
+				FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+				fragmentTransaction.remove(cameraFragment);
+
+				Iterator<String> iter = mManagerWatcher.iterator();
+				while (iter.hasNext()) {
+					if (iter.next().equals("CameraScene"))
+						iter.remove();
+				}
+				fragmentTransaction.commitAllowingStateLoss();
+			}
+
 		}
-		fragmentTransaction.commit();
 	}
 
 	public void attachAugmentedRealityScene()
@@ -566,7 +578,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
 
-		fragmentTransaction.commitAllowingStateLoss();
+		fragmentTransaction.commit();
 
 	}
 
@@ -603,6 +615,16 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 			fragmentTransaction.commit();
 			//			mManagerWatcher.clear();
 		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		HiddenCitiesCamera cameraFragment = (HiddenCitiesCamera) mFragmentManager.findFragmentByTag("CameraScene");
+		if (cameraFragment != null) {
+			cameraFragment.onActivityResult(requestCode, resultCode, data);
+		}
+
 	}
 
 	public void saveToXml(String value, String tagName, int Item)

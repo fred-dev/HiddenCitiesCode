@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,14 +37,15 @@ import android.net.Uri;
  * 
  * Created by Rex St. John (on behalf of AirPair.com) on 3/4/14.
  */
-public class HiddenCitiesCamera extends Fragment implements Button.OnClickListener
+public class HiddenCitiesCamera extends Fragment
 {
 
 	// Activity result key for camera
-	static final int	REQUEST_TAKE_PHOTO	= 11111;
+	public static final int	REQUEST_TAKE_PHOTO	= 11111;
 
-	View				mView;
-	HiddenCitiesMain	mActivity;
+	View					mView;
+	HiddenCitiesMain		mActivity;
+	public boolean			mHasActivity;
 
 	/**
 	 * OnCreateView fragment override
@@ -100,7 +100,8 @@ public class HiddenCitiesCamera extends Fragment implements Button.OnClickListen
 				mActivity.setCapturedImageURI(fileUri);
 				mActivity.setCurrentPhotoPath(fileUri.getPath());
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mActivity.getCapturedImageURI());
-				startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+				mActivity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+				mHasActivity = true;
 			}
 		}
 	}
@@ -115,14 +116,16 @@ public class HiddenCitiesCamera extends Fragment implements Button.OnClickListen
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-
 		if (requestCode == REQUEST_TAKE_PHOTO) {
 			if (resultCode == Activity.RESULT_OK) {
 				addPhotoToGallery();
+				mHasActivity = false;
 				mActivity.uploadFile(mActivity.getCurrentPhotoPath());
 				mActivity.detachCameraScene();
+
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 			} else {
+				mHasActivity = false;
 				mActivity.detachCameraScene();
 			}
 		}
@@ -169,12 +172,6 @@ public class HiddenCitiesCamera extends Fragment implements Button.OnClickListen
 	 * 
 	 * @param v
 	 */
-	@Override
-	public void onClick(View v)
-	{
-		dispatchTakePictureIntent();
-	}
-
 	/**
 	 * Scale the photo down and fit it to our image views.
 	 * 
@@ -204,5 +201,10 @@ public class HiddenCitiesCamera extends Fragment implements Button.OnClickListen
 
 		Bitmap bitmap = BitmapFactory.decodeFile(imagePath, bmOptions);
 		imageView.setImageBitmap(bitmap);
+	}
+
+	public boolean hasActivity()
+	{
+		return mHasActivity;
 	}
 }
