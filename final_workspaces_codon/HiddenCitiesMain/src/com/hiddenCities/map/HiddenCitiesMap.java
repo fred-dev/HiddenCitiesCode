@@ -9,6 +9,7 @@ import com.hiddenCities.main.XmlValuesModel;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -86,7 +88,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 
 	// These settings are the same as the settings for the map. They will in fact give you updates
 	// at the maximal rates currently possible.
-	
+
 	public HiddenCitiesMap(List<XmlValuesModel> aMarkerData, List<XmlValuesModel> aWaypointData)
 	{
 		fillWithData(aMarkerData, aWaypointData);
@@ -125,8 +127,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	{
 		super.onResume();
 
-		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		if (mActivity.getActionBar().isShowing())
 			mActivity.getActionBar().hide();

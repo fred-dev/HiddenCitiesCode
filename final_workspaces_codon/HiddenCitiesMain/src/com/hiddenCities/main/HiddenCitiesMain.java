@@ -9,13 +9,11 @@ import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.LocalActivityManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,11 +25,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.hiddenCities.main.MyFTP;
@@ -103,7 +104,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	PendingIntent				mPendingIntent;
 	AlarmManager				mAlarmManager;
-	BroadcastReceiver			mReceiver;
+	BroadcastReceiver			mMusicReceiver, mAlarmReceiver;
 
 	public MediaPlayer			mMediaPlayer;
 
@@ -116,12 +117,17 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	private Uri					mCapturedImageURI		= null;
 
 	Handler						mHandler;
+	WakeLock					mWakeLock;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity_layout);
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+		mWakeLock.acquire();
+
 		if (savedInstanceState == null) {
 			mFragmentManager = getFragmentManager();
 			mManagerWatcher = new ArrayList<String>();
@@ -187,7 +193,8 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
-			mReceiver = new MusicIntentReceiver();
+			mVibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
+			mMusicReceiver = new MusicIntentReceiver();
 			RegisterAlarmBroadcast();
 
 			mMediaRoot = Environment.getExternalStorageDirectory();
@@ -226,7 +233,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	{
 		super.onResume();
 		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-		registerReceiver(mReceiver, filter);
+		registerReceiver(mMusicReceiver, filter);
 
 	}
 
@@ -235,14 +242,22 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	{
 		super.onPause();
 		//		mWSClient.close();
-		unregisterReceiver(mReceiver);
+		unregisterReceiver(mMusicReceiver);
+	}
+
+	@Override
+	public void onStop()
+	{
+		super.onPause();
+		//		mWSClient.close();
+		mWakeLock.release();
 	}
 
 	@Override
 	public void onDestroy()
 	{
 		mWSClient.close();
-		unregisterReceiver(mReceiver);
+		unregisterReceiver(mMusicReceiver);
 		super.onDestroy();
 	}
 
@@ -314,6 +329,12 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void login()
 	{
+		Toast.makeText(this.getApplicationContext(), "Logging in, I'll just be a moment", Toast.LENGTH_SHORT).show();
+
+		//hide keyboard
+		final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(this.getWindow().getDecorView().getWindowToken(), 0);
+
 		System.out.println("mayday mayday, Logging in!!!!");
 		parseSettings();
 		System.out.println("Parsed Settings!!!!");
@@ -337,208 +358,255 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void attachScene(String aName)
 	{
-		Fragment fragment = null;
 		switch (aName) {
-			case "CompassAudioScene":
-				fragment = new HiddenCitiesCompassAudio();
-			break;
-			case "CompassVideoScene":
-				fragment = new HiddenCitiesCompassVideo();
-			break;
-			case "MapScene":
-				fragment = new HiddenCitiesMap(mMarkerData, mWaypointData);
+			case "CameraScene":
+				attachCameraScene();
 			break;
 			case "LoginScene":
-				fragment = new HiddenCitiesLogin();
-			break;
-			case "HelpDialerScene":
-				fragment = new HiddenCitiesHelpDialer();
-			break;
-			case "CameraScene":
-				fragment = new HiddenCitiesCamera();
+				attachLoginScene();
 			break;
 			case "AugmentedRealityScene":
-				fragment = new HiddenCitiesAugmentedReality();
+				attachAugmentedRealityScene();
 			break;
-		}
-		if (fragment != null) {
-			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			fragmentTransaction.add(R.id.container, fragment, aName);
-			mManagerWatcher.add(aName);
-			fragmentTransaction.commit();
-
+			case "HelpDialerScene":
+				attachHelpDialerScene();
+			break;
+			case "MapScene":
+				attachMapScene();
+			break;
+			case "CompassVideoScene":
+				attachCompassVideoScene();
+			break;
+			case "CompassAudioScene":
+				attachCompassAudioScene();
+			break;
 		}
 		//		fragmentTransaction.replace(R.id.container, mScenes[2]);
 	}
 
 	public void detachScene(String aName)
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		Fragment fragment = mFragmentManager.findFragmentByTag(aName);
-		if (fragment != null) {
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-			fragmentTransaction.remove(fragment);
-			Iterator<String> iter = mManagerWatcher.iterator();
-			while (iter.hasNext()) {
-				if (iter.next().equals(aName))
-					iter.remove();
-			}
-			fragmentTransaction.commit();
-
+		switch (aName) {
+			case "detachCameraScene":
+				detachCameraScene();
+			break;
+			case "detachLoginScene":
+				detachLoginScene();
+			break;
+			case "AugmentedRealityScene":
+				detachAugmentedRealityScene();
+			break;
+			case "HelpDialerScene":
+				detachHelpDialerScene();
+			break;
+			case "MapScene":
+				detachMapScene();
+			break;
+			case "CompassVideoScene":
+				detachCompassVideoScene();
+			break;
+			case "CompassAudioScene":
+				detachCompassAudioScene();
+			break;
 		}
 	}
 
 	public void attachCompassAudioScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesCompassAudio(), "CompassAudioScene");
-		mManagerWatcher.add("CompassAudioScene");
-		//		fragmentTransaction.replace(R.id.container, mScenes[2]);
-		fragmentTransaction.commit();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("CompassAudioScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesCompassAudio(), "CompassAudioScene");
+			mManagerWatcher.add("CompassAudioScene");
+			//		fragmentTransaction.replace(R.id.container, mScenes[2]);
+			fragmentTransaction.commit();
+		}
 
 	}
 
 	public void detachCompassAudioScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("CompassAudioScene"));
+		Fragment compassAudioFragment = mFragmentManager.findFragmentByTag("CompassAudioScene");
+		if (compassAudioFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(compassAudioFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("CompassAudioScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("CompassAudioScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 
 	}
 
 	public void attachCompassVideoScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesCompassVideo(), "CompassVideoScene");
-		mManagerWatcher.add("CompassVideoScene");
-		//		fragmentTransaction.replace(R.id.container, mScenes[2]);
-		fragmentTransaction.commit();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("CompassVideoScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesCompassVideo(), "CompassVideoScene");
+			mManagerWatcher.add("CompassVideoScene");
+			//		fragmentTransaction.replace(R.id.container, mScenes[2]);
+			fragmentTransaction.commit();
+		}
 
 	}
 
 	public void detachCompassVideoScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("CompassVideoScene"));
+		Fragment compassVideoFragment = mFragmentManager.findFragmentByTag("CompassVideoScene");
+		if (compassVideoFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(compassVideoFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("CompassVideoScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("CompassVideoScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 
 	}
 
 	public void attachMapScene()
 	{
-		//		emptyFragmentManager();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("MapScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
 
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesMap(mMarkerData, mWaypointData), "MapScene");
-		mManagerWatcher.add("MapScene");
-
-		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
-
-		fragmentTransaction.commit();
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesMap(mMarkerData, mWaypointData), "MapScene");
+			mManagerWatcher.add("MapScene");
+			fragmentTransaction.commit();
+		}
 
 	}
 
 	public void detachMapScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("MapScene"));
+		Fragment mapFragment = mFragmentManager.findFragmentByTag("MapScene");
+		if (mapFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(mapFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("MapScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("MapScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 	}
 
 	public void attachLoginScene()
 	{
-		//		emptyFragmentManager();
 
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesLogin(), "LoginScene");
-		mManagerWatcher.add("LoginScene");
-
-		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
-
-		fragmentTransaction.commit();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("LoginScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesLogin(), "LoginScene");
+			mManagerWatcher.add("LoginScene");
+			fragmentTransaction.commit();
+		}
 
 	}
 
 	public void detachLoginScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("LoginScene"));
+		Fragment loginFragment = mFragmentManager.findFragmentByTag("LoginScene");
+		if (loginFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(loginFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("LoginScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("LoginScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 	}
 
 	public void attachHelpDialerScene()
 	{
-		//		emptyFragmentManager();
-
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesHelpDialer(), "HelpDialerScene");
-		mManagerWatcher.add("HelpDialerScene");
-
-		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
-
-		fragmentTransaction.commit();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("HelpDialerScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesHelpDialer(), "HelpDialerScene");
+			mManagerWatcher.add("HelpDialerScene");
+			fragmentTransaction.commit();
+		}
 
 	}
 
 	public void detachHelpDialerScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("HelpDialerScene"));
+		Fragment helpDialerFragment = mFragmentManager.findFragmentByTag("HelpDialerScene");
+		if (helpDialerFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(helpDialerFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("HelpDialerScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("HelpDialerScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 	}
 
 	public void attachCameraScene()
 	{
-		//		emptyFragmentManager();
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesCamera(), "CameraScene");
-		mManagerWatcher.add("CameraScene");
-
-		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
-
-		fragmentTransaction.commit();
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("CameraScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesCamera(), "CameraScene");
+			mManagerWatcher.add("CameraScene");
+			fragmentTransaction.commit();
+		}
 
 	}
 
@@ -569,31 +637,36 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void attachAugmentedRealityScene()
 	{
-		//		emptyFragmentManager();
-
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.add(R.id.container, new HiddenCitiesAugmentedReality(), "AugmentedRealityScene");
-		mManagerWatcher.add("AugmentedRealityScene");
-
-		//		fragmentTransaction.replace(R.id.container, mScenes[3]);
-
-		fragmentTransaction.commit();
-
+		boolean alreadyExists = false;
+		Iterator<String> iter = mManagerWatcher.iterator();
+		while (iter.hasNext()) {
+			if (iter.next().equals("AugmentedRealityScene"))
+				alreadyExists = true;
+		}
+		if (!alreadyExists) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			fragmentTransaction.add(R.id.container, new HiddenCitiesAugmentedReality(), "AugmentedRealityScene");
+			mManagerWatcher.add("AugmentedRealityScene");
+			fragmentTransaction.commit();
+		}
 	}
 
 	public void detachAugmentedRealityScene()
 	{
-		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-		fragmentTransaction.remove(mFragmentManager.findFragmentByTag("AugmentedRealityScene"));
+		Fragment augmentedRealityFragment = mFragmentManager.findFragmentByTag("AugmentedRealityScene");
+		if (augmentedRealityFragment != null) {
+			FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+			fragmentTransaction.remove(augmentedRealityFragment);
 
-		Iterator<String> iter = mManagerWatcher.iterator();
-		while (iter.hasNext()) {
-			if (iter.next().equals("AugmentedRealityScene"))
-				iter.remove();
+			Iterator<String> iter = mManagerWatcher.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().equals("AugmentedRealityScene"))
+					iter.remove();
+			}
+			fragmentTransaction.commit();
 		}
-		fragmentTransaction.commit();
 	}
 
 	public void triggerError()
@@ -829,7 +902,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void RegisterAlarmBroadcast()
 	{
-		mReceiver = new BroadcastReceiver() {
+		mAlarmReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent)
 			{
@@ -838,7 +911,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 			}
 		};
 
-		registerReceiver(mReceiver, new IntentFilter("sample"));
+		registerReceiver(mAlarmReceiver, new IntentFilter("sample"));
 		mPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("sample"), 0);
 		mAlarmManager = (AlarmManager) (this.getSystemService(Context.ALARM_SERVICE));
 	}
@@ -846,7 +919,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	public void UnregisterAlarmBroadcast()
 	{
 		mAlarmManager.cancel(mPendingIntent);
-		getBaseContext().unregisterReceiver(mReceiver);
+		getBaseContext().unregisterReceiver(mAlarmReceiver);
 	}
 
 	public void preparePlayer(String fileName)

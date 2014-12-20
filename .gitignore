@@ -25,3 +25,6 @@ vuforia-sdk-android-3-0-9/
 vuforiaWorkspace/
 copy_to_phone/hiddenCities/video/
 copy_to_phone/hiddenCities/Vuforia/video/
+final_workspaces_codon/HiddenCitiesMain/bin
+final_workspaces_codon/HiddenCitiesMain/gen
+final_workspaces_codon/HiddenCitiesMain/.settings
