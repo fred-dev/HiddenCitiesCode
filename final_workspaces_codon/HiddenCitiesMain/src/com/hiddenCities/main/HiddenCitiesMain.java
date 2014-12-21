@@ -187,7 +187,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
-			mReceiver = new MusicIntentReceiver();
+			//mReceiver = new MusicIntentReceiver();
 			RegisterAlarmBroadcast();
 
 			mMediaRoot = Environment.getExternalStorageDirectory();
@@ -225,8 +225,8 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	public void onResume()
 	{
 		super.onResume();
-		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-		registerReceiver(mReceiver, filter);
+		//IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+		//registerReceiver(mReceiver, filter);
 
 	}
 
@@ -799,27 +799,27 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	}
 
-	public class MusicIntentReceiver extends BroadcastReceiver
-	{
-		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-				int state = intent.getIntExtra("state", -1);
-				switch (state) {
-					case 0:
-						Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
-						doVibrate();
-					break;
-					case 1:
-						Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
-					break;
-					default:
-						Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
-				}
-			}
-		}
-	}
+//	public class MusicIntentReceiver extends BroadcastReceiver
+//	{
+//		@Override
+//		public void onReceive(Context context, Intent intent)
+//		{
+//			if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+//				int state = intent.getIntExtra("state", -1);
+//				switch (state) {
+//					case 0:
+//						Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
+//						doVibrate();
+//					break;
+//					case 1:
+//						Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
+//					break;
+//					default:
+//						Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
+//				}
+//			}
+//		}
+//	}
 
 	void setAlarmWithDelay(long delay)
 	{

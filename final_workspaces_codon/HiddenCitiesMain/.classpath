@@ -4,8 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/Users/hesamohadi/Work Stuff/Code/Others/processing-android-fragment/bin"/>
-	<classpathentry kind="lib" path="/android-mode"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/panframe-1.9.jar"/>
 	<classpathentry kind="lib" path="libs/commons-net-3.3.jar"/>
