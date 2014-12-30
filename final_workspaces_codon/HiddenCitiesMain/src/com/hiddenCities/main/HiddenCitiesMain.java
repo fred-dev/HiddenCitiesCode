@@ -194,11 +194,19 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
 <<<<<<< HEAD
+<<<<<<< HEAD
 			//mReceiver = new MusicIntentReceiver();
 =======
 			mVibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
 			mMusicReceiver = new MusicIntentReceiver();
 >>>>>>> fa5035a7d1da01d45f2d36be9db33c7341d9a66c
+=======
+			mVibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
+			mMusicReceiver = new MusicIntentReceiver();
+=======
+			//mReceiver = new MusicIntentReceiver();
+>>>>>>> master
+>>>>>>> pr/8
 			RegisterAlarmBroadcast();
 
 			mMediaRoot = Environment.getExternalStorageDirectory();
@@ -237,12 +245,21 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	{
 		super.onResume();
 <<<<<<< HEAD
+<<<<<<< HEAD
 		//IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
 		//registerReceiver(mReceiver, filter);
 =======
 		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
 		registerReceiver(mMusicReceiver, filter);
 >>>>>>> fa5035a7d1da01d45f2d36be9db33c7341d9a66c
+=======
+		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+		registerReceiver(mMusicReceiver, filter);
+=======
+		//IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+		//registerReceiver(mReceiver, filter);
+>>>>>>> master
+>>>>>>> pr/8
 
 	}
 
