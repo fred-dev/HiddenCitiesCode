@@ -165,3 +165,34 @@ Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.
 
 !ENTRY org.eclipse.ui 2 2 2014-12-17 16:44:20.128
 !MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
+!SESSION 2014-12-30 10:50:27.768 -----------------------------------------------
+eclipse.buildId=M20130204-1200
+java.version=1.7.0_71
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.adtproduct -keyring /Users/Fred/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-12-30 10:50:31.756
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:34.893
+!MESSAGE projectOpenedWithWorkspace: failed to find manifest package for project HiddenCitiesMain
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:34.893
+!MESSAGE projectOpenedWithWorkspace: failed to find manifest package for project google-play-services_lib
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:38.139
+!MESSAGE fileChanged: failed to find manifest package for project HiddenCitiesMain
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:38.139
+!MESSAGE fileChanged: failed to find manifest package for project HiddenCitiesMain
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:40.011
+!MESSAGE fileChanged: failed to find manifest package for project HiddenCitiesMain
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2014-12-30 10:50:40.011
+!MESSAGE fileChanged: failed to find manifest package for project HiddenCitiesMain
+
+!ENTRY org.eclipse.ui 2 2 2014-12-30 10:51:30.308
+!MESSAGE Invalid property category path: ValidationPropertiesPage (bundle: org.eclipse.wst.xml.ui, propertyPage: org.eclipse.wst.xml.ui.propertyPage.project.validation)
