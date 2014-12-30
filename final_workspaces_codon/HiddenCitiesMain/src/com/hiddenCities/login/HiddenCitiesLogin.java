@@ -87,9 +87,6 @@ public class HiddenCitiesLogin extends Fragment
 
 		mActivity.saveToXml(username.getText().toString(), "username", 0);
 		mActivity.saveToXml(email.getText().toString(), "useremail", 0);
-		Toast.makeText(mActivity.getApplicationContext(), "Logging in, I'll just be a moment", Toast.LENGTH_SHORT)
-				.show();
-
 		mActivity.login();
 
 	}

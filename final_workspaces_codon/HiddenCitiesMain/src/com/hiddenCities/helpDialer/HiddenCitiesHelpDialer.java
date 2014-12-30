@@ -26,7 +26,7 @@ import com.hiddenCities.main.HiddenCitiesMain;
 public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchListener
 {
 
-	static ToneGenerator	_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+	static ToneGenerator		_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
 	private static final int[]	BUTTON_IDS		= { R.id.Button1, R.id.Button2, R.id.Button3, R.id.Button4,
 			R.id.Button5, R.id.Button6, R.id.Button7, R.id.Button8, R.id.Button9, R.id.Buttonstar, R.id.Button0,
@@ -48,7 +48,7 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 	Button						mButton;
 	AudioPlayManager[]			mPlayManagers;
 
-	HiddenCitiesMain					mActivity;
+	HiddenCitiesMain			mActivity;
 	View						mView;
 
 	@Override
@@ -63,7 +63,8 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 		mActivity = (HiddenCitiesMain) getActivity();
 		mView = inflater.inflate(R.layout.help_dialer_layout, container, false);
 
-		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		if (mActivity.getActionBar().isShowing())
 			mActivity.getActionBar().hide();
@@ -74,6 +75,8 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 			mButton.setOnTouchListener(this); // maybe
 			buttonList.add(mButton);
 		}
+		
+		_toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
 		mediaPaths = new String[2];
 		File root = Environment.getExternalStorageDirectory();
@@ -85,14 +88,15 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 
 			mPlayManagers[i] = new AudioPlayManager(mediaPaths[i], 64); // buffersize = 64kb
 			mPlayManagers[i].setIsLooping(true);
-		}
+			mPlayManagers[i].start();
+			while (!mPlayManagers[i].isSetup());
+						}
 		mPlayManagers[0].play();
-		mPlayManagers[1].pause();
 
 		ImageView IV = (ImageView) mView.findViewById(R.id.imageView1);
 		Bitmap bMap = BitmapFactory.decodeFile(root + "/hiddenCities/images/hiddencitieshelpscreen.png");
 		IV.setImageBitmap(bMap);
-		
+
 		mView.setOnTouchListener(this);
 		return mView;
 	}
@@ -102,15 +106,9 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 	{
 
 		super.onResume();
-		mPlayManagers = new AudioPlayManager[mediaPaths.length];
-		for (int i = 0; i < mPlayManagers.length; i++) {
-
-			mPlayManagers[i] = new AudioPlayManager(mediaPaths[i], 64); // buffersize = 64kb
-			mPlayManagers[i].setIsLooping(true);
-		}
 		mPlayManagers[0].play();
 		mPlayManagers[1].pause();
-		_toneGenerator	= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+		
 	}
 
 	@Override
@@ -118,25 +116,26 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 	{
 		super.onPause();
 		for (int i = 0; i < mPlayManagers.length; i++) {
-
-			mPlayManagers[i].pause();
+			if (mPlayManagers[i] != null) {
+				mPlayManagers[i].pause();
+			}
 		}
 		_toneGenerator.stopTone();
-		
+
 	}
-	
+
 	@Override
 	public void onStop()
 	{
 		super.onPause();
 		for (int i = 0; i < mPlayManagers.length; i++) {
-
-			mPlayManagers[i].stop();
-			mPlayManagers[i].release();
+			if (mPlayManagers[i] != null) {
+				mPlayManagers[i].stop();
+				mPlayManagers[i].release();
+			}
 		}
-		_toneGenerator.stopTone();
 		_toneGenerator.release();
-		
+
 	}
 
 	public boolean onTouch(View v, MotionEvent event)
@@ -153,6 +152,10 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 			_toneGenerator.startTone(TONE_IDS[tempStore]);
 			System.out.println(BUTTON_IDS[tempStore]);
 			Log.d("button number", Integer.toString(tempStore));
+			if (v.getId() == R.id.ButtonEndCall) {
+				mActivity.detachHelpDialerScene();
+
+			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			_toneGenerator.stopTone();
@@ -182,9 +185,6 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 					}
 				break;
 			}
-		}
-		if (v.getId()==R.id.ButtonEndCall){
-			mActivity.detachHelpDialerScene();
 		}
 		return false;
 	}

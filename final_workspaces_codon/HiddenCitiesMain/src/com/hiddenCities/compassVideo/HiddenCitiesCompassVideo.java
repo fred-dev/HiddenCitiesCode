@@ -52,8 +52,8 @@ public class HiddenCitiesCompassVideo extends Fragment implements PFAssetObserve
 		mActivity = (HiddenCitiesMain) getActivity();
 		mView = inflater.inflate(R.layout.compass_video_layout, container, false);
 //		mActivity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 	
 		_frameContainer = (ViewGroup) mView.findViewById(R.id.framecontainer);
