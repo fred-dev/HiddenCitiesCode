@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><settings>
+     <users>
+          <user>
+               <username>fredasster</username>
+               <useremail>me@myemail.com</useremail>
+          </user>
+     </users>
+     <networkInfos>
+          <networkInfo>
+               <ftpAddress>ftp.greenhost.nl</ftpAddress>
+               <ftpUser>webmaster@fredrodrigues.net</ftpUser>
+               <ftpPassword>insertHere</ftpPassword>
+               <ftpRemotePath>/domains/photos/</ftpRemotePath>
+               <webSocketAdress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAdress>
+               <webSocketUser>fred</webSocketUser>
+          </networkInfo>
+     </networkInfos>
+     <messageStrings>
+          <messageString>
+               <welcomeString>Welcome to Hidden Cities, please enter your name and email address</welcomeString>
+               <emailString>Email</emailString>
+               <usernameString>Username</usernameString>
+               <instructionStringOne>Instructiion One</instructionStringOne>
+               <instructionStringTwo>Instructiion Two</instructionStringTwo>
+               <instructionStringThree>Instructiion Three</instructionStringThree>
+               <instructionStringFour>Instructiion Four</instructionStringFour>
+               <instructionStringFive>Instructiion Five</instructionStringFive>
+               <instructionStringSix>Instructiion Six</instructionStringSix>
+               <instructionStringSeven>Instructiion Seven</instructionStringSeven>
+               <errorStringOne>Error One</errorStringOne>
+               <errorStringTwo>Error One</errorStringTwo>
+               <errorStringThree>Error One</errorStringThree>
+               <errorStringFour>Error One</errorStringFour>
+          </messageString>
+     </messageStrings>
+     <markers>
+          <marker>
+               <markerId>0</markerId>
+               <markerLat>52.393100</markerLat>
+               <markerLong>4.911760</markerLong>
+               <installationType>360Video</installationType>
+          </marker>
+          <marker>
+               <markerId>1</markerId>
+               <markerLat>52.393047</markerLat>
+               <markerLong>4.911658</markerLong>
+               <installationType>compasAudio</installationType>
+          </marker>
+          <marker>
+               <markerId>2</markerId>
+               <markerLat>52.392792</markerLat>
+               <markerLong>4.912575</markerLong>
+               <installationType>portholes</installationType>
+          </marker>
+          <marker>
+               <markerId>3</markerId>
+               <markerLat>52.392605</markerLat>
+               <markerLong>4.913015</markerLong>
+               <installationType>invisibleWall</installationType>
+          </marker>
+          <marker>
+               <markerId>4</markerId>
+               <markerLat>52.392723</markerLat>
+               <markerLong>4.913133</markerLong>
+               <installationType>conductor</installationType>
+          </marker>
+     </markers>
+     <gpsAudioPlayers>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+     </gpsAudioPlayer>
+     <waypoints>
+          <waypoint>
+               <waypointId>0</waypointId>
+               <waypointLat>52.393100</waypointLat>
+               <waypointLong>4.911760</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>1</waypointId>
+               <waypointLat>52.393047</waypointLat>
+               <waypointLong>4.911658</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>2</waypointId>
+               <waypointLat>52.392792</waypointLat>
+               <waypointLong>4.912575</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>3</waypointId>
+               <waypointLat>52.392605</waypointLat>
+               <waypointLong>4.913015</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>4</waypointId>
+               <waypointLat>52.392723</waypointLat>
+               <waypointLong>4.913133</waypointLong>
+          </waypoint>
+     </waypoints>
+     
+     <portholes>
+          <porthole>
+               <portholeDataDat>DataSet.dat</portholeDataDat>
+               <portholeDataXML>DataSet.xml</portholeDataXML>
+               <portholeImage>porthole1.jpg</portholeImage>
+               <portholeVideo>porthole1.m4v</portholeVideo>
+          </porthole>
+     </portholes>
+     <colours>
+          <colour>
+               <colourName>blue</colourName>
+               <colourHexValue>245</colourHexValue>
+          </colour>
+     </colours>
+</settings>

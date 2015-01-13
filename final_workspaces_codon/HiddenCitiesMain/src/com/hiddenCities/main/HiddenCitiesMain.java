@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.hiddenCities.main.MyFTP;
 import com.hiddenCities.main.XmlValuesModel;
 import com.hiddenCities.main.XMLParser;
@@ -88,6 +89,13 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	List<XmlValuesModel>		mWaypointData			= null;
 	List<XmlValuesModel>		mNetworkData			= null;
 	List<XmlValuesModel>		mIdData					= null;
+	List<XmlValuesModel> 		gpsAudioPlayData 		= null;
+
+
+	LatLng[] gpsAudioPlayLatLongList = null;
+	String[] gpsAudioPlayerFileNames = null;
+	boolean[] gpsAudioHasPlayed = null;
+	boolean[] markerVisitedList = null;
 
 	public String				mUserName, mUserEmail;
 
@@ -783,6 +791,20 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 				}
 
 			}
+			if(gpsAudioPlayData !=null){
+				gpsAudioPlayerFileNames = new String[gpsAudioPlayData.size()];
+				gpsAudioPlayLatLongList = new LatLng[gpsAudioPlayData.size()];
+				gpsAudioHasPlayed = new boolean[gpsAudioPlayData.size()];
+				for (int n = 0; n < gpsAudioPlayData.size(); n++) {
+					XmlValuesModel xmlRowData = gpsAudioPlayData.get(n);
+					if (xmlRowData != null) {
+						gpsAudioPlayLatLongList[n] = new LatLng(xmlRowData.getGpsAudioPlayerLat() ,xmlRowData.getGpsAudioPlayerLong());
+						gpsAudioPlayerFileNames[n] = xmlRowData.getGpsAudioPlayerAudioFile();
+						gpsAudioHasPlayed[n]= false;
+					}
+				}
+				
+			}
 
 		} catch (Exception e) {
 			Log.e("XML parse", "Exception parse xml :" + e);
@@ -848,6 +870,24 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 		if (mIsConnected) {
 			mWSClient.send("map/" + aLocation.getLatitude() + "/" + aLocation.getLongitude());
+		}
+		
+		if (gpsAudioPlayLatLongList != null) {
+			
+			for (int l = 0; l < gpsAudioPlayLatLongList.length; l++) {
+				double distance = 0;
+				Location locationMarker = new Location("A");
+				locationMarker.setLatitude(gpsAudioPlayLatLongList[l].latitude);
+				locationMarker.setLongitude(gpsAudioPlayLatLongList[l].longitude);
+				distance = locationMarker.distanceTo(aLocation);
+				if (distance < 20) {
+					if(gpsAudioHasPlayed[l]==false){
+						preparePlayer(gpsAudioPlayerFileNames[l]);
+						gpsAudioHasPlayed[l] = true;
+					}	
+				}
+			}
+	
 		}
 	}
 
