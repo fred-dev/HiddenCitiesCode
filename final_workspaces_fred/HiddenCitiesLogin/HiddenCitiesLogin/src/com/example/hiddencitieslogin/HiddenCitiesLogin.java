@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,8 +33,6 @@ import android.widget.Toast;
 
    private EditText  username=null;
    private EditText  email=null;
-   private TextView  emailTextView=null;
-   private TextView  userNameTextView=null;
    private TextView  welcomeTextView=null;
  
    private Button login;
@@ -45,19 +44,27 @@ import android.widget.Toast;
       setContentView(R.layout.activity_hidden_cities_login);
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
   			WindowManager.LayoutParams.FLAG_FULLSCREEN);
-  	 
+
   	 if (getActionBar().isShowing()) getActionBar().hide();
+      
+      View decorView = getWindow().getDecorView();
+      decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
   	 
-      username = (EditText)findViewById(R.id.editText1);
-      email = (EditText)findViewById(R.id.editText2);
-      login = (Button)findViewById(R.id.button1);
+      username = (EditText)findViewById(R.id.nameEntry);
+      email = (EditText)findViewById(R.id.emailEntry);
+      login = (Button)findViewById(R.id.loginButton);
+      username.setHint("Name");
+      email.setHint("Email");
       
       welcomeTextView =(TextView)findViewById(R.id.welcomeText);
-      userNameTextView = (TextView)findViewById(R.id.usernameText);
-      emailTextView= (TextView)findViewById(R.id.emailText);
-      welcomeTextView.setText("Welcome to Hidden Cities, please enter your name and email address:");
-      userNameTextView.setText("Name:");
-      emailTextView.setText("Email:");
+   
+      welcomeTextView.setText(Html.fromHtml("Welcome to \nYour City"));
+ 
    }
 
    public void login(View view){

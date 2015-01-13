@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <string name="app_name">HiddenCitiesLogin</string>
+   <string name="action_settings">Settings</string>
+   <string name="hello_world">Welcome to Your City</string>
+    <string name="enterEmail">To start \r\nplease enter your name and email</string>
+   <string name="username">Name:</string>
+   <string name="email">Email:</string>
+   <string name="Login">Let\'s go!</string>
+</resources>

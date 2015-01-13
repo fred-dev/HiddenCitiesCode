@@ -118,7 +118,7 @@
      </colours>
      <messageStrings>
           <messageString>
-               <welcomeString>Welcome to Hidden Cities, please enter your name and email address</welcomeString>
+               <welcomeString>Welcome to your city</welcomeString>
                <emailString>Email</emailString>
                <usernameString>Username</usernameString>
                <instructionStringOne>Instructiion One</instructionStringOne>
