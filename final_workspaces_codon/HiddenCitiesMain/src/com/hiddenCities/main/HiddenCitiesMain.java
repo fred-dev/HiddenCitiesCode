@@ -193,20 +193,8 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
-<<<<<<< HEAD
-<<<<<<< HEAD
-			//mReceiver = new MusicIntentReceiver();
-=======
 			mVibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
 			mMusicReceiver = new MusicIntentReceiver();
->>>>>>> fa5035a7d1da01d45f2d36be9db33c7341d9a66c
-=======
-			mVibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
-			mMusicReceiver = new MusicIntentReceiver();
-=======
-			//mReceiver = new MusicIntentReceiver();
->>>>>>> master
->>>>>>> pr/8
 			RegisterAlarmBroadcast();
 
 			mMediaRoot = Environment.getExternalStorageDirectory();
@@ -244,22 +232,8 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	public void onResume()
 	{
 		super.onResume();
-<<<<<<< HEAD
-<<<<<<< HEAD
-		//IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-		//registerReceiver(mReceiver, filter);
-=======
 		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
 		registerReceiver(mMusicReceiver, filter);
->>>>>>> fa5035a7d1da01d45f2d36be9db33c7341d9a66c
-=======
-		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-		registerReceiver(mMusicReceiver, filter);
-=======
-		//IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-		//registerReceiver(mReceiver, filter);
->>>>>>> master
->>>>>>> pr/8
 
 	}
 
@@ -898,27 +872,27 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	}
 
-//	public class MusicIntentReceiver extends BroadcastReceiver
-//	{
-//		@Override
-//		public void onReceive(Context context, Intent intent)
-//		{
-//			if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-//				int state = intent.getIntExtra("state", -1);
-//				switch (state) {
-//					case 0:
-//						Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
-//						doVibrate();
-//					break;
-//					case 1:
-//						Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
-//					break;
-//					default:
-//						Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
-//				}
-//			}
-//		}
-//	}
+	public class MusicIntentReceiver extends BroadcastReceiver
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+				int state = intent.getIntExtra("state", -1);
+				switch (state) {
+					case 0:
+						Toast.makeText(context, "Headset is unplugged", Toast.LENGTH_LONG).show();
+						doVibrate();
+					break;
+					case 1:
+						Toast.makeText(context, "Headset is plugged", Toast.LENGTH_LONG).show();
+					break;
+					default:
+						Toast.makeText(context, "I have no idea what the headset state is", Toast.LENGTH_LONG).show();
+				}
+			}
+		}
+	}
 
 	void setAlarmWithDelay(long delay)
 	{
