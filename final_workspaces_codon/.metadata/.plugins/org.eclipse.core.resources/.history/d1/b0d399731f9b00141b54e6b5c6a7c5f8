@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><settings>
+     <users>
+          <user>
+               <username>hgvh</username>
+               <useremail>gghh@thh.com</useremail>
+   							</user>
+     </users>
+     
+     <markers>
+          <marker>
+               <markerId>0</markerId>
+               <markerLat>44.821631</markerLat>
+               <markerLong>-0.564312</markerLong>
+          </marker>
+          <marker>
+               <markerId>1</markerId>
+               <markerLat>44.822371</markerLat>
+               <markerLong>-0.562205</markerLong>
+          </marker>
+          <marker>
+               <markerId>2</markerId>
+               <markerLat>44.823157</markerLat>
+               <markerLong>-0.562783</markerLong>
+          </marker>
+          <marker>
+               <markerId>3</markerId>
+               <markerLat>44.822462</markerLat>
+               <markerLong>-0.565729</markerLong>
+          </marker>
+          <marker>
+               <markerId>4</markerId>
+               <markerLat>44.821154</markerLat>
+               <markerLong>-0.565731</markerLong>
+          </marker>
+     </markers>
+     
+     <waypoints>
+          <waypoint>
+               <waypointId>0</waypointId>
+               <waypointLat>52.393100</waypointLat>
+               <waypointLong>4.911760</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>1</waypointId>
+               <waypointLat>52.393047</waypointLat>
+               <waypointLong>4.911658</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>2</waypointId>
+               <waypointLat>52.392792</waypointLat>
+               <waypointLong>4.912575</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>3</waypointId>
+               <waypointLat>52.392605</waypointLat>
+               <waypointLong>4.913015</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>4</waypointId>
+               <waypointLat>52.392723</waypointLat>
+               <waypointLong>4.913133</waypointLong>
+          </waypoint>
+     </waypoints>
+     <gpsAudioPlayers>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+          <gpsAudioPlayer>
+               <gpsAudioPlayerId>1</gpsAudioPlayerId>
+               <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
+               <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
+               <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+          </gpsAudioPlayer>
+     </gpsAudioPlayers>
+     <portholes>
+          <porthole>
+               <portholeDataDat>DataSet.dat</portholeDataDat>
+               <portholeDataXML>DataSet.xml</portholeDataXML>
+               <portholeImage>porthole1.jpg</portholeImage>
+               <portholeVideo>porthole1.m4v</portholeVideo>
+          </porthole>
+     </portholes>
+     <colours>
+          <colour>
+               <colourName>blue</colourName>
+               <colourHexValue>245</colourHexValue>
+          </colour>
+     </colours>
+     <messageStrings>
+          <messageString>
+               <welcomeString>Welcome to Hidden Cities, please enter your name and email address</welcomeString>
+               <emailString>Email</emailString>
+               <usernameString>Username</usernameString>
+               <instructionStringOne>Instructiion One</instructionStringOne>
+               <instructionStringTwo>Instructiion Two</instructionStringTwo>
+               <instructionStringThree>Instructiion Three</instructionStringThree>
+               <instructionStringFour>Instructiion Four</instructionStringFour>
+               <instructionStringFive>Instructiion Five</instructionStringFive>
+               <instructionStringSix>Instructiion Six</instructionStringSix>
+               <instructionStringSeven>Instructiion Seven</instructionStringSeven>
+               <errorStringOne>Error One</errorStringOne>
+               <errorStringTwo>Error One</errorStringTwo>
+               <errorStringThree>Error One</errorStringThree>
+               <errorStringFour>Error One</errorStringFour>
+          </messageString>
+     </messageStrings>
+     <networkInfo>
+          <networkInfo>
+               
+               <ftpAddress>163.47.73.225</ftpAddress>
+               <ftpUser>hiddencities@codon.im</ftpUser>
+               <ftpPassword>chosoo12345</ftpPassword>
+               <ftpRemotePath> </ftpRemotePath>
+               <webSocketAddress>ws://mprint-hiddencities.rhcloud.com:8000/</webSocketAddress>
+               <webSocketUser>arash</webSocketUser>
+               
+          </networkInfo>
+     </networkInfo>
+</settings>

@@ -1,68 +1,88 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<settings>
-    					   <users>
-       						 <user>
-    							<username>hg</username>
-    							<useremail>hg@gnail.com</useremail>
+<?xml version="1.0" encoding="UTF-8"?><settings>
+     <users>
+          <user>
+               <username>fre</username>
+               <useremail>gdg@ggh.vij</useremail>
    							</user>
-   						   </users>
-   						   
-                           <markers>
-                             <marker>
-                                 <markerId>0</markerId>
-                                 <markerLat>52.393100</markerLat>
-                                 <markerLong>4.911760</markerLong>
-                              </marker>
-                             <marker>
-                                  <markerId>1</markerId>
-                                  <markerLat>52.393047</markerLat>
-                                  <markerLong>4.911658</markerLong>
-                             </marker>
-                             <marker>
-                                  <markerId>2</markerId>
-                                  <markerLat>52.392792</markerLat>
-                                  <markerLong>4.912575</markerLong>
-                             </marker>
-                             <marker>
-                                  <markerId>3</markerId>
-                                  <markerLat>52.392605</markerLat>
-                                  <markerLong>4.913015</markerLong>
-                             </marker>
-                             <marker>
-                                  <markerId>4</markerId>
-                                  <markerLat>52.392723</markerLat>
-                                  <markerLong>4.913133</markerLong>
-                             </marker>
-                            </markers>
-
-                           <waypoints>
-                                <waypoint>
-                                     <waypointId>0</waypointId>
-                                     <waypointLat>52.393100</waypointLat>
-                                     <waypointLong>4.911760</waypointLong>
-                                </waypoint>
-                                <waypoint>
-                                     <waypointId>1</waypointId>
-                                     <waypointLat>52.393047</waypointLat>
-                                     <waypointLong>4.911658</waypointLong>
-                                </waypoint>
-                                <waypoint>
-                                     <waypointId>2</waypointId>
-                                     <waypointLat>52.392792</waypointLat>
-                                     <waypointLong>4.912575</waypointLong>
-                                </waypoint>
-                                <waypoint>
-                                     <waypointId>3</waypointId>
-                                     <waypointLat>52.392605</waypointLat>
-                                     <waypointLong>4.913015</waypointLong>
-                                </waypoint>
-                                <waypoint>
-                                     <waypointId>4</waypointId>
-                                     <waypointLat>52.392723</waypointLat>
-                                     <waypointLong>4.913133</waypointLong>
-                                </waypoint>
-                           </waypoints>
-							<gpsAudioPlayers>
+     </users>
+     
+     <markers>
+          <marker>
+               <markerId>0</markerId>
+               <markerLat>44.821631</markerLat>
+               <markerLong>-0.564312</markerLong>
+          </marker>
+          <marker>
+               <markerId>1</markerId>
+               <markerLat>44.822371</markerLat>
+               <markerLong>-0.562205</markerLong>
+          </marker>
+          <marker>
+               <markerId>2</markerId>
+               <markerLat>44.823157</markerLat>
+               <markerLong>-0.562783</markerLong>
+          </marker>
+          <marker>
+               <markerId>3</markerId>
+               <markerLat>44.822462</markerLat>
+               <markerLong>-0.565729</markerLong>
+          </marker>
+          <marker>
+               <markerId>4</markerId>
+               <markerLat>44.821154</markerLat>
+               <markerLong>-0.565731</markerLong>
+          </marker>
+     </markers>
+     
+     <waypoints>
+          <waypoint>
+               <waypointId>1</waypointId>
+               <waypointLat>44.821591</waypointLat>
+               <waypointLong>-0.564256</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>2</waypointId>
+               <waypointLat>44.821681</waypointLat>
+               <waypointLong>-0.564332</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>3</waypointId>
+               <waypointLat>44.822444</waypointLat>
+               <waypointLong>-0.562197</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>4</waypointId>
+               <waypointLat>44.822901</waypointLat>
+               <waypointLong>-0.562506</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>5</waypointId>
+               <waypointLat>44.823226</waypointLat>
+               <waypointLong>-0.562779</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>6</waypointId>
+               <waypointLat>44.822493</waypointLat>
+               <waypointLong>-0.565781</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>7</waypointId>
+               <waypointLat>44.821207</waypointLat>
+               <waypointLong>-0.565818</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>8</waypointId>
+               <waypointLat>44.821299</waypointLat>
+               <waypointLong>-0.565461</waypointLong>
+          </waypoint>
+          <waypoint>
+               <waypointId>9</waypointId>
+               <waypointLat>44.821651</waypointLat>
+               <waypointLong>-0.564421</waypointLong>
+          </waypoint>
+         
+     </waypoints>
+     <gpsAudioPlayers>
           <gpsAudioPlayer>
                <gpsAudioPlayerId>1</gpsAudioPlayerId>
                <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
@@ -126,4 +146,4 @@
                
           </networkInfo>
      </networkInfo>
-                          </settings>
+</settings>
