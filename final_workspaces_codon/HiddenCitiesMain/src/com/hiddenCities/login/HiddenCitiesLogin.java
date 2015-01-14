@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,7 @@ public class HiddenCitiesLogin extends Fragment
 
 	private EditText	username			= null;
 	private EditText	email				= null;
-	private TextView	emailTextView		= null;
-	private TextView	userNameTextView	= null;
+	private TextView	enterDetailsText	= null;
 	private TextView	welcomeTextView		= null;
 
 	private Button		login;
@@ -52,16 +52,24 @@ public class HiddenCitiesLogin extends Fragment
 		if (mActivity.getActionBar().isShowing())
 			mActivity.getActionBar().hide();
 
-		username = (EditText) mView.findViewById(R.id.editText1);
-		email = (EditText) mView.findViewById(R.id.editText2);
-		login = (Button) mView.findViewById(R.id.button1);
+		View decorView = getActivity().getWindow().getDecorView();
+	      decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+	  	 username = (EditText) mView.findViewById(R.id.nameEntry);
 
-		welcomeTextView = (TextView) mView.findViewById(R.id.welcomeText);
-		userNameTextView = (TextView) mView.findViewById(R.id.usernameText);
-		emailTextView = (TextView) mView.findViewById(R.id.emailText);
-		welcomeTextView.setText("Welcome to Hidden Cities, please enter your name and email address:");
-		userNameTextView.setText("Name:");
-		emailTextView.setText("Email:");
+	      email = (EditText)mView.findViewById(R.id.emailEntry);
+	      username.setHint("Name");
+	      email.setHint("Email");
+	      
+	      welcomeTextView =(TextView)mView.findViewById(R.id.welcomeText);   
+	      welcomeTextView.setText("Welcome to \nYour City");
+	      
+	      enterDetailsText = (TextView)mView.findViewById(R.id.enterDetailsText);  
+	      enterDetailsText.setText("To start \nplease enter your name and email:");
 
 		return mView;
 	}

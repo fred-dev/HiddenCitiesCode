@@ -1,4 +1,4 @@
-'    package com.example.hiddencitiesmap;
+package com.example.hiddencitiesmap;
 
 public class XmlValuesModel {
 	 

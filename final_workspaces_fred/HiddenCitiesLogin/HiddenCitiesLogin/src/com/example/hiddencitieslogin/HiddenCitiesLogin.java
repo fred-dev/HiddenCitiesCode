@@ -18,6 +18,10 @@ import org.w3c.dom.Node;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
@@ -34,6 +38,8 @@ import android.widget.Toast;
    private EditText  username=null;
    private EditText  email=null;
    private TextView  welcomeTextView=null;
+   private File mediaRoot;
+   private String backgroundImagePath;
  
    private Button login;
    int counter = 3;
@@ -64,6 +70,8 @@ import android.widget.Toast;
       welcomeTextView =(TextView)findViewById(R.id.welcomeText);
    
       welcomeTextView.setText(Html.fromHtml("Welcome to \nYour City"));
+      
+ 
  
    }
 

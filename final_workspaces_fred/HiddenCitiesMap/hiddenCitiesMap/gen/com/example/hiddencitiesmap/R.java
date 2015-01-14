@@ -340,8 +340,9 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f060006;
         public static final int common_signin_btn_light_text_focused=0x7f060007;
         public static final int common_signin_btn_light_text_pressed=0x7f060005;
-        public static final int common_signin_btn_text_dark=0x7f060018;
-        public static final int common_signin_btn_text_light=0x7f060019;
+        public static final int common_signin_btn_text_dark=0x7f06001a;
+        public static final int common_signin_btn_text_light=0x7f06001b;
+        public static final int textinput=0x7f060019;
         public static final int wallet_bright_foreground_disabled_holo_light=0x7f06000f;
         /** 
          Wallet colors to support consistent Wallet fragment holo dark UI in client application
@@ -360,8 +361,9 @@ containing a value of this type.
         public static final int wallet_hint_foreground_holo_light=0x7f060011;
         public static final int wallet_holo_blue_light=0x7f060015;
         public static final int wallet_link_text_light=0x7f060016;
-        public static final int wallet_primary_text_holo_light=0x7f06001a;
-        public static final int wallet_secondary_text_holo_dark=0x7f06001b;
+        public static final int wallet_primary_text_holo_light=0x7f06001c;
+        public static final int wallet_secondary_text_holo_dark=0x7f06001d;
+        public static final int white=0x7f060018;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -371,8 +373,8 @@ containing a value of this type.
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f090000;
-        public static final int activity_vertical_margin=0x7f090001;
+        public static final int activity_horizontal_margin=0x7f080000;
+        public static final int activity_vertical_margin=0x7f080001;
     }
     public static final class drawable {
         public static final int common_full_open_on_phone=0x7f020000;
@@ -401,48 +403,53 @@ containing a value of this type.
         public static final int common_signin_btn_text_normal_light=0x7f020017;
         public static final int common_signin_btn_text_pressed_dark=0x7f020018;
         public static final int common_signin_btn_text_pressed_light=0x7f020019;
-        public static final int ic_launcher=0x7f02001a;
-        public static final int ic_plusone_medium_off_client=0x7f02001b;
-        public static final int ic_plusone_small_off_client=0x7f02001c;
-        public static final int ic_plusone_standard_off_client=0x7f02001d;
-        public static final int ic_plusone_tall_off_client=0x7f02001e;
-        public static final int powered_by_google_dark=0x7f02001f;
-        public static final int powered_by_google_light=0x7f020020;
+        public static final int hcinterfacemaptemplate=0x7f02001a;
+        public static final int hcmaphelpbtn=0x7f02001b;
+        public static final int hcmapinfobtn=0x7f02001c;
+        public static final int hcmapphotobtn=0x7f02001d;
+        public static final int ic_launcher=0x7f02001e;
+        public static final int ic_plusone_medium_off_client=0x7f02001f;
+        public static final int ic_plusone_small_off_client=0x7f020020;
+        public static final int ic_plusone_standard_off_client=0x7f020021;
+        public static final int ic_plusone_tall_off_client=0x7f020022;
+        public static final int powered_by_google_dark=0x7f020023;
+        public static final int powered_by_google_light=0x7f020024;
     }
     public static final class id {
-        public static final int CameraButton=0x7f070016;
-        public static final int HelpButton=0x7f070015;
-        public static final int action_settings=0x7f070017;
-        public static final int book_now=0x7f070010;
-        public static final int buyButton=0x7f07000a;
-        public static final int buy_now=0x7f07000f;
-        public static final int buy_with_google=0x7f07000e;
-        public static final int classic=0x7f070011;
-        public static final int grayscale=0x7f070012;
-        public static final int holo_dark=0x7f070005;
-        public static final int holo_light=0x7f070006;
-        public static final int hybrid=0x7f070004;
-        public static final int map=0x7f070014;
-        public static final int match_parent=0x7f07000c;
-        public static final int monochrome=0x7f070013;
-        public static final int none=0x7f070000;
-        public static final int normal=0x7f070001;
-        public static final int production=0x7f070007;
-        public static final int sandbox=0x7f070008;
-        public static final int satellite=0x7f070002;
-        public static final int selectionDetails=0x7f07000b;
-        public static final int strict_sandbox=0x7f070009;
-        public static final int terrain=0x7f070003;
-        public static final int wrap_content=0x7f07000d;
+        public static final int CameraButton=0x7f0a0017;
+        public static final int HelpButton=0x7f0a0015;
+        public static final int action_settings=0x7f0a0018;
+        public static final int book_now=0x7f0a000e;
+        public static final int buyButton=0x7f0a000a;
+        public static final int buy_now=0x7f0a000f;
+        public static final int buy_with_google=0x7f0a0010;
+        public static final int classic=0x7f0a0011;
+        public static final int grayscale=0x7f0a0012;
+        public static final int holo_dark=0x7f0a0005;
+        public static final int holo_light=0x7f0a0006;
+        public static final int hybrid=0x7f0a0000;
+        public static final int infoButton=0x7f0a0016;
+        public static final int map=0x7f0a0014;
+        public static final int match_parent=0x7f0a000c;
+        public static final int monochrome=0x7f0a0013;
+        public static final int none=0x7f0a0001;
+        public static final int normal=0x7f0a0002;
+        public static final int production=0x7f0a0007;
+        public static final int sandbox=0x7f0a0008;
+        public static final int satellite=0x7f0a0003;
+        public static final int selectionDetails=0x7f0a000b;
+        public static final int strict_sandbox=0x7f0a0009;
+        public static final int terrain=0x7f0a0004;
+        public static final int wrap_content=0x7f0a000d;
     }
     public static final class integer {
-        public static final int google_play_services_version=0x7f080000;
+        public static final int google_play_services_version=0x7f070000;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
     }
     public static final class menu {
-        public static final int main=0x7f0a0000;
+        public static final int main=0x7f090000;
     }
     public static final class string {
         public static final int accept=0x7f050002;
