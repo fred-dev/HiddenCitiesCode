@@ -13,7 +13,7 @@ public class XMLParser extends DefaultHandler
      
      List<XmlValuesModel> markerList=null;
      List<XmlValuesModel> waypointList=null;
-     List<XmlValuesModel> idList=null;
+      List<XmlValuesModel> idList=null;
      List<XmlValuesModel> networkList=null;
      List<XmlValuesModel> messageList=null;
      List<XmlValuesModel> colourList=null;
@@ -25,7 +25,7 @@ public class XMLParser extends DefaultHandler
      
      XmlValuesModel markerValues=null;
      XmlValuesModel waypointValues=null;
-     XmlValuesModel idValues = null;
+     public XmlValuesModel idValues = null;
      XmlValuesModel networkValues = null;
      XmlValuesModel messageValues = null;
      XmlValuesModel colourValues = null;
@@ -191,6 +191,18 @@ public class XMLParser extends DefaultHandler
           else  if(localName.equalsIgnoreCase("username")){
             	  idValues.setUsername(builder.toString());
           }
+          else  if(localName.equalsIgnoreCase("usernameHintString")){
+        	  idValues.setUsernameHintString(builder.toString());
+          }
+          else  if(localName.equalsIgnoreCase("emailHintString")){
+        	  idValues.setEmailHintString(builder.toString());
+          }
+          else  if(localName.equalsIgnoreCase("enterDetailsString")){
+        	  idValues.setEnterDetailsString(builder.toString());
+          }
+          else  if(localName.equalsIgnoreCase("welcomeString")){
+        	  idValues.setWelcomeString(builder.toString());
+  			}
           
           else  if(localName.equalsIgnoreCase("markerId")){
                
@@ -273,44 +285,36 @@ public class XMLParser extends DefaultHandler
           else if(localName.equalsIgnoreCase("webSocketUser")){
             	  networkValues.setWebSocketUser(builder.toString());
           }
-          
-          else if(localName.equalsIgnoreCase("welcomeString")){
-            	  messageValues.setWelcomeString(builder.toString());
+            
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionTitleText")){
+            	  messageValues.setInfoKeyStringInstructionTitleText(builder.toString());
+          }
+          	
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionFollowMapText")){
+            	  messageValues.setInfoKeyStringInstructionFollowMapText(builder.toString());
           }
           
-          else if(localName.equalsIgnoreCase("emailString")){
-            	  messageValues.setEmailString(builder.toString());
-          }
-          else if(localName.equalsIgnoreCase("usernameString")){
-            	  messageValues.setUsernameString(builder.toString());
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionFindSignsText")){
+            	  messageValues.setInfoKeyStringInstructionFindSignsText(builder.toString());
           }
           
-          else if(localName.equalsIgnoreCase("instructionStringOne")){
-            	  messageValues.setInstructionStringOne(builder.toString());
+          else if(localName.equalsIgnoreCase("infoKeyStringnstructionWearHeadphonesText")){
+            	  messageValues.setInfoKeyStringnstructionWearHeadphonesText(builder.toString());
+          }
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionsTakePhotosText")){
+            	  messageValues.setInfoKeyStringInstructionsTakePhotosText(builder.toString());
           }
           
-          else if(localName.equalsIgnoreCase("instructionStringTwo")){
-            	  messageValues.setInstructionStringTwo(builder.toString());
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionsCallHelpText")){
+            	  messageValues.setInfoKeyStringInstructionsCallHelpText(builder.toString());
           }
           
-          else if(localName.equalsIgnoreCase("instructionStringThree")){
-            	  messageValues.setInstructionStringThree(builder.toString());
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionsSeeThisPageText")){
+            	  messageValues.setInfoKeyStringInstructionsSeeThisPageText(builder.toString());
           }
-          
-          else if(localName.equalsIgnoreCase("instructionStringFour")){
-            	  messageValues.setInstructionStringFour(builder.toString());
-          }
-          else if(localName.equalsIgnoreCase("instructionStringFive")){
-            	  messageValues.setInstructionStringFive(builder.toString());
-          }
-          
-          else if(localName.equalsIgnoreCase("instructionStringSix")){
-            	  messageValues.setInstructionStringSix(builder.toString());
-          }
-          
-          else if(localName.equalsIgnoreCase("instructionStringSeven")){
-            	  messageValues.setInstructionStringSeven(builder.toString());
-          }
+          else if(localName.equalsIgnoreCase("infoKeyStringInstructionsGroupIsReadyText")){
+        	  messageValues.setInfoKeyStringInstructionsGroupIsReadyText(builder.toString());
+      }
           
           else if(localName.equalsIgnoreCase("errorStringOne")){
             	  messageValues.setErrorStringOne(builder.toString());
@@ -324,13 +328,6 @@ public class XMLParser extends DefaultHandler
           else if(localName.equalsIgnoreCase("errorStringFour")){
             	  messageValues.setErrorStringFour(builder.toString());
           }
-          
-          
-          
-          
-          
-          
-          // Log.i("parse",localName.toString()+"========="+builder.toString());
      }
      
      

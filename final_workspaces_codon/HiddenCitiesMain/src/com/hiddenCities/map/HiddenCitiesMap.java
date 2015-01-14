@@ -105,7 +105,23 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		System.out.println("trying to onCreateView");
+		
+		mActivity = (HiddenCitiesMain) getActivity();
 		mView = inflater.inflate(R.layout.map_layout, container, false);
+		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+		if (mActivity.getActionBar().isShowing())
+			mActivity.getActionBar().hide();
+
+		View decorView = getActivity().getWindow().getDecorView();
+	      decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		
 		buttonList = new ArrayList<Button>();
 		for (int id : BUTTON_IDS) {
 			Button mButton = (Button) mView.findViewById(id);
@@ -129,9 +145,19 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 
 //		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		if (mActivity.getActionBar().isShowing())
 			mActivity.getActionBar().hide();
+
+		View decorView = getActivity().getWindow().getDecorView();
+	      decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
 		setUpMapIfNeeded();
 		setUpGoogleApiClientIfNeeded();

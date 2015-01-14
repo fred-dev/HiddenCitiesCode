@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><settings>
+<?xml version="1.1" encoding="UTF-8"?><settings>
      <users>
           <user>
                <username>fre</username>
                <useremail>gdg@ggh.vij</useremail>
-   							</user>
+               <usernameHintString>Name:</usernameHintString>
+               <emailHintString>Email:</emailHintString>
+               <welcomeString>WELCOME T1111O<![CDATA[<br>]]>YOUR CITYqwqw</welcomeString>
+               <enterDetailsString>To start <![CDATA[<br>]]>please enter your name and email:</enterDetailsString>
+          </user>
      </users>
      
      <markers>
@@ -80,7 +84,7 @@
                <waypointLat>44.821651</waypointLat>
                <waypointLong>-0.564421</waypointLong>
           </waypoint>
-         
+          
      </waypoints>
      <gpsAudioPlayers>
           <gpsAudioPlayer>
@@ -121,13 +125,14 @@
                <welcomeString>Welcome to your city</welcomeString>
                <emailString>Email</emailString>
                <usernameString>Username</usernameString>
-               <instructionStringOne>Instructiion One</instructionStringOne>
-               <instructionStringTwo>Instructiion Two</instructionStringTwo>
-               <instructionStringThree>Instructiion Three</instructionStringThree>
-               <instructionStringFour>Instructiion Four</instructionStringFour>
-               <instructionStringFive>Instructiion Five</instructionStringFive>
-               <instructionStringSix>Instructiion Six</instructionStringSix>
-               <instructionStringSeven>Instructiion Seven</instructionStringSeven>
+               <infoKeyStringInstructionTitleText>What to look out for</infoKeyStringInstructionTitleText>
+               <infoKeyStringInstructionFollowMapText>Follow the map<![CDATA[<br>]]>and visit the markers</infoKeyStringInstructionFollowMapText>
+               <infoKeyStringInstructionFindSignsText>When you reach one of these markers, <![CDATA[<br>]]>look at your phone for instructions</infoKeyStringInstructionFindSignsText>
+               <infoKeyStringnstructionWearHeadphonesText>Keep the headphones on <![CDATA[<br>]]>unless you are in danger</infoKeyStringnstructionWearHeadphonesText>
+               <infoKeyStringInstructionsTakePhotosText>Take pictures whenever you want<![CDATA[<br>]]>we will send them to you later</infoKeyStringInstructionsTakePhotosText>
+               <infoKeyStringInstructionsCallHelpText>Need some help?<![CDATA[<br>]]>Press SOS to call us</infoKeyStringInstructionsCallHelpText>
+               <infoKeyStringInstructionsSeeThisPageText>Want to see this again?<![CDATA[<br>]]>Press the info key.</infoKeyStringInstructionsSeeThisPageText>
+               <infoKeyStringInstructionsGroupIsReadyText>When the others are ready<![CDATA[<br>]]>let's get going</infoKeyStringInstructionsGroupIsReadyText>
                <errorStringOne>Error One</errorStringOne>
                <errorStringTwo>Error One</errorStringTwo>
                <errorStringThree>Error One</errorStringThree>

@@ -9,4 +9,4 @@ logcat.view.colsize.TID=46
 logcat.view.colsize.Tag=116
 logcat.view.colsize.Text=675
 logcat.view.colsize.Time=140
-logcat.view.filters.list=name\: 'hiddencities', tag\: '', text\: '', pid\: '', app\: 'com.hiddenCities', level\: 'verbose', 
+logcat.view.filters.list=name\: 'hiddencities', tag\: '', text\: '', pid\: '', app\: 'com.hiddenCities', level\: 'debug', 

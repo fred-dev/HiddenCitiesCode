@@ -1,12 +1,21 @@
 package com.hiddenCities.login;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.XMLReader;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +27,8 @@ import android.widget.Toast;
 
 import com.hiddenCities.R;
 import com.hiddenCities.main.HiddenCitiesMain;
+import com.hiddenCities.main.XMLParser;
+import com.hiddenCities.main.XmlValuesModel;
 
 @SuppressLint("NewApi")
 public class HiddenCitiesLogin extends Fragment
@@ -33,11 +44,15 @@ public class HiddenCitiesLogin extends Fragment
 
 	HiddenCitiesMain	mActivity;
 	View				mView;
+	XmlValuesModel loginStringData = null;
+	
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
 
 	}
 
@@ -46,8 +61,7 @@ public class HiddenCitiesLogin extends Fragment
 	{
 		mActivity = (HiddenCitiesMain) getActivity();
 		mView = inflater.inflate(R.layout.login_layout, container, false);
-		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		if (mActivity.getActionBar().isShowing())
 			mActivity.getActionBar().hide();
@@ -59,19 +73,53 @@ public class HiddenCitiesLogin extends Fragment
 	                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 	                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
 	                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-	  	 username = (EditText) mView.findViewById(R.id.nameEntry);
-
+	      
+	  	  username = (EditText) mView.findViewById(R.id.nameEntry);
 	      email = (EditText)mView.findViewById(R.id.emailEntry);
-	      username.setHint("Name");
-	      email.setHint("Email");
-	      
 	      welcomeTextView =(TextView)mView.findViewById(R.id.welcomeText);   
-	      welcomeTextView.setText("Welcome to \nYour City");
-	      
 	      enterDetailsText = (TextView)mView.findViewById(R.id.enterDetailsText);  
-	      enterDetailsText.setText("To start \nplease enter your name and email:");
+	      
+	      parseSettings();
 
 		return mView;
+	}
+
+	void parseSettings() {
+		try {
+			String fileName = "hiddenCities/hiddenCitiesSettings.xml";
+			String path = Environment.getExternalStorageDirectory() + "/"
+					+ fileName;
+			File file = new File(path);
+			if (file.exists()) {
+				Log.d("File", "Yes file is there");
+			}
+
+			FileInputStream fileInputStream = new FileInputStream(file);
+			XMLParser parser = new XMLParser();
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser sp = factory.newSAXParser();
+			XMLReader reader = sp.getXMLReader();
+			reader.setContentHandler(parser);
+			sp.parse(fileInputStream, parser);
+
+			loginStringData = (XmlValuesModel) parser.idValues;
+
+			if (loginStringData != null) {
+				XmlValuesModel xmlRowData = loginStringData;
+				if (xmlRowData != null) {
+
+					username.setHint(Html.fromHtml(xmlRowData.getUsernameHintString()));
+					email.setHint(Html.fromHtml(xmlRowData.getEmailHintString()));
+					welcomeTextView.setText(Html.fromHtml(xmlRowData.getWelcomeString()));
+					Log.d("thisis what it reads", xmlRowData.getWelcomeString());
+					enterDetailsText.setText(Html.fromHtml(xmlRowData.getEnterDetailsString()));
+
+				} else
+					Log.e("infoStrings", "infoStrings value null");
+			}
+		} catch (Exception e) {
+			Log.e("XML parse", "Exception parse xml :" + e);
+		}
 	}
 
 	public void login(View view)

@@ -3,4 +3,13 @@
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLng"/>
 <fullyQualifiedTypeName name="android.text.Html"/>
 <fullyQualifiedTypeName name="com.hiddenCities.R.id"/>
+<fullyQualifiedTypeName name="com.hiddenCities.main.XmlValuesModel"/>
+<fullyQualifiedTypeName name="android.os.Environment"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="com.hiddenCities.main.XMLParser"/>
+<fullyQualifiedTypeName name="javax.xml.parsers.SAXParserFactory"/>
+<fullyQualifiedTypeName name="javax.xml.parsers.SAXParser"/>
+<fullyQualifiedTypeName name="org.xml.sax.XMLReader"/>
 </qualifiedTypeNameHistroy>

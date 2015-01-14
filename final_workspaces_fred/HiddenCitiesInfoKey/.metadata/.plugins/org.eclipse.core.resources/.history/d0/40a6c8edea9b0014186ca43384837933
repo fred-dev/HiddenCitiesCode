@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hcinfokeywtext"
+    android:orientation="vertical"
+    tools:context=".LinearLayout" >
+
+    <TextView
+        android:id="@+id/instructionTitle"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="270dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="18dp"
+        android:lines="2"
+        
+        android:text="I'll let you know what  \nwe are going to do" />
+
+    <TextView
+        android:id="@+id/instructionFollowMap"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionFollowMap" />
+
+    <TextView
+        android:id="@+id/instructionFindSigns"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionFindSigns" />
+
+    <TextView
+        android:id="@+id/instructionWearHeadphones"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionWearHeadphones" />
+
+    <TextView
+        android:id="@+id/instructionsTakePhotos"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionsTakePhotos" />
+
+    <TextView
+        android:id="@+id/isntructionsCallHelp"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="isntructionsCallHelp" />
+
+    <TextView
+        android:id="@+id/instructionsSeeThisPage"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionsSeeThisPage" />
+
+    <TextView
+        android:id="@+id/instructionsGroupIsReady"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="instructionsGroupIsReady" />
+
+</LinearLayout>

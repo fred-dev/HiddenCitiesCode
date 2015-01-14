@@ -35,15 +35,18 @@ public class XmlValuesModel {
      private String colourHexValue;
      
      private String welcomeString;
-     private String emailString;
-     private String usernameString;
-     private String instructionStringOne;
-     private String instructionStringTwo;
-     private String instructionStringThree;
-     private String instructionStringFour;
-     private String instructionStringFive;
-     private String instructionStringSix;
-     private String instructionStringSeven;
+     private String enterDetailsString;
+     private String emailHintString;
+     private String usernameHintString;
+     private String infoKeyStringInstructionTitleText;
+     private String infoKeyStringInstructionFollowMapText;
+     private String infoKeyStringInstructionFindSignsText;
+     private String infoKeyStringnstructionWearHeadphonesText;
+     private String infoKeyStringInstructionsTakePhotosText;
+     private String infoKeyStringInstructionsCallHelpText;
+     private String infoKeyStringInstructionsSeeThisPageText;
+     private String infoKeyStringInstructionsGroupIsReadyText;
+     
      private String errorStringOne;
      private String errorStringTwo;
      private String errorStringThree;
@@ -156,45 +159,53 @@ public class XmlValuesModel {
      }
      
      
+     public void setEnterDetailsString(String enterDetailsString)
+     {
+          this.enterDetailsString = enterDetailsString;
+     }
      public void setWelcomeString(String welcomeString)
      {
           this.welcomeString = welcomeString;
      }
-     public void setEmailString(String emailString)
+     public void setEmailHintString(String emailHintString)
      {
-          this.emailString = emailString;
+          this.emailHintString = emailHintString;
      }
-     public void setUsernameString(String usernameString)
+     public void setUsernameHintString(String usernameHintString)
      {
-          this.usernameString = usernameString;
+          this.usernameHintString = usernameHintString;
      }
-     public void setInstructionStringOne(String instructionStringOne)
+     public void setInfoKeyStringInstructionTitleText(String infoKeyStringInstructionTitleText)
      {
-          this.instructionStringOne = instructionStringOne;
+          this.infoKeyStringInstructionTitleText = infoKeyStringInstructionTitleText;
      }
-     public void setInstructionStringTwo(String instructionStringTwo)
+     public void setInfoKeyStringInstructionFollowMapText(String infoKeyStringInstructionFollowMapText)
      {
-          this.instructionStringTwo = instructionStringTwo;
+          this.infoKeyStringInstructionFollowMapText = infoKeyStringInstructionFollowMapText;
      }
-     public void setInstructionStringThree(String instructionStringThree)
+     public void setInfoKeyStringInstructionFindSignsText(String infoKeyStringInstructionFindSignsText)
      {
-          this.instructionStringThree = instructionStringThree;
+          this.infoKeyStringInstructionFindSignsText = infoKeyStringInstructionFindSignsText;
      }
-     public void setInstructionStringFour(String instructionStringFour)
+     public void setInfoKeyStringnstructionWearHeadphonesText(String infoKeyStringnstructionWearHeadphonesText)
      {
-          this.instructionStringFour = instructionStringFour;
+          this.infoKeyStringnstructionWearHeadphonesText = infoKeyStringnstructionWearHeadphonesText;
      }
-     public void setInstructionStringFive(String instructionStringFive)
+     public void setInfoKeyStringInstructionsTakePhotosText(String infoKeyStringInstructionsTakePhotosText)
      {
-          this.instructionStringFive = instructionStringFive;
+          this.infoKeyStringInstructionsTakePhotosText = infoKeyStringInstructionsTakePhotosText;
      }
-     public void setInstructionStringSix(String instructionStringSix)
+     public void setInfoKeyStringInstructionsCallHelpText(String infoKeyStringInstructionsCallHelpText)
      {
-          this.instructionStringSix = instructionStringSix;
+          this.infoKeyStringInstructionsCallHelpText = infoKeyStringInstructionsCallHelpText;
      }
-     public void setInstructionStringSeven(String instructionStringSeven)
+     public void setInfoKeyStringInstructionsSeeThisPageText(String infoKeyStringInstructionsSeeThisPageText)
      {
-          this.instructionStringSeven = instructionStringSeven;
+          this.infoKeyStringInstructionsSeeThisPageText = infoKeyStringInstructionsSeeThisPageText;
+     }
+     public void setInfoKeyStringInstructionsGroupIsReadyText(String infoKeyStringInstructionsGroupIsReadyText)
+     {
+          this.infoKeyStringInstructionsGroupIsReadyText = infoKeyStringInstructionsGroupIsReadyText;
      }
      
      
@@ -323,45 +334,55 @@ public class XmlValuesModel {
      {
           return this.webSocketUser;
      }
+     
      public String getWelcomeString()
      {
           return this.welcomeString;
      }
-     public String getEmailString()
+     public String getEnterDetailsString()
      {
-          return this.emailString;
+    	 return this.enterDetailsString;
      }
-     public String getUsernameString()
+     public String getEmailHintString()
      {
-          return this.usernameString;
+          return this.emailHintString;
      }
-     public String getInstructionStringOne()
+     public String getUsernameHintString()
      {
-          return this.instructionStringOne;
+          return this.usernameHintString;
      }
-     public String getInstructionStringTwo()
+
+     public String getInfoKeyStringInstructionTitleText()
      {
-          return this.instructionStringTwo;
+          return this.infoKeyStringInstructionTitleText;
      }
-     public String getInstructionStringThree()
+     public String getInfoKeyStringInstructionFollowMapText()
      {
-          return this.instructionStringThree;
+          return this.infoKeyStringInstructionFollowMapText;
      }
-     public String getInstructionStringFour()
+     public String getInfoKeyStringInstructionFindSignsText()
      {
-          return this.instructionStringFour;
+          return this.infoKeyStringInstructionFindSignsText;
      }
-     public String getInstructionStringFive()
+     public String getInfoKeyStringnstructionWearHeadphonesText()
      {
-          return this.instructionStringFive;
+          return this.infoKeyStringnstructionWearHeadphonesText;
      }
-     public String getInstructionStringSix()
+     public String getinfoKeyStringInstructionsTakePhotosTextnfoKeyStringInstructionsTakePhotosText()
      {
-          return this.instructionStringSix;
+          return this.infoKeyStringInstructionsTakePhotosText;
      }
-     public String getInstructionStringSeven()
+     public String getInfoKeyStringInstructionsCallHelpText()
      {
-          return this.instructionStringSeven;
+          return this.infoKeyStringInstructionsCallHelpText;
+     }
+     public String getInfoKeyStringInstructionsSeeThisPageText()
+     {
+          return this.infoKeyStringInstructionsSeeThisPageText;
+     }
+     public String getInfoKeyStringInstructionsGroupIsReadyText()
+     {
+          return this.infoKeyStringInstructionsGroupIsReadyText;
      }
      public String getErrorStringOne()
      {

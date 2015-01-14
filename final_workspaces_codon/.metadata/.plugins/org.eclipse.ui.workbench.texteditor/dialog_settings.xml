@@ -15,16 +15,18 @@
 		<item value="false" key="wholeword"/>
 		<item value="" key="selection"/>
 		<list key="findhistory">
-			<item value="helloWorld"/>
-			<item value="helloW"/>
-			<item value="onLocationChanged"/>
-			<item value="preparePlayer"/>
-			<item value="OnLocationChanged"/>
-			<item value="parseSettings"/>
-			<item value="parse"/>
-			<item value="println"/>
+			<item value="welcome to your city"/>
+			<item value="welcomeTextView"/>
+			<item value="multi"/>
+			<item value="welcomeTextView.setText"/>
+			<item value="welcomeString"/>
+			<item value="WelcomeString"/>
+			<item value="getWelcomeString"/>
+			<item value="setWelcomeString"/>
 		</list>
 		<list key="replacehistory">
+			<item value="emailHintString"/>
+			<item value="usernameHintString"/>
 		</list>
 	</section>
 </section>

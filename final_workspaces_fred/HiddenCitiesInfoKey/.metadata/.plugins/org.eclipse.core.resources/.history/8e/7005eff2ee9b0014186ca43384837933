@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hcinfokeywtext"
+    android:orientation="vertical"
+    tools:context=".LinearLayout" >
+
+    <TextView
+        android:id="@+id/instructionTitle"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/instructionTitle"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/instructionFollowMap"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="40dp"
+        android:lines="2"
+        android:text="@string/Follow the map \nand visit the markers" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/instructionFindSigns"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/instructionFindSigns" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/instructionWearHeadphones"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/instructionWearHeadphones" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/instructionsTakePhotos"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/instructionsTakePhotos" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/isntructionsCallHelp"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/isntructionsCallHelp" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/instructionsSeeThisPage"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/instructionsSeeThisPage" 
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/instructionsGroupIsReady"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:lines="2"
+        
+        android:text="@string/OK, got it? \nWhen the others are ready" 
+        android:textColor="@color/white"/>
+
+</LinearLayout>

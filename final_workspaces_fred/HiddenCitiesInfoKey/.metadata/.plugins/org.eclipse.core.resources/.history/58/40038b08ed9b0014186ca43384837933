@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HiddencitiesInfoKey</string>
+    <string name="instructionTitle">HiddencitiesInfoKey</string>
+    <string name="instructionFollowMap">HiddencitiesInfoKey</string>
+    <string name="instructionFindSigns">HiddencitiesInfoKey</string>
+    <string name="instructionWearHeadphones">HiddencitiesInfoKey</string>
+    <string name="instructionsTakePhotos">HiddencitiesInfoKey</string>
+    <string name="isntructionsCallHelp">HiddencitiesInfoKey</string>
+    <string name="instructionsSeeThisPage">HiddencitiesInfoKey</string>
+    <string name="instructionsGroupIsReady">HiddencitiesInfoKey</string>
+    
+
+</resources>
