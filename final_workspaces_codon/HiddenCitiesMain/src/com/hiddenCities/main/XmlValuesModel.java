@@ -55,6 +55,13 @@ public class XmlValuesModel {
      private String errorStringThree;
      private String errorStringFour;
      
+     private String tsvideoplayfragtext1;
+     private String compasaudioplayfragtext1;
+     private String invisibleWallplayfragtext1;
+     private String invisibleWallplayfragtext2;
+     private String portholesplayfragtext1;
+     private String portholesplayfragtext2;
+     
      /************* Define Setter Methods *********/
      
      public void setMarkerLat(Float markerLat)
@@ -241,7 +248,30 @@ public class XmlValuesModel {
      {
           this.errorStringFour = errorStringFour;
      }
-     
+     public void setTsvideoplayfragtext1(String tsvideoplayfragtext1)
+     {
+          this.tsvideoplayfragtext1 = tsvideoplayfragtext1;
+     }
+     public void setCompasaudioplayfragtext1(String compasaudioplayfragtext1)
+     {
+          this.compasaudioplayfragtext1 = compasaudioplayfragtext1;
+     }
+     public void setInvisibleWallplayfragtext1(String invisibleWallplayfragtext1)
+     {
+          this.invisibleWallplayfragtext1 = invisibleWallplayfragtext1;
+     }
+     public void setInvisibleWallplayfragtext2(String invisibleWallplayfragtext2)
+     {
+          this.invisibleWallplayfragtext2 = invisibleWallplayfragtext2;
+     }
+     public void setPortholesplayfragtext1(String portholesplayfragtext1)
+     {
+          this.portholesplayfragtext1 = portholesplayfragtext1;
+     }
+     public void setPortholesplayfragtext2(String portholesplayfragtext2)
+     {
+          this.portholesplayfragtext2 = portholesplayfragtext2;
+     }
      
      
      
@@ -430,6 +460,30 @@ public class XmlValuesModel {
      public String getErrorStringFour()
      {
           return this.errorStringFour;
+     }
+     public String getTsvideoplayfragtext1()
+     {
+          return this.tsvideoplayfragtext1;
+     }
+     public String getCompasaudioplayfragtext1()
+     {
+          return this.compasaudioplayfragtext1;
+     }
+     public String getInvisibleWallplayfragtext1()
+     {
+          return this.invisibleWallplayfragtext1;
+     }
+     public String getInvisibleWallplayfragtext2()
+     {
+          return this.invisibleWallplayfragtext2;
+     }
+     public String getPortholesplayfragtext1()
+     {
+          return this.portholesplayfragtext1;
+     }
+     public String getPortholesplayfragtext2()
+     {
+          return this.portholesplayfragtext2;
      }
      
      

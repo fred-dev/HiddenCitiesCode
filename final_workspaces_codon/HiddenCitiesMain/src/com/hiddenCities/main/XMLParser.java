@@ -336,6 +336,20 @@ public class XMLParser extends DefaultHandler
           else if(localName.equalsIgnoreCase("errorStringFour")){
             	  messageValues.setErrorStringFour(builder.toString());
           }
+          
+          else if (localName.equalsIgnoreCase("tsvideoplayfragtext1")) {
+  			messageValues.setTsvideoplayfragtext1(builder.toString());
+  		} else if (localName.equalsIgnoreCase("compasaudioplayfragtext1")) {
+  			messageValues.setCompasaudioplayfragtext1(builder.toString());
+  		} else if (localName.equalsIgnoreCase("invisibleWallplayfragtext1")) {
+  			messageValues.setInvisibleWallplayfragtext1(builder.toString());
+  		} else if (localName.equalsIgnoreCase("invisibleWallplayfragtext2")) {
+  			messageValues.setInvisibleWallplayfragtext2(builder.toString());
+  		} else if (localName.equalsIgnoreCase("portholesplayfragtext1")) {
+  			messageValues.setPortholesplayfragtext1(builder.toString());
+  		} else if (localName.equalsIgnoreCase("portholesplayfragtext2")) {
+  			messageValues.setPortholesplayfragtext2(builder.toString());
+  		}
      }
      
      

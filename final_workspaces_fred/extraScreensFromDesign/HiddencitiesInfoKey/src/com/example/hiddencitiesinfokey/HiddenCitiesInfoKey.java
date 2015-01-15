@@ -139,12 +139,22 @@ public class HiddenCitiesInfoKey extends Activity implements OnTouchListener {
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-
-		// when the button is pressed we can go to the map view
-		Toast.makeText(getApplicationContext(), "So now we go to the map",
-				Toast.LENGTH_SHORT).show();
-		parseSettings();
+		if(v==exitInfoKeyBtn)
+        {          
+          if(event.getAction() == MotionEvent.ACTION_DOWN)
+          {
+             v.setAlpha(.5f);
+          } 
+          else if(event.getAction() == MotionEvent.ACTION_UP)
+          {
+             v.setAlpha(1f);
+             Toast.makeText(getApplicationContext(), "Go to Map",
+     				Toast.LENGTH_SHORT).show();
+          
+          }
+        }
 		return false;
+
 	}
 
 }

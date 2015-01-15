@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <com.google.android.gms.maps.MapView
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp" >
+    </com.google.android.gms.maps.MapView>
+
+    <Button
+        android:id="@+id/HelpButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="39dp"
+        android:background="@drawable/hcmaphelpbtn" />
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="102dp"
+        android:background="@color/white"
+        android:rotation="90" />
+
+    <Button
+        android:id="@+id/infoButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/map"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="39dp"
+        android:background="@drawable/hcmapinfobtn" />
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@+id/map"
+        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="102dp"
+        android:background="@color/white"
+        android:rotation="90" />
+
+    <Button
+        android:id="@+id/CameraButton"
+        android:layout_width="30dp"
+        android:layout_height="22dp"
+        android:layout_alignBaseline="@+id/HelpButton"
+        android:layout_alignBottom="@+id/HelpButton"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/hcmapphotobtn" />
+
+</RelativeLayout>

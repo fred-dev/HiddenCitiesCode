@@ -17,7 +17,9 @@ import android.os.Environment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -30,8 +32,8 @@ import com.hiddenCities.main.HiddenCitiesMain;
 import com.hiddenCities.main.XMLParser;
 import com.hiddenCities.main.XmlValuesModel;
 
-@SuppressLint("NewApi")
-public class HiddenCitiesLogin extends Fragment
+@SuppressLint({ "NewApi", "ClickableViewAccessibility" })
+public class HiddenCitiesLogin extends Fragment implements OnTouchListener
 {
 
 	private EditText	username			= null;
@@ -39,7 +41,7 @@ public class HiddenCitiesLogin extends Fragment
 	private TextView	enterDetailsText	= null;
 	private TextView	welcomeTextView		= null;
 
-	private Button		login;
+	private Button		loginBtn;
 	int					counter				= 3;
 
 	HiddenCitiesMain	mActivity;
@@ -78,7 +80,8 @@ public class HiddenCitiesLogin extends Fragment
 	      email = (EditText)mView.findViewById(R.id.emailEntry);
 	      welcomeTextView =(TextView)mView.findViewById(R.id.welcomeText);   
 	      enterDetailsText = (TextView)mView.findViewById(R.id.enterDetailsText);  
-	      
+	      loginBtn = (Button) mView.findViewById(R.id.loginButton);
+	      loginBtn.setOnTouchListener(this);
 	      parseSettings();
 
 		return mView;
@@ -141,9 +144,7 @@ public class HiddenCitiesLogin extends Fragment
 			return;
 		}
 
-		mActivity.saveToXml(username.getText().toString(), "username", 0);
-		mActivity.saveToXml(email.getText().toString(), "useremail", 0);
-		mActivity.login();
+		
 
 	}
 
@@ -175,6 +176,26 @@ public class HiddenCitiesLogin extends Fragment
 
 		}
 		return isValid;
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if(v==loginBtn)
+        {          
+          if(event.getAction() == MotionEvent.ACTION_DOWN)
+          {
+             v.setAlpha(.5f);
+          } 
+          else if(event.getAction() == MotionEvent.ACTION_UP)
+          {
+             v.setAlpha(1f);
+             mActivity.saveToXml(username.getText().toString(), "username", 0);
+     		mActivity.saveToXml(email.getText().toString(), "useremail", 0);
+     		mActivity.login();
+          
+          }
+        }
+		return false;
 	}
 
 }

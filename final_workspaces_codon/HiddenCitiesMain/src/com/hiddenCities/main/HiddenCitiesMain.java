@@ -127,6 +127,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 	Handler						mHandler;
 	WakeLock					mWakeLock;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -337,7 +338,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	public void login()
 	{
-		Toast.makeText(this.getApplicationContext(), "Logging in, I'll just be a moment", Toast.LENGTH_SHORT).show();
+		
 
 		//hide keyboard
 		final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -618,6 +619,7 @@ public class HiddenCitiesMain extends Activity implements LocationListener, Medi
 
 	}
 
+	@SuppressWarnings("static-access")
 	public void detachCameraScene()
 	{
 

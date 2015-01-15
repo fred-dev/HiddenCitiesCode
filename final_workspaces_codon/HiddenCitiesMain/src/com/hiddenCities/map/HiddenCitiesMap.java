@@ -41,7 +41,6 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -56,19 +55,16 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 
 	private GoogleApiClient					mGoogleApiClient;
 
-	private static final int[]				BUTTON_IDS				= { R.id.CameraButton, R.id.HelpButton
-
-																	};
+	private static final int[]				BUTTON_IDS				= { R.id.CameraButton, R.id.HelpButton, R.id.infoButton};
+	
 	private List<Button>					buttonList;
 
 	Button									mButton;
 
 	static final ToneGenerator				_toneGenerator			= new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
-	static int[]							TONE_IDS				= { ToneGenerator.TONE_DTMF_1,
-			ToneGenerator.TONE_DTMF_2,
-
-																	};
+	static int[]							TONE_IDS				= { ToneGenerator.TONE_DTMF_1,ToneGenerator.TONE_DTMF_2,};
+	
 	private static final LocationRequest	REQUEST					= LocationRequest.create()
 																			.setInterval(5000)
 																			// 5 seconds
@@ -80,6 +76,8 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	LatLng[]								mWaypointLatLongList	= null;
 	LatLng[]								mMarkerLatLongList		= null;
 	Marker[]								mMarkerList				= null;
+	int[]									mMarkerVisitedList		=null;
+	String[]								mMarkerSceneNameList	=null;
 
 	View									mView;
 	HiddenCitiesMain						mActivity;
@@ -201,12 +199,16 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	public void fillWithData(List<XmlValuesModel> aMarkerData, List<XmlValuesModel> aWaypointData)
 	{
 		if (aMarkerData != null) {
+			mMarkerVisitedList		=new int[aMarkerData.size()];
+			mMarkerSceneNameList = new String[aMarkerData.size()];
 			mMarkerList = new Marker[aMarkerData.size()];
 			mMarkerLatLongList = new LatLng[aMarkerData.size()];
 			for (int i = 0; i < aMarkerData.size(); i++) {
 				XmlValuesModel xmlRowData = aMarkerData.get(i);
 				if (xmlRowData != null) {
 					mMarkerLatLongList[i] = new LatLng(xmlRowData.getMarkerLat(), xmlRowData.getMarkerLong());
+					mMarkerVisitedList[i] = xmlRowData.getMarkerReached();
+					mMarkerSceneNameList[i] = xmlRowData.getInstallationAtMarker();
 				} else
 					Log.e("Markers", "Markers value null");
 			}
@@ -240,7 +242,12 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 				mMap.setOnMyLocationButtonClickListener(this);
 				if (mMarkerLatLongList != null) {
 					for (int l = 0; l < mMarkerLatLongList.length; l++) {
-						addNewMarker(mMarkerLatLongList[l], Integer.toString(l));
+						if(mMarkerVisitedList[l]==0){
+						addNewMarker(mMarkerLatLongList[l], Integer.toString(l), false);
+						}
+						else if(mMarkerVisitedList[l]==1){
+							addNewMarker(mMarkerLatLongList[l], Integer.toString(l), true);
+						}
 					}
 				}
 
@@ -290,8 +297,9 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 				locationMarker.setLatitude(mMarkerLatLongList[l].latitude);
 				locationMarker.setLongitude(mMarkerLatLongList[l].longitude);
 				distance = locationMarker.distanceTo(location);
-				if (distance < 10) {
-					mActivity.doVibrate();
+				if (distance < 10 && mMarkerVisitedList[l]==0) {
+					mMarkerVisitedList[l]=1;
+					//load the scene from the markers installationAtMarker String mMarkerSceneNameList[l];
 				}
 			}
 		}
@@ -329,15 +337,14 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	@Override
 	public boolean onMyLocationButtonClick()
 	{
-		Toast.makeText(mActivity, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+		
 		// Return false so that we don't consume the event and the default behavior still occurs
 		// (the camera animates to the user's current position).
 		return false;
 	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event)
-	{
+	public boolean onTouch(View v, MotionEvent event) {
 		int tempStore = 0;
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			for (int j = 0; j < 2; j++) {
@@ -346,19 +353,24 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 				}
 			}
 			_toneGenerator.startTone(TONE_IDS[tempStore]);
-			System.out.println(BUTTON_IDS[tempStore]);
-			Log.d("button number", Integer.toString(tempStore));
-			if (v.getId() == R.id.HelpButton) {
-				mActivity.attachHelpDialerScene();
-			} else if (v.getId() == R.id.CameraButton) {
-				mActivity.attachCameraScene();
-			}
+			v.setAlpha(.5f);
+
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			_toneGenerator.stopTone();
+			v.setAlpha(1f);
+			
+			if (v.getId() == R.id.HelpButton) {
+				mActivity.attachHelpDialerScene();
+
+			} else if (v.getId() == R.id.CameraButton) {
+				mActivity.attachCameraScene();
+				
+			}else if (v.getId() == R.id.infoButton) {
+
+			}
 
 		}
 		return false;
 	}
-
 }

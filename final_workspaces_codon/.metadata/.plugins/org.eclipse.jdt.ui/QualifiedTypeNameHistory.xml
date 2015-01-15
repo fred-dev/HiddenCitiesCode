@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLng"/>
 <fullyQualifiedTypeName name="android.text.Html"/>
-<fullyQualifiedTypeName name="com.hiddenCities.R.id"/>
 <fullyQualifiedTypeName name="com.hiddenCities.main.XmlValuesModel"/>
 <fullyQualifiedTypeName name="android.os.Environment"/>
 <fullyQualifiedTypeName name="java.io.File"/>
@@ -16,4 +15,5 @@
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.BitmapDescriptorFactory"/>
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLngBounds"/>
 <fullyQualifiedTypeName name="com.google.android.gms.maps.CameraUpdate"/>
+<fullyQualifiedTypeName name="com.hiddenCities.R.id"/>
 </qualifiedTypeNameHistroy>
