@@ -27,29 +27,24 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int hcinfokey=0x7f020000;
         public static final int hcinfokeyletsgobtn=0x7f020001;
         public static final int hcinfokeywtext=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
+        public static final int hcinterfacebtnplay=0x7f020003;
+        public static final int hcinterfacegopageconductor=0x7f020004;
+        public static final int hcinterfacegopageconductortext=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
     }
     public static final class id {
-        public static final int exitInfoKeyBtn=0x7f070008;
-        public static final int instructionFindSigns=0x7f070002;
-        public static final int instructionFollowMap=0x7f070001;
-        public static final int instructionTitle=0x7f070000;
-        public static final int instructionWearHeadphones=0x7f070003;
-        public static final int instructionsGroupIsReady=0x7f070007;
-        public static final int instructionsSeeThisPage=0x7f070006;
-        public static final int instructionsTakePhotos=0x7f070004;
-        public static final int isntructionsCallHelp=0x7f070005;
+        public static final int conductoraudioplayfragtext1=0x7f070000;
     }
     public static final class layout {
         public static final int play_fragment_conductor=0x7f030000;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
+        public static final int conductoraudioplayfragtext1=0x7f050008;
         public static final int instructionFindSigns=0x7f050003;
         public static final int instructionFollowMap=0x7f050002;
         public static final int instructionTitle=0x7f050001;
         public static final int instructionWearHeadphones=0x7f050004;
-        public static final int instructionsGroupIsReady=0x7f050008;
         public static final int instructionsSeeThisPage=0x7f050007;
         public static final int instructionsTakePhotos=0x7f050005;
         public static final int isntructionsCallHelp=0x7f050006;

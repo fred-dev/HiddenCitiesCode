@@ -25,18 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("ClickableViewAccessibility")
-public class PlayFragmentConductor extends Activity implements OnTouchListener {
+public class PlayFragmentConductor extends Activity  {
 
-	private Button exitInfoKeyBtn;
 
-	private TextView instructionTitleText = null;
-	private TextView instructionFollowMapText = null;
-	private TextView instructionFindSignsText = null;
-	private TextView instructionWearHeadphonesText = null;
-	private TextView instructionsTakePhotosText = null;
-	private TextView instructionsCallHelpText = null;
-	private TextView instructionsSeeThisPageText = null;
-	private TextView instructionsGroupIsReadyText = null;
+
+	private TextView conductoraudioplayfragtext1 = null;
+
 	
 	XmlValuesModel infoStringData = null;
 
@@ -61,17 +55,8 @@ public class PlayFragmentConductor extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-		exitInfoKeyBtn = (Button) findViewById(R.id.exitInfoKeyBtn);
-		exitInfoKeyBtn.setOnTouchListener(this);
 
-		instructionTitleText = (TextView) findViewById(R.id.instructionTitle);
-		instructionFollowMapText = (TextView) findViewById(R.id.instructionFollowMap);
-		instructionFindSignsText = (TextView) findViewById(R.id.instructionFindSigns);
-		instructionWearHeadphonesText = (TextView) findViewById(R.id.instructionWearHeadphones);
-		instructionsTakePhotosText = (TextView) findViewById(R.id.instructionsTakePhotos);
-		instructionsCallHelpText = (TextView) findViewById(R.id.isntructionsCallHelp);
-		instructionsSeeThisPageText = (TextView) findViewById(R.id.instructionsSeeThisPage);
-		instructionsGroupIsReadyText = (TextView) findViewById(R.id.instructionsGroupIsReady);
+		conductoraudioplayfragtext1 = (TextView) findViewById(R.id.conductoraudioplayfragtext1);
 	}
 	void parseSettings() {
 		try {
@@ -96,14 +81,8 @@ public class PlayFragmentConductor extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					instructionTitleText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					instructionFollowMapText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
-					instructionFindSignsText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFindSignsText()));
-					instructionWearHeadphonesText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringnstructionWearHeadphonesText()));
-					instructionsTakePhotosText.setText(Html.fromHtml(xmlRowData.getinfoKeyStringInstructionsTakePhotosTextnfoKeyStringInstructionsTakePhotosText()));
-					instructionsCallHelpText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsCallHelpText()));
-					instructionsSeeThisPageText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsSeeThisPageText()));
-					instructionsGroupIsReadyText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsGroupIsReadyText()));
+					conductoraudioplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");
@@ -138,24 +117,6 @@ public class PlayFragmentConductor extends Activity implements OnTouchListener {
 		super.onPause();
 	}
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
 
-		if(v==exitInfoKeyBtn)
-        {          
-          if(event.getAction() == MotionEvent.ACTION_DOWN)
-          {
-             v.setAlpha(.5f);
-          } 
-          else if(event.getAction() == MotionEvent.ACTION_UP)
-          {
-             v.setAlpha(1f);
-             Toast.makeText(getApplicationContext(), "Go to Conductor Audio",
-     				Toast.LENGTH_SHORT).show();
-          
-          }
-        }
-		return false;
-	}
 
 }

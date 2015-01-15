@@ -27,16 +27,9 @@ import android.widget.Toast;
 @SuppressLint("ClickableViewAccessibility")
 public class EndofSceneFragment extends Activity implements OnTouchListener {
 
-	private Button exitInfoKeyBtn;
+	
+	private TextView endofinstallationText = null;
 
-	private TextView instructionTitleText = null;
-	private TextView instructionFollowMapText = null;
-	private TextView instructionFindSignsText = null;
-	private TextView instructionWearHeadphonesText = null;
-	private TextView instructionsTakePhotosText = null;
-	private TextView instructionsCallHelpText = null;
-	private TextView instructionsSeeThisPageText = null;
-	private TextView instructionsGroupIsReadyText = null;
 	
 	XmlValuesModel infoStringData = null;
 
@@ -61,17 +54,10 @@ public class EndofSceneFragment extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-		exitInfoKeyBtn = (Button) findViewById(R.id.exitInfoKeyBtn);
-		exitInfoKeyBtn.setOnTouchListener(this);
+		
 
-		instructionTitleText = (TextView) findViewById(R.id.instructionTitle);
-		instructionFollowMapText = (TextView) findViewById(R.id.instructionFollowMap);
-		instructionFindSignsText = (TextView) findViewById(R.id.instructionFindSigns);
-		instructionWearHeadphonesText = (TextView) findViewById(R.id.instructionWearHeadphones);
-		instructionsTakePhotosText = (TextView) findViewById(R.id.instructionsTakePhotos);
-		instructionsCallHelpText = (TextView) findViewById(R.id.isntructionsCallHelp);
-		instructionsSeeThisPageText = (TextView) findViewById(R.id.instructionsSeeThisPage);
-		instructionsGroupIsReadyText = (TextView) findViewById(R.id.instructionsGroupIsReady);
+		endofinstallationText = (TextView) findViewById(R.id.endofinstallationText);
+	
 	}
 	void parseSettings() {
 		try {
@@ -96,14 +82,7 @@ public class EndofSceneFragment extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					instructionTitleText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					instructionFollowMapText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
-					instructionFindSignsText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFindSignsText()));
-					instructionWearHeadphonesText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringnstructionWearHeadphonesText()));
-					instructionsTakePhotosText.setText(Html.fromHtml(xmlRowData.getinfoKeyStringInstructionsTakePhotosTextnfoKeyStringInstructionsTakePhotosText()));
-					instructionsCallHelpText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsCallHelpText()));
-					instructionsSeeThisPageText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsSeeThisPageText()));
-					instructionsGroupIsReadyText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsGroupIsReadyText()));
+					endofinstallationText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");

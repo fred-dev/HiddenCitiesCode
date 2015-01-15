@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
@@ -94,9 +95,12 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 		mPlayManagers[0].play();
 
 		ImageView IV = (ImageView) mView.findViewById(R.id.imageView1);
-		Bitmap bMap = BitmapFactory.decodeFile(root + "/hiddenCities/images/hiddencitieshelpscreen.png");
-		IV.setImageBitmap(bMap);
-
+		final AnimationDrawable mailAnimation = (AnimationDrawable) IV.getBackground();
+		IV.post(new Runnable() {
+		    public void run() {
+		        if ( mailAnimation != null ) mailAnimation.start();
+		      }
+		});
 		mView.setOnTouchListener(this);
 		return mView;
 	}
@@ -144,9 +148,11 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 		System.out.println(v.getId());
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			v.setAlpha((float) 0.5);
 			for (int j = 0; j < 12; j++) {
 				if (v.getId() == BUTTON_IDS[j]) {
 					tempStore = j;
+					
 				}
 			}
 			_toneGenerator.startTone(TONE_IDS[tempStore]);
@@ -158,6 +164,7 @@ public class HiddenCitiesHelpDialer extends Fragment implements View.OnTouchList
 			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
+			v.setAlpha((float) 1.0);
 			_toneGenerator.stopTone();
 			switch (menuLevel) {
 				case 0:

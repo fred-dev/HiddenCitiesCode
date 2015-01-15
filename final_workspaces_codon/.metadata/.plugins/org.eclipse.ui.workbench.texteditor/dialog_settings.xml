@@ -3,28 +3,34 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
 		<item value="151" key="DIALOG_Y_ORIGIN"/>
-		<item value="399" key="DIALOG_HEIGHT"/>
 		<item value="1223" key="DIALOG_X_ORIGIN"/>
+		<item value="399" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="mMarkerVisitedList" key="selection"/>
+		<item value="116dp" key="selection"/>
 		<list key="findhistory">
+			<item value="118dp"/>
+			<item value="120dp"/>
+			<item value="52dp"/>
+			<item value="2dp"/>
+			<item value="android:layout_gravity=&quot;fill_horizontal&quot;"/>
 			<item value="mMarkerVisitedList"/>
 			<item value="markerReached"/>
 			<item value="errorStringFour"/>
-			<item value="marker"/>
-			<item value="addNewMarker"/>
-			<item value="setUpMapIfNeeded"/>
-			<item value="markerLong"/>
-			<item value="gpsAudioPointReached"/>
 		</list>
 		<list key="replacehistory">
+			<item value="116dp"/>
+			<item value="118dp"/>
+			<item value="50dp"/>
+			<item value="52dp"/>
+			<item value="1dp"/>
+			<item value=""/>
 			<item value="emailHintString"/>
 			<item value="usernameHintString"/>
 		</list>

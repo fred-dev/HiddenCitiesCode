@@ -16,4 +16,5 @@
 <fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLngBounds"/>
 <fullyQualifiedTypeName name="com.google.android.gms.maps.CameraUpdate"/>
 <fullyQualifiedTypeName name="com.hiddenCities.R.id"/>
+<fullyQualifiedTypeName name="android.graphics.drawable.AnimationDrawable"/>
 </qualifiedTypeNameHistroy>
