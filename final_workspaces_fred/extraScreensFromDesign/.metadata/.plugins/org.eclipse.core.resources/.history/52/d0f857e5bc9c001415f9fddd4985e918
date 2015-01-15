@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PlayFragmentPortholes</string>
+    <string name="instructionTitle">What to look out for</string>
+    <string name="instructionFollowMap">Follow the map\nand visit the markers</string>
+    <string name="instructionFindSigns">When you reach one of these markers, \nlook at your phone for instructions</string>
+    <string name="instructionWearHeadphones">Keep the headphones on \nunless you are in danger</string>
+    <string name="instructionsTakePhotos">Take pictures whenever you want\nwe will send them to you later</string>
+    <string name="isntructionsCallHelp">Need some help?\nPress SOS to call us</string>
+    <string name="instructionsSeeThisPage">Want to see this again?\nPress the info key.</string>
+    <string name="instructionsGroupIsReady">When the others are ready\nlet\'s get going</string>
+    <string name="invisibleWallplayfragtext1">Explore each frame \nthrough the phone</string>
+    <string name="invisibleWallplayfragtext2">If it is dark\n turn on the light</string>
+    
+    
+    
+    
+
+</resources>

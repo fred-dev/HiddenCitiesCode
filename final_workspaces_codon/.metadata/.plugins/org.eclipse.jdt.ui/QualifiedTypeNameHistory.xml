@@ -12,4 +12,8 @@
 <fullyQualifiedTypeName name="javax.xml.parsers.SAXParserFactory"/>
 <fullyQualifiedTypeName name="javax.xml.parsers.SAXParser"/>
 <fullyQualifiedTypeName name="org.xml.sax.XMLReader"/>
+<fullyQualifiedTypeName name="com.google.android.gms.maps.model.BitmapDescriptor"/>
+<fullyQualifiedTypeName name="com.google.android.gms.maps.model.BitmapDescriptorFactory"/>
+<fullyQualifiedTypeName name="com.google.android.gms.maps.model.LatLngBounds"/>
+<fullyQualifiedTypeName name="com.google.android.gms.maps.CameraUpdate"/>
 </qualifiedTypeNameHistroy>

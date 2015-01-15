@@ -5,7 +5,7 @@
                <useremail>gdg@ggh.vij</useremail>
                <usernameHintString>Name:</usernameHintString>
                <emailHintString>Email:</emailHintString>
-               <welcomeString>WELCOME T1111O<![CDATA[<br>]]>YOUR CITYqwqw</welcomeString>
+               <welcomeString>WELCOME TO<![CDATA[<br>]]>YOUR CITY</welcomeString>
                <enterDetailsString>To start <![CDATA[<br>]]>please enter your name and email:</enterDetailsString>
           </user>
      </users>
@@ -15,26 +15,36 @@
                <markerId>0</markerId>
                <markerLat>44.821631</markerLat>
                <markerLong>-0.564312</markerLong>
+               <installationAtMarker>360video</installationAtMarker>
+               <markerReached>0</markerReached>
           </marker>
           <marker>
                <markerId>1</markerId>
                <markerLat>44.822371</markerLat>
                <markerLong>-0.562205</markerLong>
+               <installationAtMarker>portholes</installationAtMarker>
+               <markerReached>0</markerReached>
           </marker>
           <marker>
                <markerId>2</markerId>
                <markerLat>44.823157</markerLat>
                <markerLong>-0.562783</markerLong>
+               <installationAtMarker>compassAudio</installationAtMarker>
+               <markerReached>0</markerReached>
           </marker>
           <marker>
                <markerId>3</markerId>
                <markerLat>44.822462</markerLat>
                <markerLong>-0.565729</markerLong>
+               <installationAtMarker>invisibleWall</installationAtMarker>
+               <markerReached>0</markerReached>
           </marker>
           <marker>
                <markerId>4</markerId>
                <markerLat>44.821154</markerLat>
                <markerLong>-0.565731</markerLong>
+               <installationAtMarker>conductor</installationAtMarker>
+               <markerReached>0</markerReached>
           </marker>
      </markers>
      
@@ -92,18 +102,22 @@
                <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
                <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
                <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+               <gpsAudioPointReached>0</gpsAudioPointReached>
+               
           </gpsAudioPlayer>
           <gpsAudioPlayer>
                <gpsAudioPlayerId>1</gpsAudioPlayerId>
                <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
                <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
                <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+               <gpsAudioPointReached>0</gpsAudioPointReached>
           </gpsAudioPlayer>
           <gpsAudioPlayer>
                <gpsAudioPlayerId>1</gpsAudioPlayerId>
                <gpsAudioPlayerLat>52.393100</gpsAudioPlayerLat>
                <gpsAudioPlayerLong>4.911760</gpsAudioPlayerLong>
                <gpsAudioPlayerAudioFile>IntroText.wav</gpsAudioPlayerAudioFile>
+               <gpsAudioPointReached>0</gpsAudioPointReached>
           </gpsAudioPlayer>
      </gpsAudioPlayers>
      <portholes>
@@ -122,9 +136,6 @@
      </colours>
      <messageStrings>
           <messageString>
-               <welcomeString>Welcome to your city</welcomeString>
-               <emailString>Email</emailString>
-               <usernameString>Username</usernameString>
                <infoKeyStringInstructionTitleText>What to look out for</infoKeyStringInstructionTitleText>
                <infoKeyStringInstructionFollowMapText>Follow the map<![CDATA[<br>]]>and visit the markers</infoKeyStringInstructionFollowMapText>
                <infoKeyStringInstructionFindSignsText>When you reach one of these markers, <![CDATA[<br>]]>look at your phone for instructions</infoKeyStringInstructionFindSignsText>
@@ -133,10 +144,19 @@
                <infoKeyStringInstructionsCallHelpText>Need some help?<![CDATA[<br>]]>Press SOS to call us</infoKeyStringInstructionsCallHelpText>
                <infoKeyStringInstructionsSeeThisPageText>Want to see this again?<![CDATA[<br>]]>Press the info key.</infoKeyStringInstructionsSeeThisPageText>
                <infoKeyStringInstructionsGroupIsReadyText>When the others are ready<![CDATA[<br>]]>let's get going</infoKeyStringInstructionsGroupIsReadyText>
+               
                <errorStringOne>Error One</errorStringOne>
                <errorStringTwo>Error One</errorStringTwo>
                <errorStringThree>Error One</errorStringThree>
                <errorStringFour>Error One</errorStringFour>
+
+               <tsvideoplayfragtext1>Turn and explore</tsvideoplayfragtext1>
+               <compasaudioplayfragtext1>Turn and explore</compasaudioplayfragtext1>
+               <invisibleWallplayfragtext1>Explore the frame together<![CDATA[<br>]]>through the phone</invisibleWallplayfragtext1>
+               <invisibleWallplayfragtext2>If it is too dark<![CDATA[<br>]]>turn on the light</invisibleWallplayfragtext2>
+               <portholesplayfragtext1>Explore each frame  <![CDATA[<br>]]>through the phone</portholesplayfragtext1>
+               <portholesplayfragtext2>If it is too dark<![CDATA[<br>]]>turn on the light</portholesplayfragtext2>
+               
           </messageString>
      </messageStrings>
      <networkInfo>

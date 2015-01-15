@@ -9,7 +9,6 @@ import com.hiddenCities.main.XmlValuesModel;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +27,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -177,7 +178,23 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 	{
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(point);
+		markerOptions.title(title);	
+		mMap.addMarker(markerOptions);
+	}
+	
+	public void addNewMarker(LatLng point, String title, boolean visited)
+	{
+		
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(point);
 		markerOptions.title(title);
+		if(visited==true){
+			BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+			markerOptions.icon(bitmapDescriptor);		
+		}
+		else{
+			
+		}
 		mMap.addMarker(markerOptions);
 	}
 
@@ -233,8 +250,9 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 						options.add(mWaypointLatLongList[j]).color(Color.BLUE).width(15);
 					}
 					mMap.addPolyline(options);
-					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mWaypointLatLongList[0], 17));
+					mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarkerLatLongList[0], 16));
 				}
+				
 			}
 		}
 	}
@@ -274,8 +292,6 @@ implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener, On
 				distance = locationMarker.distanceTo(location);
 				if (distance < 10) {
 					mActivity.doVibrate();
-					Toast.makeText(mActivity.getApplicationContext(), "We are close to waypoint" + Integer.toString(l),
-							Toast.LENGTH_SHORT).show();
 				}
 			}
 		}

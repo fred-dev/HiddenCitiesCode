@@ -5,6 +5,8 @@ public class XmlValuesModel {
      private  float markerLat;
      private  float markerLong;
      private  int markerId;
+     private int markerReached;
+     private String installationAtMarker;
      
      private  float wayPointLat;
      private  float wayPointLong;
@@ -14,6 +16,7 @@ public class XmlValuesModel {
      private  float gpsAudioPlayerLat;
      private  float gpsAudioPlayerLong;
      private String gpsAudioPlayerFile;
+     private int gpsAudioPointReached;
      
      private String userName;
      private String userEmail;
@@ -66,6 +69,14 @@ public class XmlValuesModel {
      {
           this.markerId = markerId;
      }
+     public void setMarkerReached(int markerReached)
+     {
+          this.markerReached = markerReached;
+     }
+     public void setInstallationAtMarker(String installationAtMarker)
+     {
+          this.installationAtMarker = installationAtMarker;
+     }
      
      public void setWayPointLat(Float wayPointLat)
      {
@@ -95,6 +106,11 @@ public class XmlValuesModel {
      public void setGpsAudioPlayerAudioFile(String gpsAudioPlayerFile){
           this.gpsAudioPlayerFile=gpsAudioPlayerFile;
      }
+     public void setGpsAudioPointReached(int gpsAudioPointReached){
+         this.gpsAudioPointReached=gpsAudioPointReached;
+    }
+    
+     
      
      public void setUsername(String userName)
      {
@@ -243,6 +259,16 @@ public class XmlValuesModel {
      {
           return markerId;
      }
+    
+     public int getMarkerReached()
+     {
+          return markerReached;
+     }
+     public String getInstallationAtMarker()
+     {
+          return installationAtMarker;
+     }
+     
      public float getWaypointLat()
      {
           return wayPointLat;
@@ -271,6 +297,11 @@ public class XmlValuesModel {
      public String getGpsAudioPlayerAudioFile(){
           return this.gpsAudioPlayerFile;
      }
+     public int getGpsAudioPointReached(){
+         return this.gpsAudioPointReached;
+    }
+     
+     
      
      public String getUsername()
      {

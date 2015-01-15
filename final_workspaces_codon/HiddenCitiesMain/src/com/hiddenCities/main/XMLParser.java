@@ -13,7 +13,7 @@ public class XMLParser extends DefaultHandler
      
      List<XmlValuesModel> markerList=null;
      List<XmlValuesModel> waypointList=null;
-      List<XmlValuesModel> idList=null;
+     List<XmlValuesModel> idList=null;
      List<XmlValuesModel> networkList=null;
      List<XmlValuesModel> messageList=null;
      List<XmlValuesModel> colourList=null;
@@ -215,6 +215,12 @@ public class XMLParser extends DefaultHandler
           else if(localName.equalsIgnoreCase("markerLong")){
             	  markerValues.setMarkerLong(Float.parseFloat(builder.toString()));
           }
+          else if(localName.equalsIgnoreCase("markerReached")){
+        	  markerValues.setMarkerReached(Integer.parseInt(builder.toString()));
+          }
+          else if(localName.equalsIgnoreCase("installationAtMarker")){
+        	  markerValues.setInstallationAtMarker(builder.toString());
+          }
           
           else  if(localName.equalsIgnoreCase("waypointId")){
                
@@ -240,9 +246,11 @@ public class XMLParser extends DefaultHandler
             	  gpsAudioPlayerValues.setGpsAudioPlayerLong(Float.parseFloat(builder.toString()));
           }
           else if(localName.equalsIgnoreCase("gpsAudioPlayerAudioFile")){
-            	  gpsAudioPlayerValues.setGpsAudioPlayerAudioFile(builder.toString());
+        	  gpsAudioPlayerValues.setGpsAudioPlayerAudioFile(builder.toString());
           }
-          
+          else if(localName.equalsIgnoreCase("gpsAudioPointReached")){
+        	  gpsAudioPlayerValues.setGpsAudioPointReached(Integer.parseInt(builder.toString()));
+          }
           else if(localName.equalsIgnoreCase("portholeDataDat")){
             	  portholeValues.setPortholeDataDat(builder.toString());
           }

@@ -3,26 +3,26 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
 		<item value="151" key="DIALOG_Y_ORIGIN"/>
-		<item value="399" key="DIALOG_HEIGHT"/>
 		<item value="1223" key="DIALOG_X_ORIGIN"/>
+		<item value="399" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="setUpMapIfNeeded" key="selection"/>
 		<list key="findhistory">
-			<item value="welcome to your city"/>
-			<item value="welcomeTextView"/>
-			<item value="multi"/>
-			<item value="welcomeTextView.setText"/>
-			<item value="welcomeString"/>
-			<item value="WelcomeString"/>
-			<item value="getWelcomeString"/>
-			<item value="setWelcomeString"/>
+			<item value="setUpMapIfNeeded"/>
+			<item value="markerLong"/>
+			<item value="gpsAudioPointReached"/>
+			<item value="markerReached"/>
+			<item value="boolean"/>
+			<item value="gpsAudioPlayerFile"/>
+			<item value="markerId"/>
+			<item value="addNewMarker"/>
 		</list>
 		<list key="replacehistory">
 			<item value="emailHintString"/>
