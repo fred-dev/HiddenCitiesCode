@@ -161,9 +161,18 @@
                <endofinstallationText>You can now move<![CDATA[<br>]]>to the next location</endofinstallationText>
                <conductoraudioplayfragtext1>You can now move<![CDATA[<br>]]>to the next location</conductoraudioplayfragtext1>
                
-               
-               
-               
+               <error1DetailText1>You can now move<![CDATA[<br>]]>to the next location</error1DetailText1>
+               <error1DetailText2>You can now move<![CDATA[<br>]]>to the next location</error1DetailText2>
+               <error2DetailText1>You can now move<![CDATA[<br>]]>to the next location</error2DetailText1>
+               <error2DetailText2>You can now move<![CDATA[<br>]]>to the next location</error2DetailText2>
+               <error2DetailText3>You can now move<![CDATA[<br>]]>to the next location</error2DetailText3>
+               <error3DetailText1>You can now move<![CDATA[<br>]]>to the next location</error3DetailText1>
+               <error3DetailText2>You can now move<![CDATA[<br>]]>to the next location</error3DetailText2>
+               <error3DetailText3>You can now move<![CDATA[<br>]]>to the next location</error3DetailText3>
+               <error4DetailText1>You can now move<![CDATA[<br>]]>to the next location</error4DetailText1>
+               <error4DetailText2>You can now move<![CDATA[<br>]]>to the next location</error4DetailText2>
+               <error4DetailText3>You can now move<![CDATA[<br>]]>to the next location</error4DetailText3>
+ 
           </messageString>
      </messageStrings>
      <networkInfo>

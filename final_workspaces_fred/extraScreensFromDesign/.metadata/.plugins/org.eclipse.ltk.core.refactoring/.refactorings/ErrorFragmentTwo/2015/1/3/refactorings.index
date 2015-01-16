@@ -1,3 +1,21 @@
 1421322587072	Rename package 'com.example.hiddencitiesinfokey'
 1421322592783	Rename type 'HiddenCitiesInfoKey'
 1421322765209	Rename resource 'info_key.xml'
+1421418536004	Rename package 'com.example.ErrorFragmentOne'
+1421418548503	Rename type 'ErrorFragmentOne'
+1421418566358	Rename resource 'error_fragment_one.xml'
+1421418587310	Delete elements
+1421418646038	Delete elements
+1421418651933	Copy file
+1421418653282	Copy file
+1421418654828	Copy file
+1421418664958	Delete elements
+1421418677509	Delete elements
+1421419165791	Delete element
+1421421221311	Delete element
+1421421500159	Rename package 'com.example.ErrorFragmentTwo'
+1421421513865	Rename package 'com.example.ErrorFragmentOne'
+1421421522056	Delete element
+1421421527741	Delete element
+1421421550558	Rename package 'com.example.ErrorFragmentOne'
+1421421643586	Rename type 'ErrorFragmentTwo'

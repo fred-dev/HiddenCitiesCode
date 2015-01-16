@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list
+    xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <item android:drawable="@drawable/hcspinwheel1" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel2" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel3" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel4" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel5" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel6" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel7" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel8" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel9" android:duration="50" />
+    <item android:drawable="@drawable/hcspinwheel10" android:duration="50" />
+   
+</animation-list>

@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hcinterfaceerror2"
+    android:orientation="vertical"
+    tools:context=".LinearLayout" >
+
+    <ImageView
+        android:id="@+id/hcspinwheelAnimationView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="110dp"
+        android:background="@anim/error_1_animation"/>
+
+    <TextView
+        android:id="@+id/error3DetailText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="150dp"
+        android:text="@string/error3DetailText1"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/error2DetailText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/error3DetailText2"
+        android:textColor="@color/white" 
+        android:lines="2"/>
+
+    <TextView
+        android:id="@+id/error3DetailText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="10dp"
+        android:lines="2"
+		android:text="@string/error3DetailText3"
+        android:textColor="@color/white" />
+
+</LinearLayout>

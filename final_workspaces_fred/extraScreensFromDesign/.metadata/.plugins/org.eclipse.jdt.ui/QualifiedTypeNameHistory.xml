@@ -4,4 +4,7 @@
 <fullyQualifiedTypeName name="android.media.MediaPlayer"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="android.view.Menu"/>
+<fullyQualifiedTypeName name="android.widget.ImageView"/>
+<fullyQualifiedTypeName name="android.graphics.drawable.AnimationDrawable"/>
+<fullyQualifiedTypeName name="android.webkit.WebView"/>
 </qualifiedTypeNameHistroy>

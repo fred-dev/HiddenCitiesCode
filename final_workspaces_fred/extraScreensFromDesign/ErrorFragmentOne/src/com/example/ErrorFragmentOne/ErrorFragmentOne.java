@@ -12,6 +12,7 @@ import org.xml.sax.XMLReader;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
@@ -21,22 +22,17 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("ClickableViewAccessibility")
 public class ErrorFragmentOne extends Activity implements OnTouchListener {
 
-	private Button exitInfoKeyBtn;
 
-	private TextView instructionTitleText = null;
-	private TextView instructionFollowMapText = null;
-	private TextView instructionFindSignsText = null;
-	private TextView instructionWearHeadphonesText = null;
-	private TextView instructionsTakePhotosText = null;
-	private TextView instructionsCallHelpText = null;
-	private TextView instructionsSeeThisPageText = null;
-	private TextView instructionsGroupIsReadyText = null;
+	private TextView error1DetailText1 = null;
+	private TextView error1DetailText2 = null;
+
 	
 	XmlValuesModel infoStringData = null;
 
@@ -61,17 +57,19 @@ public class ErrorFragmentOne extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-		exitInfoKeyBtn = (Button) findViewById(R.id.exitInfoKeyBtn);
-		exitInfoKeyBtn.setOnTouchListener(this);
 
-		instructionTitleText = (TextView) findViewById(R.id.instructionTitle);
-		instructionFollowMapText = (TextView) findViewById(R.id.instructionFollowMap);
-		instructionFindSignsText = (TextView) findViewById(R.id.instructionFindSigns);
-		instructionWearHeadphonesText = (TextView) findViewById(R.id.instructionWearHeadphones);
-		instructionsTakePhotosText = (TextView) findViewById(R.id.instructionsTakePhotos);
-		instructionsCallHelpText = (TextView) findViewById(R.id.isntructionsCallHelp);
-		instructionsSeeThisPageText = (TextView) findViewById(R.id.instructionsSeeThisPage);
-		instructionsGroupIsReadyText = (TextView) findViewById(R.id.instructionsGroupIsReady);
+		error1DetailText1 = (TextView) findViewById(R.id.error1DetailText1);
+		error1DetailText2 = (TextView) findViewById(R.id.error1DetailText2);
+		
+		ImageView IV = (ImageView) findViewById(R.id.hcspinwheelAnimationView);
+		final AnimationDrawable spinWheelAnimation = (AnimationDrawable) IV.getBackground();
+		IV.post(new Runnable() {
+		    public void run() {
+		        if ( spinWheelAnimation != null ) spinWheelAnimation.start();
+		      }
+		});
+
+
 	}
 	void parseSettings() {
 		try {
@@ -96,14 +94,8 @@ public class ErrorFragmentOne extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					instructionTitleText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					instructionFollowMapText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
-					instructionFindSignsText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFindSignsText()));
-					instructionWearHeadphonesText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringnstructionWearHeadphonesText()));
-					instructionsTakePhotosText.setText(Html.fromHtml(xmlRowData.getinfoKeyStringInstructionsTakePhotosTextnfoKeyStringInstructionsTakePhotosText()));
-					instructionsCallHelpText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsCallHelpText()));
-					instructionsSeeThisPageText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsSeeThisPageText()));
-					instructionsGroupIsReadyText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsGroupIsReadyText()));
+					//error1DetailText1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+					//error1DetailText2.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");
@@ -130,6 +122,8 @@ public class ErrorFragmentOne extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		
+		
 
 	}
 

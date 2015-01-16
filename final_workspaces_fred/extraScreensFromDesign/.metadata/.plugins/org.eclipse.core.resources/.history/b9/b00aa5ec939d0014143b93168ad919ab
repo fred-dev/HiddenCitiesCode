@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ErrorFragmentThree</string>
+    <string name="error2DetailText1">Uh oh, sorry!</string>
+    <string name="error2DetailText2">We\'ve lost connection with the server\nPlease hold on.....</string>
+    <string name="error2DetailText3">java.lang.NULLPointerException</string>
+
+    
+
+</resources>

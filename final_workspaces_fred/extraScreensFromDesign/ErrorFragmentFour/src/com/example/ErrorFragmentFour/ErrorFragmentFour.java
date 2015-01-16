@@ -1,7 +1,7 @@
 package com.example.ErrorFragmentFour;
 import com.example.ErrorFragmentFour.XMLParser;
 import com.example.ErrorFragmentFour.XmlValuesModel;
-import com.example.ErrorFragmentFour.R;
+import com.example.ErrorFragmentOne.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +12,7 @@ import org.xml.sax.XMLReader;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
@@ -20,23 +21,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("ClickableViewAccessibility")
 public class ErrorFragmentFour extends Activity implements OnTouchListener {
 
-	private Button exitInfoKeyBtn;
 
-	private TextView instructionTitleText = null;
-	private TextView instructionFollowMapText = null;
-	private TextView instructionFindSignsText = null;
-	private TextView instructionWearHeadphonesText = null;
-	private TextView instructionsTakePhotosText = null;
-	private TextView instructionsCallHelpText = null;
-	private TextView instructionsSeeThisPageText = null;
-	private TextView instructionsGroupIsReadyText = null;
+	private TextView error4DetailText1 = null;
+	private TextView error4DetailText2 = null;
+	private TextView error4DetailText3 = null;
+
 	
 	XmlValuesModel infoStringData = null;
 
@@ -61,17 +58,41 @@ public class ErrorFragmentFour extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-		exitInfoKeyBtn = (Button) findViewById(R.id.exitInfoKeyBtn);
-		exitInfoKeyBtn.setOnTouchListener(this);
 
-		instructionTitleText = (TextView) findViewById(R.id.instructionTitle);
-		instructionFollowMapText = (TextView) findViewById(R.id.instructionFollowMap);
-		instructionFindSignsText = (TextView) findViewById(R.id.instructionFindSigns);
-		instructionWearHeadphonesText = (TextView) findViewById(R.id.instructionWearHeadphones);
-		instructionsTakePhotosText = (TextView) findViewById(R.id.instructionsTakePhotos);
-		instructionsCallHelpText = (TextView) findViewById(R.id.isntructionsCallHelp);
-		instructionsSeeThisPageText = (TextView) findViewById(R.id.instructionsSeeThisPage);
-		instructionsGroupIsReadyText = (TextView) findViewById(R.id.instructionsGroupIsReady);
+		error4DetailText1 = (TextView) findViewById(R.id.error4DetailText1);
+		error4DetailText2 = (TextView) findViewById(R.id.error4DetailText2);
+		error4DetailText3 = (TextView) findViewById(R.id.error4DetailText3);
+		
+		ImageView IV = (ImageView) findViewById(R.id.hcspinwheelAnimationView);
+		final AnimationDrawable spinWheelAnimation = (AnimationDrawable) IV.getBackground();
+		IV.post(new Runnable() {
+		    public void run() {
+		        if ( spinWheelAnimation != null ) spinWheelAnimation.start();
+		      }
+		});
+		WebView wb = (WebView) findViewById(R.id.error4animatedbkgd);
+		 
+		wb.loadDataWithBaseURL(
+		        "fake://lala",
+		        "<body leftmargin=/Ò0/Ó topmargin=/Ò0/Ó rightmargin=/Ò0/Ó bottommargin=/Ò0/Ó><div style=\"text-align: left;\"><IMG id=\"myanim\" SRC=\"file:///android_asset/hcinterfaceerror3animAll.gif\" style=\"height: 100%\"style=\"width: 100%\"leftmargin=/Ò0/Ó topmargin=/Ò0/Ó rightmargin=/Ò0/Ó bottommargin=/Ò0/Ó /></div></body>", 
+		        "text/html",  
+		        "UTF-8", 
+		        "fake://lala");
+		wb.getSettings().setUseWideViewPort(false);
+		wb.setVerticalScrollBarEnabled(false);
+		wb.setHorizontalScrollBarEnabled(false);
+		wb.setScrollContainer(false);
+		
+		
+//		ImageView IVbkgd = (ImageView) findViewById(R.id.hcspinwheelAnimationView);
+//		final AnimationDrawable error3BkgdAnimation = (AnimationDrawable) IVbkgd.getBackground();
+//		IVbkgd.post(new Runnable() {
+//		    public void run() {
+//		        if ( error3BkgdAnimation != null ) error3BkgdAnimation.start();
+//		      }
+//		});
+
+
 	}
 	void parseSettings() {
 		try {
@@ -96,14 +117,9 @@ public class ErrorFragmentFour extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					instructionTitleText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					instructionFollowMapText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
-					instructionFindSignsText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFindSignsText()));
-					instructionWearHeadphonesText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringnstructionWearHeadphonesText()));
-					instructionsTakePhotosText.setText(Html.fromHtml(xmlRowData.getinfoKeyStringInstructionsTakePhotosTextnfoKeyStringInstructionsTakePhotosText()));
-					instructionsCallHelpText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsCallHelpText()));
-					instructionsSeeThisPageText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsSeeThisPageText()));
-					instructionsGroupIsReadyText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionsGroupIsReadyText()));
+					//error2DetailText1.setText(Html.fromHtml(xmlRowData.getError2DetailText1()));
+					//error2DetailText2.setText(Html.fromHtml(xmlRowData.getError2DetailText2()));
+					//error2DetailText3.setText(Html.fromHtml(xmlRowData.getError2DetailText3()));
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");
@@ -130,6 +146,8 @@ public class ErrorFragmentFour extends Activity implements OnTouchListener {
 				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		
+		
 
 	}
 
