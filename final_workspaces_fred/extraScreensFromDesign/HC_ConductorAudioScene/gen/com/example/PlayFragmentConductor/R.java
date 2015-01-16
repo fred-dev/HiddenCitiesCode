@@ -24,14 +24,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int white=0x7f040001;
     }
     public static final class drawable {
-        public static final int hcinfokey=0x7f020000;
-        public static final int hcinfokeyletsgobtn=0x7f020001;
-        public static final int hcinfokeywtext=0x7f020002;
-        public static final int hcinterfaceconductorbkgd=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
+        public static final int hcinterfaceconductorbkgd=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class layout {
-        public static final int play_fragment_conductor=0x7f030000;
+        public static final int hc_conductor_audio_scene=0x7f030000;
     }
     public static final class string {
         public static final int app_name=0x7f050000;

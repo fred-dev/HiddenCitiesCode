@@ -157,6 +157,13 @@
                <portholesplayfragtext1>Explore each frame  <![CDATA[<br>]]>through the phone</portholesplayfragtext1>
                <portholesplayfragtext2>If it is too dark<![CDATA[<br>]]>turn on the light</portholesplayfragtext2>
                
+               
+               <endofinstallationText>You can now move<![CDATA[<br>]]>to the next location</endofinstallationText>
+               <conductoraudioplayfragtext1>You can now move<![CDATA[<br>]]>to the next location</conductoraudioplayfragtext1>
+               
+               
+               
+               
           </messageString>
      </messageStrings>
      <networkInfo>

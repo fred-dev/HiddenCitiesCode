@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,7 +81,7 @@ public class EndofSceneFragment extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					endofinstallationText.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+					endofinstallationText.setText(Html.fromHtml(xmlRowData.getEndofinstallationText()));
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");

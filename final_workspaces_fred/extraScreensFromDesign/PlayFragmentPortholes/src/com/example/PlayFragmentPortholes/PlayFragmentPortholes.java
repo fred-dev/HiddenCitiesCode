@@ -85,8 +85,8 @@ public class PlayFragmentPortholes extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					portholesplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					portholesplayfragtext2.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
+					portholesplayfragtext1.setText(Html.fromHtml(xmlRowData.getPortholesplayfragtext1()));
+					portholesplayfragtext2.setText(Html.fromHtml(xmlRowData.getPortholesplayfragtext1()));
 					
 					
 				}else

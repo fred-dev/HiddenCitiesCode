@@ -23,7 +23,7 @@ public class XMLParser extends DefaultHandler {
 
 	XmlValuesModel markerValues = null;
 	XmlValuesModel waypointValues = null;
-	XmlValuesModel idValues = null;
+	public XmlValuesModel idValues = null;
 	XmlValuesModel networkValues = null;
 	XmlValuesModel messageValues = null;
 	XmlValuesModel colourValues = null;
@@ -173,6 +173,14 @@ public class XMLParser extends DefaultHandler {
 			idValues.setUserEmail(builder.toString());
 		} else if (localName.equalsIgnoreCase("username")) {
 			idValues.setUsername(builder.toString());
+		} else if (localName.equalsIgnoreCase("usernameHintString")) {
+			idValues.setUsernameHintString(builder.toString());
+		} else if (localName.equalsIgnoreCase("emailHintString")) {
+			idValues.setEmailHintString(builder.toString());
+		} else if (localName.equalsIgnoreCase("enterDetailsString")) {
+			idValues.setEnterDetailsString(builder.toString());
+		} else if (localName.equalsIgnoreCase("welcomeString")) {
+			idValues.setWelcomeString(builder.toString());
 		}
 
 		else if (localName.equalsIgnoreCase("markerId")) {
@@ -183,6 +191,10 @@ public class XMLParser extends DefaultHandler {
 			markerValues.setMarkerLat(Float.parseFloat(builder.toString()));
 		} else if (localName.equalsIgnoreCase("markerLong")) {
 			markerValues.setMarkerLong(Float.parseFloat(builder.toString()));
+		} else if (localName.equalsIgnoreCase("markerReached")) {
+			markerValues.setMarkerReached(Integer.parseInt(builder.toString()));
+		} else if (localName.equalsIgnoreCase("installationAtMarker")) {
+			markerValues.setInstallationAtMarker(builder.toString());
 		}
 
 		else if (localName.equalsIgnoreCase("waypointId")) {
@@ -209,9 +221,10 @@ public class XMLParser extends DefaultHandler {
 					.toString()));
 		} else if (localName.equalsIgnoreCase("gpsAudioPlayerAudioFile")) {
 			gpsAudioPlayerValues.setGpsAudioPlayerAudioFile(builder.toString());
-		}
-
-		else if (localName.equalsIgnoreCase("portholeDataDat")) {
+		} else if (localName.equalsIgnoreCase("gpsAudioPointReached")) {
+			gpsAudioPlayerValues.setGpsAudioPointReached(Integer
+					.parseInt(builder.toString()));
+		} else if (localName.equalsIgnoreCase("portholeDataDat")) {
 			portholeValues.setPortholeDataDat(builder.toString());
 		} else if (localName.equalsIgnoreCase("portholeDataXML")) {
 			portholeValues.setPortholeDataXML(builder.toString());
@@ -247,58 +260,32 @@ public class XMLParser extends DefaultHandler {
 			networkValues.setWebSocketUser(builder.toString());
 		}
 
-		else if (localName.equalsIgnoreCase("welcomeString")) {
-			messageValues.setWelcomeString(builder.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringInstructionTitleText")) {
+			messageValues.setInfoKeyStringInstructionTitleText(builder.toString());
 		}
 
-		else if (localName.equalsIgnoreCase("emailString")) {
-			messageValues.setEmailString(builder.toString());
-		} else if (localName.equalsIgnoreCase("usernameString")) {
-			messageValues.setUsernameString(builder.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringInstructionFollowMapText")) {
+			messageValues.setInfoKeyStringInstructionFollowMapText(builder.toString());
 		}
 
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionTitleText")) {
-			messageValues.setInfoKeyStringInstructionTitleText(builder
-					.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringInstructionFindSignsText")) {
+			messageValues.setInfoKeyStringInstructionFindSignsText(builder.toString());
 		}
 
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionFollowMapText")) {
-			messageValues.setInfoKeyStringInstructionFollowMapText(builder
-					.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringnstructionWearHeadphonesText")) {
+			messageValues.setInfoKeyStringnstructionWearHeadphonesText(builder.toString());
+		} else if (localName.equalsIgnoreCase("infoKeyStringInstructionsTakePhotosText")) {
+			messageValues.setInfoKeyStringInstructionsTakePhotosText(builder.toString());
 		}
 
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionFindSignsText")) {
-			messageValues.setInfoKeyStringInstructionFindSignsText(builder
-					.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringInstructionsCallHelpText")) {
+			messageValues.setInfoKeyStringInstructionsCallHelpText(builder.toString());
 		}
 
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringnstructionWearHeadphonesText")) {
-			messageValues.setInfoKeyStringnstructionWearHeadphonesText(builder
-					.toString());
-		} else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionsTakePhotosText")) {
-			messageValues.setInfoKeyStringInstructionsTakePhotosText(builder
-					.toString());
-		}
-
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionsCallHelpText")) {
-			messageValues.setInfoKeyStringInstructionsCallHelpText(builder
-					.toString());
-		}
-
-		else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionsSeeThisPageText")) {
-			messageValues.setInfoKeyStringInstructionsSeeThisPageText(builder
-					.toString());
-		} else if (localName
-				.equalsIgnoreCase("infoKeyStringInstructionsGroupIsReadyText")) {
-			messageValues.setInfoKeyStringInstructionsGroupIsReadyText(builder
-					.toString());
+		else if (localName.equalsIgnoreCase("infoKeyStringInstructionsSeeThisPageText")) {
+			messageValues.setInfoKeyStringInstructionsSeeThisPageText(builder.toString());
+		} else if (localName.equalsIgnoreCase("infoKeyStringInstructionsGroupIsReadyText")) {
+			messageValues.setInfoKeyStringInstructionsGroupIsReadyText(builder.toString());
 		}
 
 		else if (localName.equalsIgnoreCase("errorStringOne")) {
@@ -323,9 +310,13 @@ public class XMLParser extends DefaultHandler {
 			messageValues.setPortholesplayfragtext1(builder.toString());
 		} else if (localName.equalsIgnoreCase("portholesplayfragtext2")) {
 			messageValues.setPortholesplayfragtext2(builder.toString());
-		}
 
-		// Log.i("parse",localName.toString()+"========="+builder.toString());
+		} else if (localName.equalsIgnoreCase("endofinstallationText")) {
+			messageValues.setEndofinstallationText(builder.toString());
+
+		} else if (localName.equalsIgnoreCase("conductoraudioplayfragtext1")) {
+			messageValues.setConductoraudioplayfragtext1(builder.toString());
+		}
 	}
 
 	// Read the value of each xml NODE

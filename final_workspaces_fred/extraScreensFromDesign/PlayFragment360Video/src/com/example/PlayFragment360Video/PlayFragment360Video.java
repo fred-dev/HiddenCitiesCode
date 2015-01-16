@@ -84,7 +84,7 @@ public class PlayFragment360Video extends Activity implements OnTouchListener {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					tsvideoplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+					tsvideoplayfragtext1.setText(Html.fromHtml(xmlRowData.getTsvideoplayfragtext1()));
 
 					
 				}else

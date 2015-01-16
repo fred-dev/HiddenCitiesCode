@@ -5,6 +5,8 @@ public class XmlValuesModel {
      private  float markerLat;
      private  float markerLong;
      private  int markerId;
+     private int markerReached;
+     private String installationAtMarker;
      
      private  float wayPointLat;
      private  float wayPointLong;
@@ -14,6 +16,7 @@ public class XmlValuesModel {
      private  float gpsAudioPlayerLat;
      private  float gpsAudioPlayerLong;
      private String gpsAudioPlayerFile;
+     private int gpsAudioPointReached;
      
      private String userName;
      private String userEmail;
@@ -35,8 +38,9 @@ public class XmlValuesModel {
      private String colourHexValue;
      
      private String welcomeString;
-     private String emailString;
-     private String usernameString;
+     private String enterDetailsString;
+     private String emailHintString;
+     private String usernameHintString;
      private String infoKeyStringInstructionTitleText;
      private String infoKeyStringInstructionFollowMapText;
      private String infoKeyStringInstructionFindSignsText;
@@ -51,6 +55,15 @@ public class XmlValuesModel {
      private String errorStringThree;
      private String errorStringFour;
      
+     private String tsvideoplayfragtext1;
+     private String compasaudioplayfragtext1;
+     private String invisibleWallplayfragtext1;
+     private String invisibleWallplayfragtext2;
+     private String portholesplayfragtext1;
+     private String portholesplayfragtext2;
+     private String endofinstallationText;
+     private String conductoraudioplayfragtext1;
+     
      /************* Define Setter Methods *********/
      
      public void setMarkerLat(Float markerLat)
@@ -64,6 +77,14 @@ public class XmlValuesModel {
      public void setMarkerId(int markerId)
      {
           this.markerId = markerId;
+     }
+     public void setMarkerReached(int markerReached)
+     {
+          this.markerReached = markerReached;
+     }
+     public void setInstallationAtMarker(String installationAtMarker)
+     {
+          this.installationAtMarker = installationAtMarker;
      }
      
      public void setWayPointLat(Float wayPointLat)
@@ -94,6 +115,11 @@ public class XmlValuesModel {
      public void setGpsAudioPlayerAudioFile(String gpsAudioPlayerFile){
           this.gpsAudioPlayerFile=gpsAudioPlayerFile;
      }
+     public void setGpsAudioPointReached(int gpsAudioPointReached){
+         this.gpsAudioPointReached=gpsAudioPointReached;
+    }
+    
+     
      
      public void setUsername(String userName)
      {
@@ -158,17 +184,21 @@ public class XmlValuesModel {
      }
      
      
+     public void setEnterDetailsString(String enterDetailsString)
+     {
+          this.enterDetailsString = enterDetailsString;
+     }
      public void setWelcomeString(String welcomeString)
      {
           this.welcomeString = welcomeString;
      }
-     public void setEmailString(String emailString)
+     public void setEmailHintString(String emailHintString)
      {
-          this.emailString = emailString;
+          this.emailHintString = emailHintString;
      }
-     public void setUsernameString(String usernameString)
+     public void setUsernameHintString(String usernameHintString)
      {
-          this.usernameString = usernameString;
+          this.usernameHintString = usernameHintString;
      }
      public void setInfoKeyStringInstructionTitleText(String infoKeyStringInstructionTitleText)
      {
@@ -220,7 +250,38 @@ public class XmlValuesModel {
      {
           this.errorStringFour = errorStringFour;
      }
-     
+     public void setTsvideoplayfragtext1(String tsvideoplayfragtext1)
+     {
+          this.tsvideoplayfragtext1 = tsvideoplayfragtext1;
+     }
+     public void setCompasaudioplayfragtext1(String compasaudioplayfragtext1)
+     {
+          this.compasaudioplayfragtext1 = compasaudioplayfragtext1;
+     }
+     public void setInvisibleWallplayfragtext1(String invisibleWallplayfragtext1)
+     {
+          this.invisibleWallplayfragtext1 = invisibleWallplayfragtext1;
+     }
+     public void setInvisibleWallplayfragtext2(String invisibleWallplayfragtext2)
+     {
+          this.invisibleWallplayfragtext2 = invisibleWallplayfragtext2;
+     }
+     public void setPortholesplayfragtext1(String portholesplayfragtext1)
+     {
+          this.portholesplayfragtext1 = portholesplayfragtext1;
+     }
+     public void setPortholesplayfragtext2(String portholesplayfragtext2)
+     {
+          this.portholesplayfragtext2 = portholesplayfragtext2;
+     }
+     public void setEndofinstallationText(String endofinstallationText)
+     {
+          this.endofinstallationText = endofinstallationText;
+     }
+     public void setConductoraudioplayfragtext1(String conductoraudioplayfragtext1)
+     {
+          this.conductoraudioplayfragtext1 = conductoraudioplayfragtext1;
+     }
      
      
      
@@ -238,6 +299,16 @@ public class XmlValuesModel {
      {
           return markerId;
      }
+    
+     public int getMarkerReached()
+     {
+          return markerReached;
+     }
+     public String getInstallationAtMarker()
+     {
+          return installationAtMarker;
+     }
+     
      public float getWaypointLat()
      {
           return wayPointLat;
@@ -266,6 +337,11 @@ public class XmlValuesModel {
      public String getGpsAudioPlayerAudioFile(){
           return this.gpsAudioPlayerFile;
      }
+     public int getGpsAudioPointReached(){
+         return this.gpsAudioPointReached;
+    }
+     
+     
      
      public String getUsername()
      {
@@ -329,17 +405,22 @@ public class XmlValuesModel {
      {
           return this.webSocketUser;
      }
+     
      public String getWelcomeString()
      {
           return this.welcomeString;
      }
-     public String getEmailString()
+     public String getEnterDetailsString()
      {
-          return this.emailString;
+    	 return this.enterDetailsString;
      }
-     public String getUsernameString()
+     public String getEmailHintString()
      {
-          return this.usernameString;
+          return this.emailHintString;
+     }
+     public String getUsernameHintString()
+     {
+          return this.usernameHintString;
      }
 
      public String getInfoKeyStringInstructionTitleText()
@@ -389,6 +470,38 @@ public class XmlValuesModel {
      public String getErrorStringFour()
      {
           return this.errorStringFour;
+     }
+     public String getTsvideoplayfragtext1()
+     {
+          return this.tsvideoplayfragtext1;
+     }
+     public String getCompasaudioplayfragtext1()
+     {
+          return this.compasaudioplayfragtext1;
+     }
+     public String getInvisibleWallplayfragtext1()
+     {
+          return this.invisibleWallplayfragtext1;
+     }
+     public String getInvisibleWallplayfragtext2()
+     {
+          return this.invisibleWallplayfragtext2;
+     }
+     public String getPortholesplayfragtext1()
+     {
+          return this.portholesplayfragtext1;
+     }
+     public String getPortholesplayfragtext2()
+     {
+          return this.portholesplayfragtext2;
+     }
+     public String getEndofinstallationText()
+     {
+          return this.endofinstallationText;
+     }
+     public String getConductoraudioplayfragtext1()
+     {
+          return this.conductoraudioplayfragtext1;
      }
      
      

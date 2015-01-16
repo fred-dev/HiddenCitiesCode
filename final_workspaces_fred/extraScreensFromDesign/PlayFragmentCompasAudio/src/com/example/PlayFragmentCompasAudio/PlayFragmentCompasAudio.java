@@ -84,7 +84,7 @@ public class PlayFragmentCompasAudio extends Activity implements OnTouchListener
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					compasaudioplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+					compasaudioplayfragtext1.setText(Html.fromHtml(xmlRowData.getCompasaudioplayfragtext1()));
 					
 				}else
 					Log.e("infoStrings", "infoStrings value null");

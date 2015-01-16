@@ -81,7 +81,7 @@ public class PlayFragmentConductor extends Activity  {
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					conductoraudioplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
+					conductoraudioplayfragtext1.setText(Html.fromHtml(xmlRowData.getConductoraudioplayfragtext1()));
 
 					
 				}else

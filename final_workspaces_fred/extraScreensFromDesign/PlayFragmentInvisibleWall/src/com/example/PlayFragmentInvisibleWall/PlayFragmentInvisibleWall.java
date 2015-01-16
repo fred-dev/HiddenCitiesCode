@@ -85,8 +85,8 @@ public class PlayFragmentInvisibleWall extends Activity implements OnTouchListen
 			if (infoStringData != null) {
 				XmlValuesModel xmlRowData = infoStringData;
 				if (xmlRowData != null) {
-					invisibleWallplayfragtext1.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionTitleText()));
-					invisibleWallplayfragtext2.setText(Html.fromHtml(xmlRowData.getInfoKeyStringInstructionFollowMapText()));
+					invisibleWallplayfragtext1.setText(Html.fromHtml(xmlRowData.getInvisibleWallplayfragtext1()));
+					invisibleWallplayfragtext2.setText(Html.fromHtml(xmlRowData.getInvisibleWallplayfragtext2()));
 					
 					
 				}else

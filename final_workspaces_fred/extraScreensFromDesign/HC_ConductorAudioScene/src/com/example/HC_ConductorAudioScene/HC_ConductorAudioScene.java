@@ -39,7 +39,7 @@ public class HC_ConductorAudioScene extends Activity implements OnPreparedListen
 	   @Override
 	   protected void onCreate(Bundle savedInstanceState) {
 	      super.onCreate(savedInstanceState);
-	      setContentView(R.layout.play_fragment_conductor);
+	      setContentView(R.layout.hc_conductor_audio_scene);
 	      
 	      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
