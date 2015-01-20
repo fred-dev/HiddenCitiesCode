@@ -74,7 +74,7 @@ public class ErrorFragmentFour extends Activity implements OnTouchListener {
 		 
 		wb.loadDataWithBaseURL(
 		        "fake://lala",
-		        "<body leftmargin=/Ò0/Ó topmargin=/Ò0/Ó rightmargin=/Ò0/Ó bottommargin=/Ò0/Ó><div style=\"text-align: left;\"><IMG id=\"myanim\" SRC=\"file:///android_asset/hcinterfaceerror3animAll.gif\" style=\"height: 100%\"style=\"width: 100%\"leftmargin=/Ò0/Ó topmargin=/Ò0/Ó rightmargin=/Ò0/Ó bottommargin=/Ò0/Ó /></div></body>", 
+		        "<body leftmargin=/ï¿½0/ï¿½ topmargin=/ï¿½0/ï¿½ rightmargin=/ï¿½0/ï¿½ bottommargin=/ï¿½0/ï¿½><div style=\"text-align: left;\"><IMG id=\"myanim\" SRC=\"file:///android_asset/hcinterfaceerror3animAll.gif\" style=\"height: 100%\"style=\"width: 100%\"leftmargin=/ï¿½0/ï¿½ topmargin=/ï¿½0/ï¿½ rightmargin=/ï¿½0/ï¿½ bottommargin=/ï¿½0/ï¿½ /></div></body>", 
 		        "text/html",  
 		        "UTF-8", 
 		        "fake://lala");
